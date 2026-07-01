@@ -25,3 +25,9 @@
 - Added the repository variable setup for `VALIDATION_API_BASE_URL` and optional `SUPABASE_ANON_KEY`.
 - Added a complete `.github/workflows/deploy-validation-site.yml` example that generates `pages/config.js`, uploads `pages/` as the Pages artifact, includes hidden files so `pages/.nojekyll` is preserved, and deploys with `actions/deploy-pages`.
 - Verified the Markdown edit with `git diff --check -- in.md`.
+
+## GitHub Pages Workflow YAML Fix
+
+- Fixed `.github/workflows/deploy-validation-site.yml` after its nested `on`, `permissions`, `concurrency`, and `jobs` sections lost indentation.
+- Verified the corrected workflow file parses as YAML with PyYAML.
+- Verified whitespace with `git diff --check -- .github/workflows/deploy-validation-site.yml`.

@@ -1,54 +1,54 @@
 name: Deploy validation site
 
 on:
-push:
-branches: [main]
-paths:
-  - "pages/**"
-  - ".github/workflows/deploy-validation-site.yml"
-workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "pages/**"
+      - ".github/workflows/deploy-validation-site.yml"
+  workflow_dispatch:
 
 permissions:
-contents: read
-pages: write
-id-token: write
+  contents: read
+  pages: write
+  id-token: write
 
 concurrency:
-group: pages
-cancel-in-progress: false
+  group: pages
+  cancel-in-progress: false
 
 jobs:
-deploy:
-runs-on: ubuntu-latest
-environment:
-  name: github-pages
-  url: ${{ steps.deployment.outputs.page_url }}
-steps:
-  - name: Checkout
-    uses: actions/checkout@v6
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
 
-  - name: Generate runtime config
-    shell: bash
-    env:
-      VALIDATION_API_BASE_URL: ${{ vars.VALIDATION_API_BASE_URL }}
-      SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
-    run: |
-      cat > pages/config.js <<EOF
-      window.VALIDATION_SITE_CONFIG = {
-        apiBaseUrl: "${VALIDATION_API_BASE_URL}",
-        anonKey: "${SUPABASE_ANON_KEY}",
-      };
-      EOF
+      - name: Generate runtime config
+        shell: bash
+        env:
+          VALIDATION_API_BASE_URL: ${{ vars.VALIDATION_API_BASE_URL }}
+          SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
+        run: |
+          cat > pages/config.js <<EOF
+          window.VALIDATION_SITE_CONFIG = {
+            apiBaseUrl: "${VALIDATION_API_BASE_URL}",
+            anonKey: "${SUPABASE_ANON_KEY}",
+          };
+          EOF
 
-  - name: Configure GitHub Pages
-    uses: actions/configure-pages@v5
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
 
-  - name: Upload site artifact
-    uses: actions/upload-pages-artifact@v4
-    with:
-      path: pages
-      include-hidden-files: true
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: pages
+          include-hidden-files: true
 
-  - name: Deploy to GitHub Pages
-    id: deployment
-    uses: actions/deploy-pages@v4
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
