@@ -17,3 +17,11 @@
 - Updated `in.md` to separate hosted Edge Function secrets from local uploader credentials and remove the invalid `supabase secrets set SUPABASE_SERVICE_ROLE_KEY=...` instruction.
 - Verified `.env.local` parsing with a temporary PowerShell-created UTF-8 file, including quoted values and `SUPABASE_SERVICE_ROLE_KEY`.
 - Verified `python scripts\sync_validation_data.py --dry-run` still prepares 460 entries.
+
+## GitHub Pages Frontend Deployment Guide
+
+- Added a `Deploy Frontend to GitHub Pages` section to `in.md`.
+- Documented that the deployable frontend is the static `pages/` directory and that GitHub Actions should be used because the site is not in the repository root or `docs/`.
+- Added the repository variable setup for `VALIDATION_API_BASE_URL` and optional `SUPABASE_ANON_KEY`.
+- Added a complete `.github/workflows/deploy-validation-site.yml` example that generates `pages/config.js`, uploads `pages/` as the Pages artifact, includes hidden files so `pages/.nojekyll` is preserved, and deploys with `actions/deploy-pages`.
+- Verified the Markdown edit with `git diff --check -- in.md`.

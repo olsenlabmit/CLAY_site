@@ -18,6 +18,95 @@
 11. Add text comments in the composer. Attach an image with the file picker when needed.
 12. Posted comments appear in Comment History. Click a comment card to expand it. Click a comment image to view it full size.
 
+## Deploy Frontend to GitHub Pages
+
+This repository's deployable frontend is the static site in `pages/`. Use GitHub Actions as the Pages source because GitHub Pages branch publishing only serves the repository root or `docs/`, while this project keeps the public site in `pages/`.
+
+1. Confirm the frontend files are ready:
+   - `pages/index.html`: the deployed application.
+   - `pages/.nojekyll`: keeps GitHub Pages from processing the site with Jekyll.
+   - `pages/config.example.js`: example runtime configuration.
+2. Deploy the backend first and note the Edge Function URL:
+
+   ```text
+   https://<project-ref>.functions.supabase.co/validation-api
+   ```
+
+3. In the GitHub repository, open Settings > Secrets and variables > Actions > Variables and add:
+   - `VALIDATION_API_BASE_URL`: `https://<project-ref>.functions.supabase.co/validation-api`
+   - `SUPABASE_ANON_KEY`: the public anon key, only needed if JWT verification is enabled.
+4. In the GitHub repository, open Settings > Pages. Under Build and deployment, set Source to GitHub Actions.
+5. Add `.github/workflows/deploy-validation-site.yml` with this workflow:
+
+   ```yaml
+   name: Deploy validation site
+
+   on:
+     push:
+       branches: [main]
+       paths:
+         - "pages/**"
+         - ".github/workflows/deploy-validation-site.yml"
+     workflow_dispatch:
+
+   permissions:
+     contents: read
+     pages: write
+     id-token: write
+
+   concurrency:
+     group: pages
+     cancel-in-progress: false
+
+   jobs:
+     deploy:
+       runs-on: ubuntu-latest
+       environment:
+         name: github-pages
+         url: ${{ steps.deployment.outputs.page_url }}
+       steps:
+         - name: Checkout
+           uses: actions/checkout@v6
+
+         - name: Generate runtime config
+           shell: bash
+           env:
+             VALIDATION_API_BASE_URL: ${{ vars.VALIDATION_API_BASE_URL }}
+             SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
+           run: |
+             cat > pages/config.js <<EOF
+             window.VALIDATION_SITE_CONFIG = {
+               apiBaseUrl: "${VALIDATION_API_BASE_URL}",
+               anonKey: "${SUPABASE_ANON_KEY}",
+             };
+             EOF
+
+         - name: Configure GitHub Pages
+           uses: actions/configure-pages@v5
+
+         - name: Upload site artifact
+           uses: actions/upload-pages-artifact@v4
+           with:
+             path: pages
+             include-hidden-files: true
+
+         - name: Deploy to GitHub Pages
+           id: deployment
+           uses: actions/deploy-pages@v4
+   ```
+
+6. Commit and push the frontend and workflow files:
+
+   ```powershell
+   git add pages .github/workflows/deploy-validation-site.yml in.md
+   git commit -m "Add validation site GitHub Pages deployment"
+   git push origin main
+   ```
+
+7. Open the Actions tab and run Deploy validation site manually, or let the push trigger it. The deployed Pages URL appears in the workflow summary and in Settings > Pages.
+8. Visit the Pages URL. If the settings panel appears, confirm the reviewer name and shared review key. The API URL should already come from the generated `config.js`.
+9. For future frontend changes, update `pages/index.html`, `pages/config.example.js`, or `.github/workflows/deploy-validation-site.yml`, then push to `main` or rerun the workflow manually.
+
 ## Backend
 
 1. Open the Supabase project dashboard.
