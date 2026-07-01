@@ -164,11 +164,17 @@ This repository's deployable frontend is the static site in `pages/`. Use GitHub
    - `comments`: reviewer name/email, timestamp, comment text, and image URL.
 10. Inspect uploads in Storage under `validation-comment-images`.
 11. Rotate the shared review key by updating `VALIDATION_REVIEW_KEY` in Supabase secrets, then give reviewers the new key. No Pages redeploy is required for key rotation.
-12. Redeploy GitHub Pages by running the Deploy validation site workflow or pushing a change to `index.html`, `pages/**`, or the workflow file.
+12. After changing `supabase/functions/validation-api/index.ts`, redeploy the Edge Function:
+
+    ```powershell
+    supabase functions deploy validation-api --project-ref <project-ref> --no-verify-jwt
+    ```
+
+13. After changing `pages/**`, redeploy GitHub Pages by running the Deploy validation site workflow or pushing a change to `pages/**` or the workflow file. Confirm the latest artifact includes `index.html` and `config.js`.
 
 ## Troubleshooting
 
-- Failed login/key: click the reviewer badge and re-enter the shared review key. If writes still fail, verify `VALIDATION_REVIEW_KEY` in Supabase secrets.
+- Failed login/key: click the reviewer badge and re-enter the shared review key. The site verifies the key before loading entries by calling `/me` with `x-validation-key`; if login still fails, verify `VALIDATION_REVIEW_KEY` in Supabase secrets and redeploy the Edge Function.
 - Entries not loading: confirm `VALIDATION_API_BASE_URL` points to the deployed `validation-api` function and that the function has `SUPABASE_SERVICE_ROLE_KEY`.
 - Local sync asks for Supabase credentials: create `.env.local` with `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`, or pass `--supabase-url` and `--service-role-key` for a one-off run.
 - SVG missing: rerun the sync script and confirm the manifest row references an existing SVG file.

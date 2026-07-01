@@ -49,3 +49,13 @@
 - Appended `in.md` frontend re-implementation notes documenting the 50% default view state and trackpad pan/zoom behavior.
 - Verified inline JavaScript parsing with Node `vm.Script`.
 - Verified whitespace with `git diff --check -- index.html in.md`.
+
+## Startup Validation Key Gate
+
+- Updated `supabase/functions/validation-api/index.ts` so `GET /me` validates `x-validation-key` with the same `VALIDATION_REVIEW_KEY` guard used by write routes.
+- Updated `pages/index.html` and `index.html` so initialization verifies the reviewer key through `/me` before loading entries, and saving reviewer settings keeps the settings panel open on an invalid key.
+- Added an inline settings-panel error message for invalid reviewer keys instead of allowing entries to load before write actions fail.
+- Updated `in.md` with redeployment instructions for Edge Function changes and GitHub Pages frontend changes.
+- Verified inline JavaScript parsing for `pages/index.html` and `index.html` with `node --check`.
+- Verified Edge Function TypeScript with `deno check supabase/functions/validation-api/index.ts`.
+- Verified whitespace with `git diff --check -- pages/index.html index.html supabase/functions/validation-api/index.ts in.md`.

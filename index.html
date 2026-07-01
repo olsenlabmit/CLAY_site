@@ -259,6 +259,9 @@ body.resizing-rows { cursor: row-resize; }
   padding: 5px 10px; border: 1px solid var(--border);
   border-radius: 4px; background: #1f2937; color: var(--text); cursor: pointer;
 }
+#settings-error {
+  color: var(--danger); font-size: .72rem; line-height: 1.35;
+}
 
 #main {
   display: grid; grid-template-columns: auto minmax(0, 1fr);
@@ -520,6 +523,7 @@ body.resizing-rows { cursor: row-resize; }
     Validation API base URL
     <input type="url" id="settings-api-base" autocomplete="off" placeholder="https://.../validation-api">
   </label>
+  <div id="settings-error" hidden></div>
   <div class="settings-actions">
     <button type="button" onclick="closeReviewerSettings()">Cancel</button>
     <button type="button" onclick="saveReviewerSettingsFromForm()">Save</button>
@@ -690,6 +694,7 @@ function editReviewerSettings() {
   document.getElementById('settings-name').value = current.name;
   document.getElementById('settings-key').value = current.key;
   document.getElementById('settings-api-base').value = apiBaseUrl();
+  setReviewerSettingsError('');
   document.getElementById('settings-panel').hidden = false;
   return true;
 }
@@ -709,14 +714,35 @@ function closeReviewerSettings() {
   document.getElementById('settings-panel').hidden = true;
 }
 
-function saveReviewerSettingsFromForm() {
+async function saveReviewerSettingsFromForm() {
+  setReviewerSettingsError('');
   saveReviewerSettings(
     document.getElementById('settings-name').value,
     document.getElementById('settings-key').value,
     document.getElementById('settings-api-base').value,
   );
-  closeReviewerSettings();
-  loadInitialData();
+  try {
+    await verifyReviewerKey();
+    closeReviewerSettings();
+    loadInitialData();
+  } catch (err) {
+    handleReviewerKeyError(err);
+  }
+}
+
+function setReviewerSettingsError(message) {
+  const el = document.getElementById('settings-error');
+  if (!el) return;
+  el.textContent = message || '';
+  el.hidden = !message;
+}
+
+function handleReviewerKeyError(err) {
+  const message = err && err.message ? err.message : String(err || 'Invalid validation key.');
+  setReviewerSettingsError('Error: ' + message);
+  document.getElementById('settings-panel').hidden = false;
+  document.getElementById('entry-list').innerHTML =
+    '<p style="padding:10px;color:#bbb;font-size:.78rem">Enter a valid reviewer key to load entries.</p>';
 }
 
 function refreshReviewerUi() {
@@ -740,7 +766,9 @@ async function apiRequest(path, options = {}) {
     headers.Authorization = `Bearer ${anonKey}`;
   }
   if (settings.name) headers['x-reviewer-name'] = settings.name;
-  if (method !== 'GET' && settings.key) headers['x-validation-key'] = settings.key;
+  if ((method !== 'GET' || options.requireValidationKey) && settings.key) {
+    headers['x-validation-key'] = settings.key;
+  }
   if (options.body !== undefined && !(options.body instanceof FormData)) {
     headers['Content-Type'] = 'application/json';
   }
@@ -757,6 +785,10 @@ async function apiRequest(path, options = {}) {
 
 function apiGet(path) {
   return apiRequest(path);
+}
+
+function verifyReviewerKey() {
+  return apiRequest('/me', { requireValidationKey: true });
 }
 
 function loadInitialData() {
@@ -777,8 +809,9 @@ function loadInitialData() {
 // ── Boot ──────────────────────────────────────────────────────
 window.addEventListener('load', () => {
   if (ensureReviewerSettings()) {
-    apiGet('/me').catch(err => console.warn(err));
-    loadInitialData();
+    verifyReviewerKey()
+      .then(loadInitialData)
+      .catch(handleReviewerKeyError);
   } else {
     document.getElementById('entry-list').innerHTML =
       '<p style="padding:10px;color:#bbb;font-size:.78rem">Enter reviewer settings to load entries.</p>';

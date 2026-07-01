@@ -275,6 +275,8 @@ Deno.serve(async (req) => {
 
   try {
     if (req.method === "GET" && route.length === 1 && route[0] === "me") {
+      const keyError = requireWriteKey(req);
+      if (keyError) return keyError;
       return json({
         email: "",
         name: req.headers.get("x-reviewer-name") || "",
