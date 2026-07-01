@@ -12,7 +12,6 @@ from urllib import error, parse, request
 
 REPO_VALIDATION_DIR = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = REPO_VALIDATION_DIR / "validation_manifest.csv"
-DEFAULT_SVG_DIR = REPO_VALIDATION_DIR / "validation_svgs_v1"
 DEFAULT_ENV_FILE = REPO_VALIDATION_DIR / ".env.local"
 
 
@@ -227,7 +226,12 @@ def parse_args() -> argparse.Namespace:
     _load_env_file(DEFAULT_ENV_FILE)
     parser = argparse.ArgumentParser(description="Sync validation entries to Supabase.")
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
-    parser.add_argument("--svg-dir", type=Path, default=DEFAULT_SVG_DIR)
+    parser.add_argument(
+        "--svg-dir",
+        type=Path,
+        required=True,
+        help="Directory containing the SVG files referenced by --manifest.",
+    )
     parser.add_argument("--entries-csv", type=Path, help="Optional exported Entries sheet CSV.")
     parser.add_argument("--comments-csv", type=Path, help="Optional exported Comments sheet CSV.")
     parser.add_argument(

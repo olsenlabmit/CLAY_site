@@ -10,6 +10,7 @@ index,BIGSMILES,SVG-file-name
 8,[H]{[$][$]C(N1CCCC1=O)C[$][$]}[H],8 - polyvinylpyrrolidone [PVP].svg
 9,{[][$]CC(OC(=O)C)[$][]},9 - poly(vinyl acetate) [PVAc].svg
 10,{[][$]CCN(CCN)CCNCCN(CCNCCN)CCN(CN(CN)CN)CC[$][]},10 - polyethyleneimine [PEI].svg
+11,{[][$]{[$][$]C(F)(F)C(F)(F)[$][$]}C(F)(CC(F)(F)C(C(F)(F)F)OC(F)(F)C(F)(F)S(=O)(=O)[O-1])C(F)(O)[$][]},11 - Nafion.svg
 12,{[][$]C=1NC(=CC1)C1=CC=C(N1)[$][]},12 - polypyrrole [PPy].svg
 13,{[][$]c1ccc(s1)[$][]},13 - polythiophene [PTh].svg
 14,{[][$]c1c2c(OCCO2)c(s1)[$][]},"14 - poly(3,4-ethylenedioxythiophene).svg"
@@ -32,26 +33,41 @@ index,BIGSMILES,SVG-file-name
 31,"O{[$][$]C/C=C/C[$],[$]CC(C=C)[$],[$]C/C=C\C[$][$]}O",31 - polybutadiene.svg
 32,{[][<]C(=O)c1ccc(cc1)C(=O)Nc1ccc(cc1)N[>][]},32 - Kevlar.svg
 33,{[][<]CC(C)(C(=O)OC)[>][]},33 - poly(methyl methacrylate).svg
+34,"[H]{[>][<]OCC[>],[<]CC(O{[>][<]CC(O)[>][<]}[H])[>][<]}O",34 - poly(ethylene glycol-g-vinyl alcohol) [PEG-g-PVA].svg
 35,CCC(C){[$][$]CC(c1ccccc1)[$][$]}CC(c1ccccc1)C,35 - polystyrene [PS].svg
+36,[H]{[$][$]C(C)(C(=O)OC)C[$][$]}C(c1ccccc1)(c1ccccc1)C{[$][$]C(c1ccccc1)C[$][$]}C(C)CC,36 - poly(styrene-b-methyl methacrylate).svg
 37,O{[>][<]CCO[>][<]}[H],37 - poly(ethylene oxide) [PEO].svg
 38,"[H]{[$][$]CC(C)[$],[$]CC[$][$]}[H]",38 - poly(propylene-r-ethylene).svg
+39,{[][<]C(=O)Nc1ccc(cc1)Cc1ccc(cc1)NC(=O)O{[>][<]CCO[>][<]}[>][]},39 - polyurethane [PU].svg
 40,"{[][<]C(=O)c1ccc(cc1)C(=O)OCCCCO[>],[<]C(=O)CCCCC(=O)OCCCCO[>][]}",40 - poly(butylene adipate terephthalate) [PBAT].svg
 42,"{[][$]CC(c1ccccc1)[$],[$]C/C=C/C[$][]}",42 - poly(styrene-r-butadiene).svg
 43,{[][<]N=P(OCCOCCOC(=O)C(C)(C)Br)(OCCOCCOC(=O)C(C)(C)Br)[>][]},43 - hexakis[2-[2-(2-bromoisobutyryloxy)ethoxy]ethoxy]cyclotriphosphazene.svg
+44,{[][<]N=P(OCCOCCOC(=O)C({[$][$]CC(c1ccccc1)[$][$]}Br)(C)C)(OCCOCCOC(=O)C({[$][$]CC(c1ccccc1)[$][$]}Br)(C)C)[>][]},44 - comb polystyrene.svg
 45,{[][<][P@]1(Oc2c(-c3c(ccc4c3cccc4)O1)c1c(cccc1)cc2)=N[>][]},"45 - helical poly(2,2'-dioxy-1,1'-binaphthyl)phosphazene.svg"
+46,{[][<]P(NC(C(C)CC)C(=O)OCC)(N{[>][<]CCO[>][<]})=N[>][]},46 - poly(organo)phosphazene.svg
 47,{[][<]P(Oc1ccc(-c2ccccc2)cc1)(NCC(=O)NCC(=O)OCC)=N[>][]},47 - poly[(glycine ethyl glycinato)(phenyl phenoxy)phosphazene].svg
 48,{[][<]N1BNB(NB1)[>][]},48 - polyborazylene.svg
+49,"C[Si](C)(O{[>][<][Si](c1ccccc1)(C)O[>],[<][Si](C)(C)O[>][<]}[Si](C)(C)C)C",49 - poly(dimethyl-r-methylphenyl siloxane).svg
 50,"C[Si](C)(C)O{[>][<][Si](C)(CCCOCC(O)COC(=O)C=1C(=O)C=2C=3N(C(C)COC3/C(N3CCN(C)CC3)=C\(F)C2)C1)O[>],[<][Si](C)(C)O[>],[<][Si](C)(CCCOCC1CO1)O[>][<]}[Si](C)(C)C",50 - poly(levofloxacin-r-epoxy-r-dimethyl siloxane).svg
 51,{[][<]C(F)(F)C(Cl)(F)[>][]},51 - polychlorotrifluoroethylene [PCTFE].svg
 52,{[][$]CC(C)(C)[$][]},52 - polyisobutylene.svg
 53,{[][$]C/C(Cl)=C/C[$][]},53 - polychloroprene.svg
 54,{[][$]C/C=C\(C)C[$][]},"54 - poly(cis-1,4-isoprene).svg"
 55,{[][$]C/C=C/(C)C[$][]},"55 - poly(trans-1,4-isoprene).svg"
+56,{[][$]CNC=1N=C(NC[$])N=C(N1)NC[$][]},56 - melamine formaldehyde.svg
+57,{[][$]c1cc2cc(c1O)Cc1cc(Cc3c(O)c(cc([$])c3)C2)c(O)c(c1)[$][]},57 - Bakelite (phenol formaldehyde).svg
 58,"{[][<]C(=O)c1ccc(cc1)C(=O)Nc1ccc(cc1)N[>],[<]Nc1ccc(cc1)Oc1cc(ccc1)NC(=O)c1ccc(cc1)C(=O)[>][]}","58 - co-poly-(paraphenylene_3,4'-diphenylether terephthalamide [Technora].svg"
 59,"CC(Cl){[>][<]CC(Cl)(Cl)[>],[<]CC(Cl)[>][<]}CC(Cl)Cl",59 - poly(vinylidene-r-vinyl chloride) [Saran].svg
 60,"{[][$]C(F)(C(F)(F)F)C(F)(F)[$],[$]CC(F)(F)[$][]}",60 - poly(perfluoropropylene-r-vinylidene fluoride) [Viton].svg
 61,[H]{[>][<]OC(=O)c1ccc(cc1)C(=O)OCC[>][<]}O,61 - biaxially-oriented polyethylene terephthalate [Mylar].svg
 62,{[][<]Nc1cc(ccc1)NC(=O)c1cc(ccc1)C(=O)[>][]},62 - poly(m-phenylene isophthalamide) [Nomex].svg
+63,{[][<]{[>][<]C(C)CO[>][<]}C(=O)Nc1ccc(cc1)Cc1ccc(cc1)NC(=O)NCCN[>][]},63 - poly(urea_urethane) thermoplastic elastomer [Lycra].svg
+64,{[][<[<]1]c1nc2c3c4c(ccc3)c3nc5c(nc3c3c4c(ccc3)c2nc1[>[>]2])cc(c([<[<]1])c5)[>[>]2][]},64 - polyquinoxaline ladder [PQL].svg
+65,{[][<[<]1]c1cc2c(cc1[>[>]2])sc1c(n2)cc(S[<[<]1])c(c1)=N[>[>]2][]},65 - poly(phenothiazine) ladder [PTL].svg
+66,{[][<[<]1]c1cc2c(cc1[>[>]2])oc1c(n2)cc(O[<[<]1])c(c1)=N[>[>]2][]},66 - poly(phenooxazine) ladder [POL].svg
+67,{[][<[<]1]c1c(cc-2c(N(C(CCCCCCCC)CCCCCCCC)c3c2cc2c(c4c(cc5c(cc(C)c6c5cc5c(-c7c(cc8c(c(C)cc9c8cc(c[<[<]1])c([>[>]2])c9)c7)N5C(CCCCCCCC)CCCCCCCC)c6)c4)cc2C)c3)c1)c(C)[>[>]2][]},67 - carbazole-based ladder polymer.svg
+68,Br{[>][<]C1=CC([>])=CC(=C1)[<][<]}B(O)O,68 - hyperbranched network.svg
+69,"{[][$]C(C[$])[$],[$]CC[$][]}",69 - branched polyethylene.svg
 78,{[][<][Si](CC)(CC)O[>][]},78 - poly[oxy(diethylsilylene)].svg
 79,{[][<]C[Si](C)(C)[>][]},79 - poly(dimethylsilylenemethylene).svg
 80,{[][<][Si](c1ccccc1)(C)O[>][]},80 - poly[oxy(methylphenylsilylene)].svg
@@ -173,12 +189,15 @@ index,BIGSMILES,SVG-file-name
 196,{[][$]C(F)(F)C(F)(c1c(F)c(F)c(F)c(F)c1F)[$][]},196 - poly(perfluorostyrene).svg
 197,{[][<]Oc1ccc(cc1)C(C(Cl)(F)F)(C(Cl)(F)F)c1ccc(cc1)OC(=O)[>][]},"197 - poly[2,2-(1,3-dichloro-1,1,3,3-tetrafluoro)propane bis(4-phenyl)carbonate].svg"
 198,{[][$]CC(c1ccccc1CO)[$][]},198 - poly(o-hydroxymethyl styrene).svg
+199,{[][<]OCC[>][<]}OCC(CO{[>][<]CCO[>][<]})(CO{[>][<]CCO[>][<]})CO{[>][<]CCO[>][]},199 - star poly(ethylene oxide).svg
 201,"[H]{[>][<]NC(Cc1ccc(O)cc1)C(=O)[>],[<]NC(CCCCN)C(=O)[>],[<]NC(Cc1cc(O)c(O)cc1)C(=O)[>][<]}OCC",201 - poly(Tyr-DOPA-Lys).svg
 203,{[][$]=C/C=C\C=C/C=C\C=C/C=C\C=C/C=C\C=[$][]},203 - cis-polyacetylene.svg
+204,{[][<]CCN([>])[<][]},204 - branched polyethyleneimine.svg
 205,[H]{[>][<][C@@]1(O)OC(CO)([H])[C@@]([H])(C([C@@]1(O)[H])(O)[H])O[C@@]1(O)[C@@]([H])(O)C([H])(O)[C@@](C(O1)([H])CO)([H])O[>][]},205 - cellulose.svg
 206,"{[][$]CC(C#N)[$],[$]C/C=C/C[$],[$]CC(c1ccccc1)[$][]}",206 - acrylonitrile butadiene styrene [ABS].svg
 207,"{[][$]CC(C#N)[$],[$]CC(c1ccccc1)[$],[$]CC(C(OC)=O)[$][]}",207 - acrylonitrile styrene acrylate [ASA].svg
 208,{[][<]N1C(=O)c2c(C1=O)ccc(c2)Oc1ccc(cc1)C(C)(C)c1ccc(cc1)Oc1ccc2c(c1)C(=O)N(C2=O)c1cccc(c1)[>][]},208 - polyetherimide [PEI].svg
+209,CCC(CCC){[$][$]CC({[>][<]OCC[>][<]}O)[$][$]}[H],209 - grafted poly(ethylene oxide).svg
 210,{[][$]CC(C(NC(C)C)=O)[$][]},210 - poly(N-isopropylacrylamide) [NIPAM].svg
 211,"{[][$]CC(C)(C(NC(C)C)=O)[$],[$]C(C(NC(C)C)=O)C[$][]}",211 - poly(NIPMAM-co-NIPAM).svg
 212,{[][<]O[C@]1[C@@](O)[C@@](O)[C@@](O[C@@]1C[O-1])O[C@]1[C@@](O)[C@@](O)[C@@](O[C@@]1C[O-1].[Na+1].[Na+1])O[>][]},212 - sodium alginate.svg
@@ -186,15 +205,20 @@ index,BIGSMILES,SVG-file-name
 214,"{[][$]CN(C(=O)C)C[$],[$]CN(C(=O)CCN1C(=O)C=CC1=O)C[$][]}",214 - maleimide-modified poly(N-acetylethylenimine).svg
 215,"{[][$]CN(C(=O)C)C[$],[$]CN(C(=O)CCc1occc1)C[$][]}",215 - furan-modified poly(N-acetylethylenimine).svg
 216,"{[][$]CN(C(=O)C)C[$],[$]CN(C(=O)CCS)C[$][]}",216 - disulfide-modified poly(N-acetylethylenimine).svg
+217,{[][$]=CCC1C(C=[$])CC(C=[$])C1C=[$][]},217 - poly(dicyclopentadiene).svg
 218,{[][<]N1C(=O)C2=C(C1=O)C=CC(=C2)OC1=CC=C(C=C1)C(C)(C)C1=CC=C(C=C1)OC1=CC=2C(=O)N(C(=O)C2C=C1)C1=CC=C(C=C1)OC1=CC=C(C=C1)C1=CC=C(C=C1)OC1=CC=C(C=C1)[>][]},218 - shape memory polyimide.svg
 219,{[][$]=CC1CCC(C1)C=[$][]},219 - polynorbornene.svg
+220,{[][$]=C\C1CCC(C1)C=[$][$]}{[$][$]=C\C1C(C(=O)O)C(C(=O)O)C(C1)C=[$][]},220 - poly(norbornene)-b-poly(norbornene-dicarboxylic acid).svg
 221,{[][$]c1c2c(CC=N2)c(c(O)c1O)-c1c2c(CC=N2)c(c(O)c1O)[$][]},221 - polydopamine [PDA].svg
+222,C({[>][<]c1cccc(c1OCC1CO1)C[>][<]}c1ccccc1OCC1CO1)c1c(cccc1)OCC1CO1,222 - epoxy novolac.svg
+223,"CC(=C)C(O)OCCNC(=O)OCC({[>][<]C(F)(F)C(F)(F)O[>],[<]C(F)(F)O[>][<]}OC(F)(F)COC(=O)NCCOC(=O)C(=C)C)(F)F",223 - perfluoropolyether [PFPE].svg
 224,[H]{[>][<][C@@]1(OC(=O)C)OC(COC(=O)C)([H])[C@@]([H])(C([C@@]1(O)[H])(O)[H])O[C@@]1(OC(=O)C)[C@@]([H])(O)C([H])(O)[C@@](C(O1)([H])COC(=O)C)([H])O[>][]},224 - cellulose acetate.svg
 225,O{[>][<]C(C)COC(=O)CCC(=O)O[>][<]}CC(O)C,225 - poly(propylene fumarate) [PPF].svg
 226,{[][<]CC(C)OC(=O)O[>][]},226 - polypropylene carbonate [PPC].svg
 227,{[][<]CCOC(=O)O[>][]},227 - polyethylene carbonate [PEC].svg
 228,{[][<]OC(=O)OC1C(CCCC1)[>][]},228 - polycyclohexane carbonate.svg
 229,"{[][<]CO[>],[<]CCO[>][]}",229 - polyacetal copolymer.svg
+230,{[][<]C(=O)c1c(cccc1)C(=O)OCC(OC(=O)c1ccccc1C(=O)[>])CO[<][]},230 - polyester glyptal.svg
 231,[H]{[>][<][C@@]1(O[N+1](=O)[O-1])OC(CO[N+1](=O)[O-1])([H])[C@@]([H])(C([C@@]1(O)[H])(O)[H])O[C@@]1(O[N+1](=O)[O-1])[C@@]([H])(O)C([H])(O)[C@@](C(O1)([H])CO[N+1](=O)[O-1])([H])O[>][]},231 - nitrocellulose.svg
 232,"{[][<]CC(CCl)O[>],[<]CCO[>][]}",232 - epichlorohydrin rubber [ECO].svg
 233,"{[][$]C(F)(F)C(F)(C(F)(F)F)[$],[$]C(F)(F)C(F)(F)[$][]}",233 - fluorinated ethylene propylene [FEP].svg
@@ -205,12 +229,62 @@ index,BIGSMILES,SVG-file-name
 238,"{[][$]CC[$],[$]CC(OC(=O)C)[$][]}",238 - poly(ethylene-co-vinyl acetate).svg
 239,"{[][$]CC(c1ccccc1)[$],[$]CC(C#N)[$][]}",239 - poly(styrene acrylonitrile) [SAN].svg
 240,{[][$]C=1OC2=C(N1)C=C(C=C2)C=1C=C2C(=CC1)OC(=N2)C=1C=C(C=CC1)[$][]},240 - polybenzimidazole [PBI].svg
+241,{[][$]c1ccc(cc1)N1C(=O)N(c2ccc([$])cc2)C(=O)N(C1=O)c1ccc(cc1)[$][]},241 - polyisocyanurate.svg
 242,[H]{[>][<]OCCOC(=O)CCC(=O)[>][<]}OCCO,242 - polyester polyol.svg
 243,"{[][$]CC[$],[$]C(F)(F)C(F)(F)[$][]}",243 - poly(ethylene-co-tetrafluoroethene) [ETFE].svg
 244,"{[][$]CC[$],[$]C(F)(F)C(Cl)(F)[$][]}",244 - poly(ethylene-co-chlorotrifluoroethene) [ECTFE].svg
 245,{[][<]OCC(=O)[>][<]}O,245 - poly(glycolic acid) [PGA].svg
 246,{[][<][Si]N[>][]},246 - perhydro-polysilazane [PHPS].svg
 247,{[][<]c1nnn(c1)C[C@@](O)COC[>][]},247 - chiral bottlebrush polymer (CBP).svg
+248,"CCC(C){[$][$]CC(c1ccccc1)[$][$]}{[$][$]C/C=C\(C)C[$],[$]C/C=C/(C)C[$],[$]CC(C(=C)C)[$],[$]CC(C)(C=C)[$][$]}{[$][$]CC(c1ccccc1)[$][$]}{[>][<]CCO[>][<]}[H]",248 - poly(styrene-b-isoprene-b-styrene-b-ethylene oxide) tetrablock.svg
+249,"CCC(C){[$][$]C/C=C\(C)C[$],[$]C/C=C/(C)C[$],[$]CC(C(=C)C)[$],[$]CC(C)(C=C)[$][$]}{[$][$]CC(c1ccccc1)[$][$]}{[>][<][Si](C)(C)O[>][]}",249 - poly(isoprene-b-styrene-b-dimethyl siloxane) triblock.svg
+250,{[][$]CC(c1ccccc1)[$][$]}{[>][<][Si](C)(C)O[>][]},250 - poly(styrene-b-dimethyl siloxane) diblock [PS-b-PDMS].svg
+251,"[H]{[$][$]C(CC)C[$],[$]CCCC[$][$]}{[$][$]C(C1CCCCC1)C[$][$]}C(CC)C",251 - poly(butylene-b-styrene) diblock.svg
+252,{[][$]CC(c1c(C(=O)Oc2ccc(OCCCC)cc2)ccc(C(=O)Oc2ccc(OCCCC)cc2)c1)[$][$]}{[>][<][Si](C)(C)O[>][]},252 - PDMS‐b‐PBPCS.svg
+253,CCC(C){[$][$]CC(c1ccccc1)[$][$]}{[$][$]CC(C(=O)OCC(CC)CCCC)(C)[$][$]}[H],253 - poly(styrene-b-ethylhexylmethacrylate) diblock [PS-b-PEHMA].svg
+254,CCC({[$][$]CC(c1ccccc1)[$][$]}{[$][$]CC(C(OCCC)=O)(C)[$][$]}[H])C,254 - poly(styrene-b-butylmethacrylate) diblock [PS-b-PBMA].svg
+255,"{[][<]CCO[>][<]}{[$][$]C/C=C\(C)C[$],[$]C/C=C/(C)C[$],[$]CC(C(C)=C)[$],[$]CC(C=C)(C)[$][]}",255 - poly(ethylene oxide-b-isoprene) diblock [PEO-b-PI].svg
+256,"{[][<]CCO[>][<]}{[$][$]C/C=C\C[$],[$]C/C=C/C[$],[$]CC(C=C)[$][]}",256 - poly(ethylene oxide-b-butadiene) diblock [PEO-PBD].svg
+257,"{[][<][Si](C)(C)O[>][<]}{[$][$]C/C=C\C[$],[$]C/C=C/C[$],[$]CC(C=C)[$][]}",257 - poly(dimethyl siloxane-b-butadiene) diblock [PDMS-b-PBD].svg
+258,{[][$]CC(c1ccccn1)[$][$]}{[$][$]CC(c1ccncc1)[$][]},258 - poly(2-vinylpyridine)-b-poly(4-vinylpyridine) diblock [P2VP-b-P4VP].svg
+259,"{[][$]CCC(C)C[$],[$]CC(C(C)C)[$],[$]CC(C)(CC)[$][$]}{[$][$]CC[$][]}",259 - poly(ethylene-b-ethylene propylene) diblock [PE-b-PEP].svg
+260,COCCOCCO{[>][<]CCO[>][<]}{[>][<]C(CC)CO[>][<]}[H],260 - poly(oxyethylene-b-oxybutylene) diblock [POE-b-POB].svg
+261,"{[][<]C(C)C(=O)O[>][<]}{[$][$]CCC(C)C[$],[$]CC(C(C)C)[$],[$]CC(C)(CC)[$][]}",261 - poly(lactic acid-b-ethylenepropylene) diblock [PLA-b-PEP].svg
+262,{[][$]CC(c1ccccc1)[$][$]}{[$][$]CC(c1ccccn1)[$][]},262 - poly(styrene-b-2-vinylpyridine) diblock [PS-b-P2VP].svg
+263,{[][$]CC(c1ccccc1)[$][$]}{[$][$]CC(c1ccncc1)[$][]},263 - poly(styrene-b-4-vinylpyridine) diblock [PS-b-P4VP].svg
+264,CC(C)(C{[$][$]=C/C1CCC(C1)/C=[$][$]}{[$][$]=C/C1CC(C2C1CN(C(C)(C)C)[Sn](Cl)(Cl)N(C(C)(C)C)C2)C=[$][$]})C,"264 - poly(Sn[2,3-trans-bis[(tert-butylamido)methyl]norborn5-ene]-b-norbornene) diblock.svg"
+265,CC(C)(C{[$][$]=C/C1C(CO[Si](C)(C)C)CC(C1)/C=[$][$]}{[$][$]=C/C1C(C2c3c(c(OC)ccc3OC)C1C=C2)/C=[$][$]}Cc1ccccc1)C,265 - poly(dimethoxybenzotricyclodecatriene-b-trimethylsiloxymethylnorbornene) diblock [PDMB-b-PTMSMN].svg
+266,"{[][$]CC(C1CCCCC1)[$][$]}{[$][$]CCCC[$],[$]CC(CC)[$][]}",266 - poly(vinylcyclohexane-b-ethylethylene) diblock [PVCH-b-PEE].svg
+267,"{[][$]CC(C1CCCCC1)[$][$]}{[$][$]CCC(C)C[$],[$]CC(C(C)C)[$],[$]CC(C)(CC)[$][]}",267 - poly(vinylcyclohexane-b-ethylpropylene) diblock [PVCH-b-PEP].svg
+268,"{[][$]CCC(C)C[$],[$]CC(C(C)C)[$],[$]CC(C)(CC)[$][$]}{[$][$]CC(CC)[$],[$]CCCC[$][]}",268 - poly(ethylpropylene-b-ethylethylene) diblock [PEP-b-PEE].svg
+269,"{[][$]CC(c1ccccc1)[$][$]}{[$][$]CCC(C)C[$],[$]CC(C(C)C)[$],[$]CC(C)(CC)[$][]}",269 - poly(styrene-b-ethylpropylene) diblock [PS-b-PEP].svg
+270,"{[][$]CC(c1ccccc1)[$],[$]CC(c1ccc(S(=O)(=O)O)cc1)[$][$]}{[$][$]CCC(C)C[$],[$]CC(C(C)C)[$],[$]CC(C)(CC)[$][]}",270 - poly(styrenesulfonate-b-methylbutylene) diblock [PSS-b-PMB].svg
+271,[H]{[>][<]OC(=O)OC(C)C[>][<]}OCC{[$][$]CC(c1ccccc1)[$][$]}C(CC)C,271 - poly(styrene-b-propylene carbonate) diblock [PS-b-PPC].svg
+272,{[][$]CC(c1ccccn1)[$][$]}{[$][$]CC(C(OCCOC)=O)(C)[$][]},272 - poly[2-vinylpyridine-b-oligo(ethylene glycol) methyl ether methacrylate] diblock [P2VP-b-POEGMA].svg
+273,{[][$]CC(c1cc(O)c(O)cc1)[$][$]}{[$][$]CC(c1ccccc1)[$][]},273 - poly(dihydroxystyrene-b-styrene) diblock [PDHS-b-PS].svg
+274,"CO{[>][<]CCO[>][<]}{[>][<]C(=O)C(C)O[>],[<]C(=O)CO[>][<]}C(CO)=O",274 - poly(ethylene oxide)-block-poly(lactic-co-glycolic acid) diblock [PEO-b-PLGA].svg
+275,"{[][$]CCCC[$],[$]CC(CC)[$][$]}{[>][<][Si](C)(C)O[>][]}",275 - poly(ethylethylene-b-dimethyl siloxane) diblock [PEE-b-PDMS].svg
+276,"{[][<]CCO[>][<]}{[$][$]CCCC[$],[$]CC(CC)[$][]}",276 - poly(ethylene oxide-b-ethylethylene).svg
+277,"{[][<]CCO[>][<]}{[$][$]CCC(C)C[$],[$]CC(C(C)C)[$],[$]CC(C)(CC)[$][]}",277 - poly(ethylene oxide-b-ethylpropylene).svg
+278,"{[][$]CC(c1ccccc1)[$][$]}{[$][$]C/C=C\(C)C[$],[$]C/C=C/(C)C[$],[$]CC(C(C)=C)[$],[$]CC(C=C)(C)[$][]}",278 - poly(styrene-b-isoprene) diblock [PS-b-PI].svg
+279,{[][$]CC(C1CCCCC1)[$][$]}{[>][<]CCO[>][]},279 - poly(vinylcyclohexane-b-ethylene oxide) diblock [PVCH-b-PEO].svg
+280,"{[][$]CC(C1CCCCC1)[$][$]}{[$][$]C/C=C\(C)C[$],[$]C/C=C/(C)C[$],[$]CC(C(C)=C)[$],[$]CC(C=C)(C)[$][]}",280 - poly(vinylcyclohexane-b-isoprene) diblock [PVCH-b-PI].svg
+281,"{[][<]CC(c1ccccc1)[>][<]}{[$][$]C/C=C\C[$],[$]C/C=C/C[$],[$]CC(C=C)[$][]}",281 - poly(styrene-b-butadiene) diblock [PS-b-PBD].svg
+282,"{[][<]CC(C1CCCCC1)[>][<]}{[$][$]C/C=C\C[$],[$]C/C=C/C[$],[$]CC(C=C)[$][]}",282 - poly(vinyl cyclohexane-b-butadiene) diblock [PVCH-b-PBD].svg
+283,"[H]{[>][<]OC(=O)C(C)[>][<]}{[$][$]C/C=C\(C)C[$],[$]C/C=C/(C)C[$],[$]CC(C(C)=C)[$],[$]CC(C=C)(C)[$][$]}C(CC)C",283 - poly(lactic acid-b-isoprene) diblock [PLA-b-PI].svg
+284,"C[Si](C)(C){[>][<][Si](C)(C)O[>][<]}{[$][$]C/C=C\(C)C[$],[$]C/C=C/(C)C[$],[$]CC(C(C)=C)[$],[$]CC(C)(C=C)[$][$]}C(CC)C",284 - poly(isoprene-b-dimethyl siloxane) diblock [PI-b-PDMS].svg
+285,"{[][$]CCC(C)C[$],[$]CC(C(C)C)[$],[$]CC(C)(CC)[$][$]}{[$][$]O[Si](C)(C)[$][]}",285 - poly(dimethyl siloxane-b-ethylene propylene) diblock [PDMS-b-PEP].svg
+286,"{[][<]C(C)C(=O)O[>][<]}{[$][$]CCCC[$],[$]CC(CC)[$][]}",286 - poly(lactic acid-b-ethylethylene) diblock [PLA-b-PEE].svg
+287,{[][$][Si](C)(C)O[$][$]}{[$][$]CC(C1CCCCC1)[$][]},287 - poly(vinyl cyclohexane-b-dimethyl siloxane) diblock [PVCH-b-PDMS].svg
+288,[H]{[>][<]OC(=O)OC(C)C[>][<]}{[$][$]CC(C1CCCCC1)[$][]},288 - poly(propylene carbonate-b-vinylcyclohexane) diblock [PPC-b-PVCH].svg
+289,{[][$]CC(c1ccccc1)[$][$]}C(C)(C)C(=O)O{[>][<]CCO[>][<]}C(=O)C({[$][$]CC(c1ccccc1)[$][$]})(C)C,289 - poly(styrene-b-ethylene oxide-b-styrene) triblock.svg
+290,{[][<]OC(C)CC(=O)[>][<]}{[>][<]OC(CCC)CC(=O)[>][]},290 - poly(3-hydroxybutyrate-b-3-hydroxyhexanoate) diblock [PHB-b-PHHx].svg
+291,C=CC({[>][<]OC(C)C(=O)[>][<]}{[>][<]OCC[>][<]}{[>][<]OC(=O)C(C)[>][<]}OC(=O)C=C)=O,291 - poly(lactic acid-b-ethylene oxide-b-lactic acid).svg
+292,"{[][$]CC(C{[>][<]OCC[>][<]}OC)[$],[$]C(C(=O)O)C(C(O)=O)[$][$]}{[$][$]CC(c1ccccc1)[$][$]}SC(c1ccccc1)=S",292 - poly(methoxy poly(ethylene glycol) allyl ether-co-maleic anhydride)-block-polystyrene [P(11EO_MH)-b-PS].svg
+293,[H]{[>][<]OCCCC(CSC{[>][<]CO[>][<]})C(=O)[>][<]}{[>][<]C(=O)C(C)OC(=O)C(C)O[>][<]}OCc1ccccc1,293 - poly(lactic-acid-b-del-valerolactone) diblock [PLA-b-PFVL].svg
+294,"{[][$]CC(C)(C(=O)NC(C)C)[$][$]}C{[$][$]C(=C/Oc1ccccc1)C[$],[$]C(=C)C(Oc1ccccc1)[$][]}",294 - poly(N-isopropyl acrylamide)-b-poly(phenoxyallene) diblock [PNIPAM-b-PPOA].svg
+295,OC(=O)CCC({[$][$]C(C)(C(=O)OCCN(C)C)C[$][$]}{[$][$]CC(c1ccccc1)[$][$]}SC(=S)c1ccccc1)(C)C#N,295 - poly(2-(dimethylamino)ethyl methacrylate)-block-polystyrene [PDMAEMA-b-PS].svg
+296,CCC(C){[$][$]CC(c1ccccc1)[$][$]}CCC(OCCOCc1ccc(C=C)cc1){[$][$]CC(OCCCl)[$][$]}CC(OC)OCCCl,296 - alpha-acetal-gamma-styrenyl-poly(chloroethyl vinyl ether-block-styrene) [PCEVE-b-PS].svg
 299,{[][<][Si](C)(C)O[>][]},299 - unnamed_299.svg
 300,{[][$]C\C=C/C[$][]},300 - unnamed_300.svg
 301,{[][$]CC=C(CCC)C[$][]},301 - unnamed_301.svg
@@ -426,6 +500,7 @@ index,BIGSMILES,SVG-file-name
 511,"{[][<]N1C(=O)c2cc(ccc2C1=O)C(=O)c3cc4C(=O)N(C(=O)c4cc3)[<],[>]c1ccc(cc1)[>][]}",511 - unnamed_511.svg
 512,"{[][<]c1nc2cc(ccc2nc1)S(=O)(=O)c3cc4nc(cnc4cc3)[<],[>]c1ccc(cc1)[>][]}",512 - unnamed_512.svg
 513,"{[][<]N1C(=O)c2cc(ccc2C1=O)Oc3cc4C(=O)N(C(=O)c4cc3)[<],[>]c1ccc(cc1)[>][]}",513 - unnamed_513.svg
+514,{[>][<]OCC[>][<]}O,514 - unnamed_514.svg
 515,"{[][<]c1c(c2ccccc2)c(c3ccccc3)c4cc(ccc4n1)Oc5cc6c(c7ccccc7)c(c8ccccc8)c(nc6cc5)[<],[>]c1ccc(cc1)[>][]}",515 - unnamed_515.svg
 516,C{[<][>]OCC[<][>]}OC(=O)C=C,516 - unnamed_516.svg
 517,C{[>][<]OCC[>][<]}OC(=O)C,517 - unnamed_517.svg
@@ -433,26 +508,134 @@ index,BIGSMILES,SVG-file-name
 519,C=CC(=O){[<][>]OCC[<][>]}OC(=O)C=C,519 - unnamed_519.svg
 520,CC(=O){[>][<]OCC[>][<]}OC(=O)C,520 - unnamed_520.svg
 521,ClCC{[>][<]OCC[>][<]}Cl,521 - unnamed_521.svg
+522,O{[>][<]C(=O)C(C)O[>][<]},522 - unnamed_522.svg
 523,O{[>][<]CCO[>][<]}CCO,523 - unnamed_523.svg
 524,O{[>][<]CCO[>][<]}C(=O)C(C)(C)SC(=S)SCCCCCCCCCCCC,524 - unnamed_524.svg
+525,O{[>][<]CCO[>][<]}C(=O)C(C)(C)SC(=S)S{[$][$]C(C)(C(=O)OC)C[$][$]}CCCCCCCCCCCC,525 - unnamed_525.svg
+526,O{[>][<]CCO[>][<]}C(=O)C(C)(C)SC(=S)S{[$][$]CC(C(=O)NC(C)C)[$][$]}CCCCCCCCCCCC,526 - unnamed_526.svg
 527,C1C(O1)CO{[>][<]CCO[>][<]}CC(O1)C1,527 - unnamed_527.svg
 528,CC(C)(C){[$][$]CC(C)(C)[$][$]}CC(C)=C,528 - unnamed_528.svg
 529,CC(C)(C){[$][$]CC(C)(C)[$][$]}CC(C)CSCCNC(=O)OC(C)(C)C,529 - unnamed_529.svg
 530,CC(C)(C){[$][$]CC(C)(C)[$][$]}CC(C)CSCCN,530 - unnamed_530.svg
+531,CC(C)(C){[$][$]CC(C)(C)[$][$]}CC(C)CSCCN{[<][>]C(=O)C(CCC(=O)OCc1ccccc1)N[<][>]},531 - unnamed_531.svg
 532,C=C[Si](C)(C){[>][<]O[Si](C)(C)[>][<]}O[Si](C)(C)C=C,532 - unnamed_532.svg
 533,C[Si](C)(C)O[Si](C)(C)O{[>][<][Si](C)O[>][<]}[Si](C)(C)C,533 - unnamed_533.svg
 534,C[Si](C)(C)O[Si](C)(C)O{[>][<][Si](C)(C)O[>][<]}[Si](C)(C)C,534 - unnamed_534.svg
 535,NCCC[Si](C)(C)O{[<][>][Si](C)(C)O[<][>]}[Si](C)(C)CCCN,535 - unnamed_535.svg
 536,"O{[$][$]CC(c1ccccc1)[$],[$]CC(C)(C(=O)OC)[$][$]}ON1C(C)(C)CCCC1(C)(C)",536 - unnamed_536.svg
+537,O{[<][>]C(=O)CCCCCN[<][>]},537 - unnamed_537.svg
 538,O{[<][>]C(=O)CCCCCN[<][>]}C(=O)CCCCC(=O)O,538 - unnamed_538.svg
 539,"C(c1ccccc1)O{[>][<]CCO[>],[<]CC(COCCN(C(C)C)(C(C)C))O[>][<]}[H]",539 - unnamed_539.svg
+540,"O{[>][<]C(=O)C(C)N[>],[<]C(=O)CN[>][<]}",540 - unnamed_540.svg
+541,"CCC(C){[$][$]CC(C1CCCCC1)[$][$]}{[$][$]CCCC[$],[$]CC(CC)[$][$]}[H]",541 - unnamed_541.svg
+542,{[][$]CC(c1cc(C(=O)Oc2ccc(OCCCC)cc2)ccc1(C(=O)Oc3ccc(OCCCC)cc3))[$][$]}{[>][<][Si](C)(C)O[>][]},542 - unnamed_542.svg
+543,CCC(C){[$][$]CC(c1ccccc1)[$][$]}{[$][$]CC(C)(C(=O)OCC(CC)CCCC)[$][$]}[H],543 - unnamed_543.svg
+544,{[][$]CC(c1ccccc1)[$][$]}{[$][$]CC(C)(C(=O)OCCCC)[$][]},544 - unnamed_544.svg
+545,"{[][<]CCO[>][<]}{[$][$]C\C=C(C)/C[$],[$]C\C=C(C)\C[$],[$]CC(C(C)=C)[$],[$]CC(C)(C=C)[$][]}",545 - unnamed_545.svg
+546,"{[][<]CCO[>][<]}{[$][$]C\C=C/C[$],[$]C\C=C\C[$],[$]CC(C=C)[$][]}",546 - unnamed_546.svg
+547,"{[][$]C\C=C/C[$],[$]C\C=C\C[$],[$]CC(C=C)[$][$]}{[>][<][Si](C)(C)O[>][]}",547 - unnamed_547.svg
+548,"{[][$]C\C=C(C)/C[$],[$]C\C=C(C)\C[$],[$]CC(C(C)=C)[$],[$]CC(C)(C=C)[$][$]}{[$][$]CC(c1ccccc1)[$][]}",548 - unnamed_548.svg
+549,{[][$]CC(c1ncccc1)[$][$]}{[$][$]CC(c1ccncc1)[$][]},549 - unnamed_549.svg
+550,"{[][$]CCCC[$],[$]CC(CC)[$][$]}{[$][$]CCC(C)C[$],[$]CC(C(C)C)[$],[$]CC(C)(CC)[$][]}",550 - unnamed_550.svg
+551,"{[][$]CCC(C)C[$],[$]CC(C(C)C)[$],[$]CC(C)(CC)[$][$]}{[$][$]CCCC[$],[$]CC(CC)[$][]}",551 - unnamed_551.svg
+552,"{[][$]CCCC[$],[$]CC(CC)[$][$]}{[$][$]CCCC[$],[$]CC(CC)[$][]}",552 - unnamed_552.svg
+553,{[][<]CCO[>][<]}{[>][<]C(CC)CO[>][]},553 - unnamed_553.svg
+554,"CCC(C){[$][$]C\C=C(C)/C[$],[$]C\C=C(C)\C[$],[$]CC(C(C)=C)[$],[$]CC(C)(C=C)[$][$]}{[>][<]CCO[>][<]}[H]",554 - unnamed_554.svg
+555,"{[][$]CC(c1ccccc1)[$][$]}{[$][$]C\C=C(C)/C[$],[$]C\C=C(C)\C[$],[$]CC(C(C)=C)[$],[$]CC(C)(C=C)[$][]}",555 - unnamed_555.svg
+556,CCC(C){[$][$]CC(c1ccccc1)[$][$]}{[$][$]CC(c1ncccc1)[$][$]}[H],556 - unnamed_556.svg
+557,"[H]{[>][>]CCO[<][<]}{[$][$]C\C=C(C)/C[$],[$]C\C=C(C)\C[$],[$]CC(C(C)=C)[$],[$]CC(C)(C=C)[$][$]}C(C)CC",557 - unnamed_557.svg
+558,"CCC(C){[$][$]CCCC[$],[$]CC(CC)[$][$]}{[$][$]CCCC[$],[$]CC(CC)[$][]}",558 - unnamed_558.svg
+559,{[][$]CC(c1ccccc1)[$][$]}{[$][$]CC(C=C)[$][]},559 - unnamed_559.svg
+560,"{[][$]CC(c1ccccc1)[$][$]}{[$][$]C\C=C/C[$],[$]C\C=C\C[$],[$]CC(C=C)[$][]}",560 - unnamed_560.svg
+561,"CCC(C){[$][$]CC(c1ccccc1)[$][$]}{[$][$]C\C=C(C)/C[$],[$]C\C=C(C)\C[$],[$]CC(C(C)=C)[$],[$]CC(C)(C=C)[$][]}",561 - unnamed_561.svg
+562,{[][$]CC(c1ccccc1)[$][$]}{[$][$]CC(c1ncccc1)[$][]},562 - unnamed_562.svg
+563,"CCC(C){[$][$]CC(c1ccccc1)[$][$]}{[$][$]C\C(C)=C/C(C)[$],[$]C\C(C)=C\C(C)[$],[$]CC(C)(C=CC)[$],[$]C(C)C(C(C)=C)[$][$]}[H]",563 - unnamed_563.svg
+564,CCCC{[$][$]CC(c1ccccc1)[$][$]}{[$][$]CC(c1ccncc1)[$][]},564 - unnamed_564.svg
+565,C=C{[>][<]C1CC(C2CN(C(C)(C)C)[Sn](Cl)(Cl)N(C(C)(C)C)CC12)C=C[>][<]}{[>][<]C(C1)CCC1C=C[>][<]}C(C)(C)(C),565 - unnamed_565.svg
+566,{[][$]CC(c1ccccc1)[$][$]}{[$][$]CC(C)(C(=O)OC)[$][]},566 - unnamed_566.svg
+567,{[][$]CC(C)(C(=O)OC)[$][$]}{[$][$]CC(c1ccccc1)[$][]},567 - unnamed_567.svg
+568,c1ccccc1C=C{[>][>]C=CC1C(C3/C=C\C1c2c(OC)ccc(OC)c23)[<][<]}{[>][<]C(C1)CC(CO[Si](C)(C)C)C1C=C[>][<]}C(C)(C)(C),568 - unnamed_568.svg
+569,"{[][<]C(=O)C(C)O[>][<]}{[$][$]C\C=C(C)/C[$],[$]C\C=C(C)\C[$],[$]CC(C(C)=C)[$],[$]CC(C)(C=C)[$][]}",569 - unnamed_569.svg
+570,{[][<]CCO[>][<]}{[>][<]CC(C)O[>][]},570 - unnamed_570.svg
+571,CCC(C){[$][$]CC(c1ncccc1)[$][$]}{[$][$]CC(c1ccccc1)[$][]},571 - unnamed_571.svg
+572,{[][$]CC(c1ncccc1)[$][$]}{[$][$]CC(c1ccccc1)[$][]},572 - unnamed_572.svg
+573,CCC(C){[$][$]CC(C)(c1ccccc1)[$][$]}{[$][$]CC(c1ccc(O)cc1)[$][$]}[H],573 - unnamed_573.svg
+574,{[][$]CC(c1ccccc1)[$][$]}{[>][<]CCO[>][]},574 - unnamed_574.svg
+575,{[][$]CC(c1ccccc1)[$][$]}{[$][$]CC(C(=O)OC(C)(C)C)[$][]},575 - unnamed_575.svg
+576,{[][<][Si](C)(C)O[>][<]}{[$][$]CC(c1ccccc1)[$][]},576 - unnamed_576.svg
+577,[H]{[>][>]CC(C)OC(=O)O[<][<]}OCC{[$][$]CC(c1ccccc1)[$][$]}C(C)CC,577 - unnamed_577.svg
+578,{[][$]CC(c1ncccc1)[$][$]}{[$][$]CC(C)(C(=O)OCCOC)[$][]},578 - unnamed_578.svg
+579,{[][<]CCO[>][<]}{[$][$]CC(c1ccccc1)[$][]},579 - unnamed_579.svg
+580,{[][$]CC(c1ccccc1)[$][$]}{[$][$]CC(c1ccc(O)c(O)c1)[$][]},580 - unnamed_580.svg
+581,"CO{[>][<]CCO[>][<]}{[>][<]C(=O)C(C)O[>],[<]C(=O)CO[>][<]}C(=O)CO",581 - unnamed_581.svg
+582,"{[][$]CCC(C)C[$],[$]CC(C(C)C)[$],[$]CC(C)(CC)[$][$]}{[>][<][Si](C)(C)O[>][]}",582 - unnamed_582.svg
+583,"{[][$]CC(CC)[$],[$]CCCC[$][$]}{[>][<][Si](C)(C)O[>][]}",583 - unnamed_583.svg
+584,"{[][$]CC(CC)[$],[$]CCCC[$][$]}{[>][<]CCO[>][]}",584 - unnamed_584.svg
+585,C(c1ccccc1)(c1ccccc1)C{[$][$]CC(c1ncccc1)[$][$]}{[$][$]CC(c1ccncc1)[$][$]}C(C)CC,585 - unnamed_585.svg
+586,"[H]{[$][$]CCCC[$],[$]CC(CC)[$][$]}{[$][$]CCC(C)C[$],[$]CC(C(C)C)[$],[$]CC(C)(CC)[$][$]}C(C)CC",586 - unnamed_586.svg
+587,"CCC(C){[$][$]CC(c1ccccc1)[$][$]}{[$][$]C\C=C(C)/C[$],[$]C\C=C(C)\C[$],[$]CC(C(C)=C)[$],[$]CC(C)(C=C)[$][$]}[H]",587 - unnamed_587.svg
+588,"[H]{[>][>]C(C)C(=O)O[<][<]}{[$][$]C\C=C(C)/C[$],[$]C\C=C(C)\C[$],[$]CC(C(C)=C)[$],[$]CC(C)(C=C)[$][$]}C(C)CC",588 - unnamed_588.svg
+589,"CCC(C){[$][$]C\C=C(C)/C[$],[$]C\C=C(C)\C[$],[$]CC(C(C)=C)[$],[$]CC(C)(C=C)[$][$]}{[>][<][Si](C)(C)O[>][<]}[Si](C)(C)(C)",589 - unnamed_589.svg
+590,"CCC(C){[$][$]CCC(C)C[$],[$]CC(C(C)C)[$],[$]CC(C)(CC)[$][$]}{[>][<][Si](C)(C)O[>][<]}[Si](C)(C)(C)",590 - unnamed_590.svg
+591,"CCC(C){[$][$]CC(C1CCCCC1)[$][$]}{[$][$]CCC(C)C[$],[$]CC(C(C)C)[$],[$]CC(C)(CC)[$][$]}[H]",591 - unnamed_591.svg
+592,"CCC(C){[$][$]CC(C1CCCCC1)[$][$]}{[$][$]CC(CC)[$],[$]CCCC[$][$]}[H]",592 - unnamed_592.svg
+593,c1ccccc1{[<][>][Si](CC)(CC)CCC[<][>]}CC(c1ccccc1)(c1ccccc1){[$][$]CC(C(=O)OCCO)[$][$]},593 - unnamed_593.svg
+594,{[][$]CC[$][$]}{[$][$]CC(c1ccccc1)[$][]},594 - unnamed_594.svg
+595,{[][<]OCC[>][<]}{[<][>]OC(C)C[<][>]}{[>][<]OCC[>][]},595 - unnamed_595.svg
+596,"{[][$]CC(C(=O)O)[$],[$]CC(C(=O)O{[>][<]CCO[>][<]}C)[$][]}",596 - unnamed_596.svg
+597,"CCC(C){[$][$]CC(c1ccccc1)[$][$]}{[$][$]C\C=C(C)/C[$],[$]C\C=C(C)\C[$],[$]CC(C(C)=C)[$],[$]CC(C)(C=C)[$][$]}{[$][$]CC(c1ccccc1)[$][$]}{[>][<]CCO[>][<]}[H]",597 - unnamed_597.svg
+598,"CCC(C){[$][$]CC(C1CCCCC1)[$][$]}{[$][$]CCCC[$],[$]CC(CC)[$][$]}{[$][$]CC(C1CCCCC1)[$][$]}{[$][$]CCCC[$],[$]CC(CC)[$][$]}{[$][$]CC(C1CCCCC1)[$][$]}{[$][$]CCC(C)C[$],[$]CC(C(C)C)[$],[$]CC(C)(CC)[$][$]}",598 - unnamed_598.svg
+599,"{[][$]CC(C1CCCCC1)[$][$]}{[$][$]CCC(C)C[$],[$]CC(C(C)C)[$],[$]CC(C)(CC)[$][$]}{[$][$]CC(C1CCCCC1)[$][$]}{[$][$]CCC(C)C[$],[$]CC(C(C)C)[$],[$]CC(C)(CC)[$][$]}{[$][$]CC(C1CCCCC1)[$][$]}{[$][$]CCC(C)C[$],[$]CC(C(C)C)[$],[$]CC(C)(CC)[$][$]}{[$][$]CC(C1CCCCC1)[$][$]}{[$][$]CCC(C)C[$],[$]CC(C(C)C)[$],[$]CC(C)(CC)[$][$]}{[$][$]CC(C1CCCCC1)[$][$]}{[$][$]CCC(C)C[$],[$]CC(C(C)C)[$],[$]CC(C)(CC)[$][$]}{[$][$]CC(C1CCCCC1)[$][]}",599 - unnamed_599.svg
+600,CO{[>][<]CCO[>][<]}C(=O)C(c1ccccc1){[$][$]CC(C)(C(=O)OC)[$][$]}{[$][$]CC(c1ccccc1)[$][$]}SC(=S)c1ccccc1,600 - unnamed_600.svg
+601,"{[][$]CC(c(cc1)ccc1CCCC{[>][<]OCC[>][<]}S)[$],[$]CC(c1ccccc1)[$][]}",601 - unnamed_601.svg
 602,{[][$]CC(C)([#R])[$][]}.{#R=C(=O)OCC12CC(C3)CC(C1)CC3C2},602 - unnamed_602.svg
+603,"{[][$]CC(C)(C)[$],[$]CC(c1cccc(c1)C{[$][$]CC(C)(C(=O)OC)[$][$]}Br)[$][]}",603 - unnamed_603.svg
+604,NCC(C)(C){[$][$]CC(C(=O)OCCO)(COC(=O)C(C){[$][$]CC(C)(C(=O)OC)[$][$]}Cl)[$][$]}C(C)(C)c1ccccc1,604 - unnamed_604.svg
+605,{[][<]N=Cc(cc1)ccc1C=NCCC[Si](C)(C)O{[<][>][Si](C)(C)O[<][>]}[Si](C)(C)CCC[>][]},605 - unnamed_605.svg
+606,"{[][<]{[>][<]C(=O)Nc(cc1)ccc1Cc(cc2)ccc2NC(=O)[<],[>]O{[<][>]CC(C)O[<][>]}[>][>]}[<],[>]NCCN[>][]}",606 - unnamed_606.svg
+607,"{[][$]CC(c(cc1)ccc1CCCC{[>][<]OCC[>][<]}N)[$],[$]CC(c1ccccc1)[$][]}",607 - unnamed_607.svg
+608,"{[][$]CC(c(cc1)ccc1CCCC{[>][<]OCC[>][<]}C(=O)O)[$],[$]CC(c1ccccc1)[$][]}",608 - unnamed_608.svg
+609,"{[][>]C(=O)Nc1ccc(C)c(c1)NC(=O)[>],[<]OCC{[>][<]OCC[>][<]}O[<],[<]OCCCO[<][]}",609 - unnamed_609.svg
+610,C([#Arm])([#Arm])([#Arm])[#Arm].{#Arm=CO{[<][>]CCO[<][>]}},610 - unnamed_610.svg
+611,OCCCCCC(=O){[>][<]OCCCCCC(=C)[>][<]}OCc1cc([#Arm1])cc([#Arm2])c1.{#Arm1=c2nnn(CC{[$][$]CC(c3ccccc3)[$][$]}CCC)c2}.{#Arm2=c4nnn({[>][<]CCO[>][<]}C)c4},611 - unnamed_611.svg
+612,CC([#R])([#R])([#R]).{#R=c(cc1)ccc1OC(=O)C(CO{[>][<]C(=O)C(C)O[>][<]})(CO{[>][<]C(=O)C(C)O[>][<]})C},612 - unnamed_612.svg
+613,CC([#R])([#R])([#R]).{#R=c(cc1)ccc1OC(=O)C(CO{[>][<]C(=O)C(C)O[>][<]}C(=O)CCC(=O)O)(CO{[>][<]C(=O)C(C)O[>][<]}C(=O)CCC(=O)O)(C)},613 - unnamed_613.svg
+614,CC(=O){[>][<]N(CCCCCC)C(=O)[>][<]}OCCCCCCn1nnc(c1)COCC([#Arm])([#Arm])CC.{#Arm=CO{[>][<]C(=O)CCCCCO[>][<]}},614 - unnamed_614.svg
+615,CC(=O){[>][<]N(CCCCCC)C(=O)[>][<]}OCCCCCCn1nnc(c1)COCC([#Arm])([#Arm])([#Arm]).{#Arm=CO{[>][<]C(=O)CCCCCO[>][<]}},615 - unnamed_615.svg
+616,"{[][<]NCCC{[>][<][Si](C)(C)O[>][<]}[Si](C)(C)CCCN[<],[>]C(=O)NC(CC1)CCC1CC(CC2)CCC2NC(=O)[>][]}",616 - unnamed_616.svg
+617,C([#R])([#R])([#R])([#R]).{#R=C{[<][>]OC(=O)CCCCC[<][>]}OC(=O)C(C)(C)Br},617 - unnamed_617.svg
+618,C([#R])([#R])([#R])([#R]).{#R=C{[<][>]OC(=O)CCCCC[<][>]}OC(=O)C(C)(C){[$][$]CC(C)(C(=O)OCCOCCOCCOCCOCCOCCOCCOCCOCCOC)[$][$]}{[$][$]CC(C)(C(=O)OCCOCCOC)[$][$]}Br},618 - unnamed_618.svg
+619,C([#R])([#R])([#R])([#R]).{#R=C{[<][>]OC(=O)CCCCC[<][>]}OC(=O)C(C)(C){[$][$]CC(C)(C(=O)OCCOCCOC)[$][$]}{[$][$]CC(C)(C(=O)OCCOCCOCCOCCOCCOCCOCCOCCOCCOC)[$][$]}Br},619 - unnamed_619.svg
+620,N([#R])([#R])CCCCN([#R])([#R]).{#R=CCCN(CCCN{[<][>]C(=O)C(CCCCN)N[<][>]})(CCCN{[<][>]C(=O)C(CCCCN)N[<][>]})},620 - unnamed_620.svg
+621,"{[][<]CCCCC(C)(C)C(=O)O{[>][<]CCO[>][<]}C(=O)C(C)(C)CCCC[<],[>]n1cc([<2])nn1,[>2]COCC(COC[>2])(COC[>2])COC[>2][]}",621 - unnamed_621.svg
+622,"{[][<]CCCCC(C)(C)C(=O)O{[>][<]CCO[>][<]}C(=O)C(C)(C)CCCC[<],[>]n1cc([<2])nn1,[>2]COCC(COC[>2])(COC[>2])C[]}",622 - unnamed_622.svg
+623,C([#R])([#R])([#R])([#R]).{#R=C{[<][>]OC(=O)CCCCC[<][>]}O},623 - unnamed_623.svg
+624,"{[][<]NCCC{[>][<]OCC[>][<]}OCC(CO{[<][>]CCO[<][>]}CCCN[<])(CO{[<][>]CCO[<][>]}CCCN[<])CO{[<][>]CCO[<][>]}CCCN[<],[>]C(=O)CCCOC{[>][<]OCC[>][<]}OCC(CO{[<][>]CCO[<][>]}COCCCC(=O)[>])(CO{[<][>]CCO[<][>]}COCCCC(=O)[>])CO{[<][>]CCO[<][>]}COCCCC(=O)[>][]}",624 - unnamed_624.svg
+625,"{[][>]C(=O)CCCCCCC(=O)[>],C([#R])([#R])OC([#R])([#R])[]}.{#R=COC(CO{[<][>]CCO[<][>]}CCN[<])(CO{[<][>]CCO[<][>]}CCN[<])}",625 - unnamed_625.svg
 626,"{[][<1]CC(=O)OCc1ccc(COC(=O)C[<1])c(N(=O)=O)c1,CCC(COC(=O)CCS[>2])(COC(=O)CCS[>2])COC(=O)CCS[>2],[>1]CC[<2][]}",626 - unnamed_626.svg
+627,"{[][<1]CC(=O)OCc1ccc(COC(=O)C[<1])c(N(=O)=O)c1,[>2]SCCC(=O)OC(COC(=O)CCS[>2])(COC(=O)CCS[>2])COC(=O)CCS[>2],[>1]CC[<2][]}",627 - unnamed_627.svg
+628,"{[][<1]CC(=O)OCc1ccc(COC(=O)C[<1])c(N(=O)=O)c1,[>2]SCCC(=O)OC(COC(=O)CCS[>2])(COC(=O)CCS[>2])COC(=O)CCS[>2],[>2]SCCCCCCS[>2],[>1]CC[<2][]}",628 - unnamed_628.svg
+629,N(CCC(=O)[#R])(CCC(=O)[#R])CCN(CCC(=O)[#R])(CCC(=O)[#R]).{#R={[>][<]NCCN(CCC(=O)[>])CCC(=O)[>][]}},629 - unnamed_629.svg
+630,N(CCN([#R])([#R]))(CCN([#R])([#R]))(CCN([#R])([#R])).{#R=CCC(=O){[>][<]NCCN(CCC(=O)[>])CCC(=O)[>][]}},630 - unnamed_630.svg
+631,"{[][$]CC[$],[$]CC([$])[$][]}",631 - unnamed_631.svg
+632,"{[][<]c1cc([>])cc([>])c1;[<]Br,[>]B(O)O[]}",632 - unnamed_632.svg
+633,N([#R])([#R])CCCCN([#R])([#R]).{#R={[>][<]CCCN([>])([>])[]}},633 - unnamed_633.svg
+634,{[][<]CCN([>])[>][]},634 - unnamed_634.svg
+646,N([#Arm])([#Arm]){[$][$]CC(c1ccccc1)[$][$]}Cc(cc1)ccc1C{[$][$]CC(c1ccccc1)[$][$]}N([#Arm])([#Arm]).{#Arm=CC{[>][<]OC(=O)C(C)OC(=O)C(C)[>][<]}O},646 - unnamed_646.svg
+647,O{[<][>]CCCCCC(=O)[<][>]}OC(c1ccccc1)(c(cc2)ccc2OC(=O)C(C){[$][$]CC(C)(C(=O)OC)[$][$]}Br)C(c3ccccc3)(c(cc4)ccc4OC(=O)C(C){[$][$]CC(c5ccccc5)[$][$]}Br)O{[>][<]C(=O)CCCCC[>][<]}O,647 - unnamed_647.svg
+648,O{[<][>]CCCCCC(=O)[<][>]}OC(c1ccccc1)(c(cc2)ccc2OC(=O)C(C){[$][$]CC(C)(C(=O)OC)[$][$]}Br){[$][$]CC(C(=O)OC(C)(C)C)[$][$]}C(c3ccccc3)(c(cc4)ccc4OC(=O)C(C){[$][$]CC(c5ccccc5)[$][$]}Br)O{[>][<]C(=O)CCCCC[>][<]}O,648 - unnamed_648.svg
 649,CCCC{[$][$]CC(c1ccccc1)[$][$]}CC(c1ccccc1)CC(COC(C)OCC)O,649 - unnamed_649.svg
+650,C(c1ccccc1)OCC{[>][<]OCC[>][<]}OC(COC(C)OCC)CC(c1ccccc1)C{[$][$]CC(c1ccccc1)[$][$]}CCCC,650 - unnamed_650.svg
+651,C(c1ccccc1)OCC{[>][<]OCC[>][<]}OC(CO)CC(c1ccccc1)C{[$][$]CC(c1ccccc1)[$][$]}CCCC,651 - unnamed_651.svg
+652,C(c1ccccc1)OCC{[>][<]OCC[>][<]}OC(COC(=O)C(C)(C)Br)CC(c1ccccc1)C{[$][$]CC(c1ccccc1)[$][$]}CCCC,652 - unnamed_652.svg
+653,C(c1ccccc1)OCC{[>][<]OCC[>][<]}OC(COC(=O)C(C)(C){[$][$]CC(C(=O)OC(C)(C)C)[$][$]}Br)CC(c1ccccc1)C{[$][$]CC(c1ccccc1)[$][$]}CCCC,653 - unnamed_653.svg
+654,C([#A])C(c1ccccc1)CC(c1ccccc1)CC(C(=O)OC(C)(C)C){[$][$]CC(C(=O)OC(C)(C)C)[$][$]}C(C)(C)C(=O)OCC(CC(c1ccccc1)C{[$][$]CC(c1ccccc1)[$][$]}CCCC)(O{[>][<]CCO[>][<]}CCOC(c1ccccc1)).{#A=C(c1ccccc1)CC(c1ccccc1)CC(C(=O)OC(C)(C)C){[$][$]CC(C(=O)OC(C)(C)C)[$][$]}C(C)(C)C(=O)OCC(CC(c1ccccc1)C{[$][$]CC(c1ccccc1)[$][$]}CCCC)(OC{[>][<]CCO[>][<]}CCOC(c1ccccc1))},654 - unnamed_654.svg
 655,OCCO{[<][>]CCO[<][>]}CCO,655 - unnamed_655.svg
 656,OC(=O)C=CC(=O)OCCO{[>][<]CCO[>][<]}CCOC(=O)C=CC(=O)O,656 - unnamed_656.svg
 657,C(C(=O)O)(SC(=S)c1ccccc1)CC(=O)OCCO{[>][<]CCO[>][<]}CCOC(=O)CC(C(=O)O)(SC(=S)c1ccccc1),657 - unnamed_657.svg
 658,C(C(=O)OCCO)(SC(=S)c1ccccc1)CC(=O)OCCO{[>][<]CCO[>][<]}CCOC(=O)CC(C(=O)OCCO)(SC(=S)c1ccccc1),658 - unnamed_658.svg
+659,C(C(=O)OCCO)({[$][$]CC(c1ccccc1)[$][$]}SC(=S)c1ccccc1)CC(=O)OCCO{[>][<]CCO[>][<]}CCOC(=O)CC(C(=O)OCCO)({[$][$]CC(c1ccccc1)[$][$]}SC(=S)c1ccccc1),659 - unnamed_659.svg
+660,C(C(=O)OCC{[>][<]OC(=O)C(C)OC(=O)C(C)[>][<]}O)({[$][$]CC(c1ccccc1)[$][$]}SC(=S)c1ccccc1)CC(=O)OCCO{[>][<]CCO[>][<]}CCOC(=O)CC(C(=O)OCC{[>][<]OC(=O)C(C)OC(=O)C(C)[>][<]}O)({[$][$]CC(c1ccccc1)[$][$]}SC(=S)c1ccccc1),660 - unnamed_660.svg
 661,{[][$]CC(c1ccc(S(=O)(=O)[O-])cc1)[$].[Na+][]},661 - unnamed_661.svg
 662,{[][<]C[C@@H](C)C[C@@H](C)[>][]},662 - unnamed_662.svg
 663,{[][<]C[C@@H](C)C[C@H](C)[>][]},663 - unnamed_663.svg

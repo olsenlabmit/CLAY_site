@@ -31,3 +31,13 @@
 - Fixed `.github/workflows/deploy-validation-site.yml` after its nested `on`, `permissions`, `concurrency`, and `jobs` sections lost indentation.
 - Verified the corrected workflow file parses as YAML with PyYAML.
 - Verified whitespace with `git diff --check -- .github/workflows/deploy-validation-site.yml`.
+
+## Explicit SVG Directory Flag for Sync
+
+- Removed the fixed `DEFAULT_SVG_DIR` path from `scripts/sync_validation_data.py`.
+- Made `--svg-dir` a required terminal flag so each sync run explicitly selects the SVG directory referenced by the manifest.
+- Updated `in.md` backend sync examples to pass `--svg-dir site_svgs_260701` for normal uploads, exported entry state migration, and exported comment migration.
+- Verified `python -m py_compile scripts\sync_validation_data.py`.
+- Verified `python scripts\sync_validation_data.py --dry-run` fails with argparse's required `--svg-dir` error.
+- Verified `python scripts\sync_validation_data.py --svg-dir site_svgs_260701 --dry-run` prepares 643 entries and 0 comments.
+- Verified whitespace with `git diff --check -- scripts/sync_validation_data.py in.md`.

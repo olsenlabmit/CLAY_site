@@ -138,23 +138,23 @@ This repository's deployable frontend is the static site in `pages/`. Use GitHub
 
    ```powershell
    conda activate rdkit-env
-   python scripts/sync_validation_data.py
+   python scripts/sync_validation_data.py --svg-dir site_svgs_260701
    ```
 
-   The script reads `validation_manifest.csv` and `validation_svgs_v1/*.svg`, then upserts `entries`.
+   The script reads `validation_manifest.csv` by default and requires `--svg-dir` to identify the SVG directory, then upserts `entries`.
 
 7. To migrate exported Google Sheet entry state:
 
    ```powershell
    conda activate rdkit-env
-   python scripts/sync_validation_data.py --entries-csv path\to\Entries.csv
+   python scripts/sync_validation_data.py --svg-dir site_svgs_260701 --entries-csv path\to\Entries.csv
    ```
 
 8. To migrate exported Google Sheet comments:
 
    ```powershell
    conda activate rdkit-env
-   python scripts/sync_validation_data.py --comments-csv path\to\Comments.csv
+   python scripts/sync_validation_data.py --svg-dir site_svgs_260701 --comments-csv path\to\Comments.csv
    ```
 
    Add `--replace-comments` only when the existing Supabase comments should be deleted first.
