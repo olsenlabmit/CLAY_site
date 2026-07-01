@@ -28,17 +28,24 @@
    supabase functions deploy validation-api --project-ref <project-ref> --no-verify-jwt
    ```
 
-4. Set Edge Function secrets:
+4. Set Edge Function secrets. Do not set `SUPABASE_SERVICE_ROLE_KEY`; Supabase provides it automatically to hosted Edge Functions.
 
    ```powershell
-   supabase secrets set SUPABASE_SERVICE_ROLE_KEY=<service-role-key> VALIDATION_REVIEW_KEY=<shared-review-key> --project-ref <project-ref>
+   supabase secrets set VALIDATION_REVIEW_KEY=<shared-review-key> --project-ref <project-ref>
    supabase secrets set VALIDATION_COMMENT_IMAGE_BUCKET=validation-comment-images --project-ref <project-ref>
    ```
 
 5. In GitHub repository variables, set:
    - `VALIDATION_API_BASE_URL`: `https://<project-ref>.functions.supabase.co/validation-api`
    - `SUPABASE_ANON_KEY`: the public anon key, if JWT verification is enabled.
-6. To upload or update validation SVG data:
+6. To upload or update validation SVG data from a local terminal, create `.env.local` in the repository root. This file is ignored by Git.
+
+   ```text
+   SUPABASE_URL=https://<project-ref>.supabase.co
+   SUPABASE_SERVICE_ROLE_KEY=<service-role-key>
+   ```
+
+   Then run:
 
    ```powershell
    conda activate rdkit-env
@@ -74,6 +81,7 @@
 
 - Failed login/key: click the reviewer badge and re-enter the shared review key. If writes still fail, verify `VALIDATION_REVIEW_KEY` in Supabase secrets.
 - Entries not loading: confirm `VALIDATION_API_BASE_URL` points to the deployed `validation-api` function and that the function has `SUPABASE_SERVICE_ROLE_KEY`.
+- Local sync asks for Supabase credentials: create `.env.local` with `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`, or pass `--supabase-url` and `--service-role-key` for a one-off run.
 - SVG missing: rerun the sync script and confirm the manifest row references an existing SVG file.
 - Save errors: check the browser console and Supabase function logs. Annotation and checked writes require `x-validation-key`.
 - Image upload failures: confirm the `validation-comment-images` bucket exists and is public, and that `VALIDATION_COMMENT_IMAGE_BUCKET` matches it.

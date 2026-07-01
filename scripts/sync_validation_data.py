@@ -13,6 +13,7 @@ from urllib import error, parse, request
 REPO_VALIDATION_DIR = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = REPO_VALIDATION_DIR / "validation_manifest.csv"
 DEFAULT_SVG_DIR = REPO_VALIDATION_DIR / "validation_svgs_v1"
+DEFAULT_ENV_FILE = REPO_VALIDATION_DIR / ".env.local"
 
 
 def _cell(row: dict[str, str], *names: str) -> str:
@@ -27,6 +28,30 @@ def _cell(row: dict[str, str], *names: str) -> str:
 def _read_csv(path: Path) -> list[dict[str, str]]:
     with path.open(newline="", encoding="utf-8-sig") as handle:
         return list(csv.DictReader(handle))
+
+
+def _strip_env_quotes(value: str) -> str:
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in {'"', "'"}:
+        return value[1:-1]
+    return value
+
+
+def _load_env_file(path: Path) -> None:
+    if not path.exists():
+        return
+    for line_number, raw_line in enumerate(path.read_text(encoding="utf-8-sig").splitlines(), 1):
+        line = raw_line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if line.startswith("export "):
+            line = line[7:].strip()
+        if "=" not in line:
+            raise SystemExit(f"Invalid env line in {path} at line {line_number}: {raw_line}")
+        name, value = line.split("=", 1)
+        name = name.strip()
+        if not name:
+            raise SystemExit(f"Invalid env name in {path} at line {line_number}: {raw_line}")
+        os.environ.setdefault(name, _strip_env_quotes(value.strip()))
 
 
 def _parse_bool(value: str) -> bool:
@@ -199,6 +224,7 @@ class SupabaseRest:
 
 
 def parse_args() -> argparse.Namespace:
+    _load_env_file(DEFAULT_ENV_FILE)
     parser = argparse.ArgumentParser(description="Sync validation entries to Supabase.")
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
     parser.add_argument("--svg-dir", type=Path, default=DEFAULT_SVG_DIR)

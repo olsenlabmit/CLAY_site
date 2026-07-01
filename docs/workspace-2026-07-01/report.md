@@ -9,3 +9,11 @@
 - Verified `build_validation_svgs.py` resolves `C:\Users\ChemEGrad2025\Documents\MIT\Research\BIGSMILES_clay\layout` and that the directory exists.
 - Verified Python syntax with `python -m py_compile build_validation_svgs.py scripts\sync_validation_data.py`.
 - Verified whitespace with `git diff --check`.
+
+## Local Supabase Environment Loading
+
+- Added optional `.env.local` loading to `scripts/sync_validation_data.py`; values in the file fill missing local environment variables, while shell variables and CLI flags still take precedence.
+- Added `.env.local` to `.gitignore` so local Supabase credentials are not committed.
+- Updated `in.md` to separate hosted Edge Function secrets from local uploader credentials and remove the invalid `supabase secrets set SUPABASE_SERVICE_ROLE_KEY=...` instruction.
+- Verified `.env.local` parsing with a temporary PowerShell-created UTF-8 file, including quoted values and `SUPABASE_SERVICE_ROLE_KEY`.
+- Verified `python scripts\sync_validation_data.py --dry-run` still prepares 460 entries.
