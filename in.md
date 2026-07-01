@@ -176,3 +176,8 @@ This repository's deployable frontend is the static site in `pages/`. Use GitHub
 - Image upload failures: confirm the `validation-comment-images` bucket exists and is public, and that `VALIDATION_COMMENT_IMAGE_BUCKET` matches it.
 - Stale Pages deployment: rerun the Deploy validation site workflow and confirm the latest artifact includes `index.html` and `config.js`.
 - Mismatched manifest/SVG counts: run the sync script. It stops when the manifest row count does not match the number of SVG files.
+
+## Frontend Re-implementation Notes
+
+- SVG view state should initialize and restore to `DEFAULT_SVG_SCALE = 0.5`, centered on the SVG's original viewBox.
+- Trackpad wheel handling should treat pinch gestures (`ctrlKey` wheel events) as cursor-centered zoom and likely touchpad two-finger scroll events as canvas panning.

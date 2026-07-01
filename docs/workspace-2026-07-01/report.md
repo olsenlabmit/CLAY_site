@@ -41,3 +41,11 @@
 - Verified `python scripts\sync_validation_data.py --dry-run` fails with argparse's required `--svg-dir` error.
 - Verified `python scripts\sync_validation_data.py --svg-dir site_svgs_260701 --dry-run` prepares 643 entries and 0 comments.
 - Verified whitespace with `git diff --check -- scripts/sync_validation_data.py in.md`.
+
+## SVG Default Scale and Touchpad Navigation
+
+- Updated `index.html` SVG viewport initialization and Restore View behavior to use a centered `DEFAULT_SVG_SCALE = 0.5`, so SVG layouts display at 50% size by default.
+- Added trackpad wheel handling in `index.html`: pinch/`ctrlKey` wheel events zoom around the cursor, while likely two-finger scroll wheel events pan the SVG canvas.
+- Appended `in.md` frontend re-implementation notes documenting the 50% default view state and trackpad pan/zoom behavior.
+- Verified inline JavaScript parsing with Node `vm.Script`.
+- Verified whitespace with `git diff --check -- index.html in.md`.
