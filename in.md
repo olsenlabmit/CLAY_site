@@ -21,7 +21,7 @@
 ## Backend
 
 1. Open the Supabase project dashboard.
-2. Run `validation_site/supabase/schema.sql` in the SQL editor. It creates `entries`, `comments`, the update trigger, and the public `validation-comment-images` Storage bucket.
+2. Run `supabase/schema.sql` in the SQL editor. It creates `entries`, `comments`, the update trigger, and the public `validation-comment-images` Storage bucket.
 3. Deploy the Edge Function from this repository:
 
    ```powershell
@@ -42,23 +42,23 @@
 
    ```powershell
    conda activate rdkit-env
-   python validation_site/scripts/sync_validation_data.py
+   python scripts/sync_validation_data.py
    ```
 
-   The script reads `validation_site/validation_manifest.csv` and `validation_site/validation_svgs_v1/*.svg`, then upserts `entries`.
+   The script reads `validation_manifest.csv` and `validation_svgs_v1/*.svg`, then upserts `entries`.
 
 7. To migrate exported Google Sheet entry state:
 
    ```powershell
    conda activate rdkit-env
-   python validation_site/scripts/sync_validation_data.py --entries-csv path\to\Entries.csv
+   python scripts/sync_validation_data.py --entries-csv path\to\Entries.csv
    ```
 
 8. To migrate exported Google Sheet comments:
 
    ```powershell
    conda activate rdkit-env
-   python validation_site/scripts/sync_validation_data.py --comments-csv path\to\Comments.csv
+   python scripts/sync_validation_data.py --comments-csv path\to\Comments.csv
    ```
 
    Add `--replace-comments` only when the existing Supabase comments should be deleted first.
@@ -68,7 +68,7 @@
    - `comments`: reviewer name/email, timestamp, comment text, and image URL.
 10. Inspect uploads in Storage under `validation-comment-images`.
 11. Rotate the shared review key by updating `VALIDATION_REVIEW_KEY` in Supabase secrets, then give reviewers the new key. No Pages redeploy is required for key rotation.
-12. Redeploy GitHub Pages by running the Deploy validation site workflow or pushing a change to `validation_site/index.html`, `validation_site/pages/**`, or the workflow file.
+12. Redeploy GitHub Pages by running the Deploy validation site workflow or pushing a change to `index.html`, `pages/**`, or the workflow file.
 
 ## Troubleshooting
 

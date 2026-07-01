@@ -145,10 +145,11 @@ function _findSiblingDriveFile_(csvFile, fileName) {
  * import re
  * from pathlib import Path
  *
- * repo = Path(r"C:\Users\ChemEGrad2025\Documents\MIT\Research\BIGSMILES_clay")
- * data_path = repo / "data" / "cleanDatasetLayout.json"
- * svg_dir = repo / "validation_site" / "validation_svgs_v1"
- * csv_path = repo / "validation_site" / "validation_manifest.csv"
+ * site_dir = Path.cwd()
+ * layout_repo_dir = site_dir.parent / "BIGSMILES_clay"
+ * data_path = layout_repo_dir / "data" / "cleanDatasetLayout.json"
+ * svg_dir = site_dir / "validation_svgs_v1"
+ * csv_path = site_dir / "validation_manifest.csv"
  *
  * invalid_filename_chars = re.compile(r'[<>:"/\\|?*\x00-\x1f]')
  *

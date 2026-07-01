@@ -11,10 +11,12 @@ import tempfile
 from pathlib import Path
 
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-LAYOUT_DIR = REPO_ROOT / "layout"
+SITE_ROOT = Path(__file__).resolve().parent
+DEFAULT_LAYOUT_REPO_ROOT = SITE_ROOT.parent / "BIGSMILES_clay"
+LAYOUT_REPO_ROOT = Path(os.environ.get("CLAY_LAYOUT_REPO_ROOT", DEFAULT_LAYOUT_REPO_ROOT))
+LAYOUT_DIR = LAYOUT_REPO_ROOT / "layout"
 LAYOUT_OUTPUT_DIR = LAYOUT_DIR / "output"
-VALIDATION_SVG_DIR = Path(__file__).resolve().parent / "validation_svgs_v1"
+VALIDATION_SVG_DIR = SITE_ROOT / "validation_svgs_v1"
 FINAL_DIR_PATTERN = re.compile(r"^entry_(\d+)_")
 INVALID_FILENAME_CHARS = re.compile(r'[<>:"/\\|?*\x00-\x1f]')
 TARGET_LAYER_KEYS = frozenset({"F0", "F1"})
