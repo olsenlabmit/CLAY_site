@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BigSMILES Viewer</title>
+<style>
+/* ── Reset & base ─────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  height: 100vh; display: flex; flex-direction: column;
+  background: #f0f2f5; color: #222; overflow: hidden;
+}
+
+/* ── Header ───────────────────────────────────────── */
+#header {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 46px; padding: 0 20px;
+  background: #1565c0; color: #fff; flex-shrink: 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,.3);
+}
+#header h1    { font-size: .95rem; font-weight: 600; letter-spacing: .02em; }
+#user-badge   { font-size: .76rem; background: rgba(255,255,255,.18);
+                padding: 3px 10px; border-radius: 20px; }
+
+/* ── Main layout ──────────────────────────────────── */
+#main { flex: 1; display: flex; overflow: hidden; }
+
+/* ── Left panel ───────────────────────────────────── */
+#left-panel {
+  width: 210px; min-width: 160px; flex-shrink: 0;
+  background: #fff; border-right: 1px solid #ddd;
+  display: flex; flex-direction: column; overflow: hidden;
+}
+#lp-header {
+  padding: 10px 12px; flex-shrink: 0; border-bottom: 1px solid #eee;
+  font-size: .7rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .07em; color: #777;
+}
+#entry-list { flex: 1; overflow-y: auto; }
+#entry-controls {
+  padding: 8px 10px; border-bottom: 1px solid #eee;
+  display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;
+}
+#entry-search {
+  width: 100%; border: 1px solid #ddd; border-radius: 4px;
+  padding: 6px 8px; font-size: .76rem;
+}
+.entry-filter-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+}
+.entry-filter {
+  display: flex; flex-direction: column; align-items: stretch; gap: 2px;
+  font-size: .72rem; color: #666; text-transform: none; letter-spacing: 0;
+}
+.entry-filter select {
+  min-width: 0; width: 100%; border: 1px solid #ddd; border-radius: 4px;
+  padding: 5px 6px; font-size: .72rem; background: #fff; color: #222;
+}
+.entry-item {
+  padding: 9px 12px; cursor: pointer;
+  border-bottom: 1px solid #f4f4f4; transition: background .12s;
+}
+.entry-item:hover          { background: #e3f2fd; }
+.entry-item.active         { background: #1565c0; color: #fff; }
+.ei-head { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.ei-idx  { font-size: .78rem; font-weight: 700; }
+.ei-bs   { font-size: .68rem; opacity: .6; white-space: nowrap;
+           overflow: hidden; text-overflow: ellipsis; max-width: 184px; }
+.entry-item.active .ei-bs  { opacity: .8; }
+.bookmark-btn {
+  border: 0; background: transparent; color: #999; cursor: pointer;
+  flex: 0 0 auto; font-size: .84rem; line-height: 1; padding: 2px;
+  opacity: .55; filter: grayscale(1);
+}
+.bookmark-btn.bookmarked { color: #f9a825; opacity: 1; filter: none; }
+
+/* ── Right panel ──────────────────────────────────── */
+#right-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+
+/* ── BigSMILES bar ────────────────────────────────── */
+#bs-bar { background: #fff; border-bottom: 1px solid #ddd; padding: 8px 16px; flex-shrink: 0; }
+#bs-lbl  { font-size: .68rem; font-weight: 700; text-transform: uppercase;
+           letter-spacing: .07em; color: #888; margin-bottom: 3px; }
+#bs-text { font-family: 'Courier New', monospace; font-size: .87rem;
+           color: #1565c0; word-break: break-all;
+           max-height: 52px; overflow-y: auto; }
+
+/* ── SVG area ─────────────────────────────────────── */
+#svg-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+
+/* ── Toolbar ──────────────────────────────────────── */
+#toolbar {
+  display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
+  padding: 5px 12px; background: #fafafa; border-bottom: 1px solid #e0e0e0;
+  flex-shrink: 0;
+}
+.tbtn {
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 4px 9px; font-size: .76rem; cursor: pointer;
+  border: 1px solid #ccc; border-radius: 4px; background: #fff;
+  color: #333; transition: background .12s, border-color .12s;
+}
+.tbtn:hover           { background: #e3f2fd; border-color: #1565c0; }
+.tbtn.active          { background: #1565c0; color: #fff; border-color: #1565c0; }
+.tbtn.green           { background: #2e7d32; color: #fff; border-color: #2e7d32; }
+.tbtn.green:hover     { background: #1b5e20; }
+.tbtn.red:hover       { background: #ffebee; border-color: #c62828; color: #c62828; }
+#t-color { width: 28px; height: 28px; padding: 2px; border: 1px solid #ccc;
+           border-radius: 4px; cursor: pointer; }
+#t-width { width: 50px; padding: 3px 5px; border: 1px solid #ccc;
+           border-radius: 4px; font-size: .76rem; text-align: center; }
+#t-font-size { width: 58px; padding: 3px 5px; border: 1px solid #ccc;
+               border-radius: 4px; font-size: .76rem; text-align: center; }
+.t-sep   { width: 1px; height: 20px; background: #ddd; margin: 0 2px; }
+#save-status { font-size: .72rem; margin-left: auto; min-width: 90px; text-align: right; }
+
+/* ── SVG wrapper & container ──────────────────────── */
+#svg-wrapper {
+  flex: 1; overflow: hidden;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 14px; background: #eef0f3; min-height: 0;
+}
+#svg-container {
+  background: #fff; border-radius: 4px;
+  box-shadow: 0 1px 6px rgba(0,0,0,.15);
+  overflow: hidden; max-width: 100%;
+}
+#svg-container svg { display: block; width: 100%; height: 100%; }
+#svg-placeholder {
+  padding: 60px 40px; color: #bbb;
+  font-size: .88rem; text-align: center;
+}
+
+/* ── Comments section ─────────────────────────────── */
+#cmts-section {
+  background: #fff; border-top: 1px solid #ddd;
+  flex-shrink: 0; display: flex; flex-direction: column;
+  height: 210px;
+}
+#cmts-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 14px; border-bottom: 1px solid #eee; flex-shrink: 0;
+}
+#cmts-title  { font-size: .7rem; font-weight: 700; text-transform: uppercase;
+               letter-spacing: .07em; color: #777; }
+#cmts-toggle { font-size: .72rem; color: #1565c0; background: none;
+               border: none; cursor: pointer; }
+#cmts-panel-body { flex: 1; display: flex; overflow: hidden; min-height: 0; }
+
+/* ── Comment list ─────────────────────────────────── */
+#cmts-history-list { flex: 1; overflow-y: auto; padding: 8px 14px; }
+.cmt-card  {
+  padding: 7px 10px; margin-bottom: 7px;
+  background: #f8f9fa; border-radius: 6px;
+  border-left: 3px solid #1565c0;
+}
+.cmt-meta  { font-size: .67rem; color: #888; margin-bottom: 3px; }
+.cmt-meta strong { color: #1565c0; }
+.cmt-text  { font-size: .77rem; color: #333; white-space: pre-wrap; }
+.cmt-img   { max-width: 100%; max-height: 80px; margin-top: 5px;
+             border-radius: 3px; cursor: pointer; border: 1px solid #eee; }
+
+/* ── Add comment form ─────────────────────────────── */
+#cmt-form  {
+  width: 230px; min-width: 200px; border-left: 1px solid #eee;
+  padding: 8px 10px; display: flex; flex-direction: column; gap: 5px; flex-shrink: 0;
+}
+#cmt-input {
+  flex: 1; resize: none; border: 1px solid #ddd; border-radius: 4px;
+  padding: 6px 8px; font-size: .77rem; font-family: inherit; min-height: 50px;
+}
+#cmt-file  { font-size: .7rem; }
+#cmt-thumb { max-width: 100%; max-height: 42px; display: none;
+             object-fit: contain; border-radius: 3px; }
+#post-btn  {
+  padding: 5px 0; background: #1565c0; color: #fff;
+  border: none; border-radius: 4px; cursor: pointer;
+  font-size: .77rem; font-weight: 600;
+}
+#post-btn:hover    { background: #0d47a1; }
+#post-btn:disabled { background: #aaa; cursor: default; }
+
+/* ── Spinner ──────────────────────────────────────── */
+.spin {
+  width: 22px; height: 22px; margin: 20px auto;
+  border: 3px solid #eee; border-top-color: #1565c0;
+  border-radius: 50%; animation: sp .7s linear infinite;
+}
+@keyframes sp { to { transform: rotate(360deg); } }
+
+/* ── Lightbox ─────────────────────────────────────── */
+#lightbox {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.78); z-index: 9999;
+  align-items: center; justify-content: center;
+}
+#lightbox.on { display: flex; }
+#lb-img      { max-width: 90vw; max-height: 90vh; border-radius: 6px; }
+#lb-close    { position: fixed; top: 16px; right: 20px; color: #fff;
+               font-size: 1.8rem; background: none; border: none;
+               cursor: pointer; line-height: 1; }
+/* Phase 1 visual foundation: dark grid layout */
+:root {
+  --bg: #0d1117;
+  --panel: #161b22;
+  --panel-2: #1f2633;
+  --panel-3: #0f1724;
+  --border: #30363d;
+  --border-strong: #3f4b5f;
+  --text: #e6edf3;
+  --muted: #8b949e;
+  --blue: #58a6ff;
+  --blue-strong: #1f6feb;
+  --purple: #a371f7;
+  --danger: #ff7b72;
+  --success: #3fb950;
+  --splitter: #42526a;
+  --shadow: 0 14px 36px rgba(0,0,0,.28);
+}
+html { font-size: 18px; }
+body { background: var(--bg); color: var(--text); }
+button, input, textarea { font: inherit; }
+body.resizing-cols,
+body.resizing-rows { user-select: none; }
+body.resizing-cols { cursor: col-resize; }
+body.resizing-rows { cursor: row-resize; }
+
+#header {
+  height: 48px; background: linear-gradient(90deg, #111827, #17122a);
+  color: var(--text); border-bottom: 1px solid var(--border);
+  box-shadow: 0 2px 14px rgba(0,0,0,.35);
+}
+#header h1 { font-size: .95rem; font-weight: 650; letter-spacing: 0; }
+#user-badge {
+  color: #dbeafe; background: rgba(88,166,255,.14);
+  border: 1px solid rgba(88,166,255,.28); border-radius: 999px;
+  padding: 3px 10px; cursor: pointer;
+}
+#user-badge:hover { background: rgba(88,166,255,.22); }
+#settings-panel {
+  position: absolute; top: 54px; right: 12px; z-index: 20;
+  width: 320px; padding: 12px; border: 1px solid var(--border);
+  border-radius: 8px; background: var(--panel); box-shadow: 0 14px 36px rgba(0,0,0,.35);
+  display: grid; gap: 8px;
+}
+#settings-panel[hidden] { display: none; }
+#settings-panel label {
+  display: grid; gap: 3px; color: var(--muted); font-size: .72rem;
+}
+#settings-panel input {
+  width: 100%; padding: 7px 8px; border: 1px solid var(--border);
+  border-radius: 4px; background: #0f172a; color: var(--text);
+}
+#settings-panel .settings-actions {
+  display: flex; justify-content: flex-end; gap: 8px;
+}
+#settings-panel button {
+  padding: 5px 10px; border: 1px solid var(--border);
+  border-radius: 4px; background: #1f2937; color: var(--text); cursor: pointer;
+}
+
+#main {
+  display: grid; grid-template-columns: auto minmax(0, 1fr);
+  flex: 1; min-height: 0; height: calc(100vh - 48px); background: var(--bg);
+}
+#right-panel {
+  --cmts-width: 280px;
+  --composer-height: 24vh;
+  display: grid; grid-column: 2; min-width: 0; min-height: 0;
+  height: 100%;
+  grid-template-columns: minmax(360px, 1fr) var(--cmts-width);
+  grid-template-rows: auto minmax(0, 1fr) minmax(128px, var(--composer-height));
+}
+#cmts-panel-body { display: flex !important; }
+#cmts-panel-body[style*="none"] { display: none !important; }
+
+#left-panel {
+  grid-column: 1; grid-row: 1;
+  width: 236px; min-width: 170px; max-width: 34vw;
+  background: var(--panel); border-right: 1px solid var(--splitter);
+  overflow: auto; resize: none; position: relative;
+}
+#svg-area::after {
+  content: ""; position: absolute; background: var(--splitter);
+  opacity: .75; transition: opacity .12s, background .12s;
+}
+#left-resizer {
+  position: absolute; top: 0; right: 0; bottom: 0; z-index: 3;
+  width: 7px; background: var(--splitter); cursor: col-resize;
+  touch-action: none;
+  opacity: .75; transition: opacity .12s, background .12s;
+}
+#left-panel:hover #left-resizer,
+#left-resizer:hover,
+#svg-area:hover::after { opacity: 1; background: var(--blue); }
+#lp-header {
+  border-bottom-color: var(--border); color: var(--muted);
+}
+#entry-controls {
+  background: var(--panel); border-bottom-color: var(--border);
+}
+#entry-search,
+.entry-filter select {
+  background: var(--panel-2); border-color: var(--border);
+  color: var(--text);
+}
+#entry-search::placeholder { color: var(--muted); }
+.entry-filter { color: var(--muted); }
+.entry-item {
+  border-bottom-color: rgba(48,54,61,.7);
+  transition: background .12s, color .12s;
+}
+.entry-item:hover { background: rgba(88,166,255,.14); }
+.entry-item.active {
+  background: linear-gradient(90deg, rgba(31,111,235,.58), rgba(163,113,247,.44));
+  color: #fff;
+}
+.entry-item.active .ei-bs { opacity: .9; }
+.entry-item.active .bookmark-btn.bookmarked { color: #ffd33d; }
+.bookmark-btn:hover { opacity: 1; color: #f2cc60; }
+.bookmark-btn.bookmarked { color: #f2cc60; }
+
+#bs-bar {
+  grid-column: 1; grid-row: 1;
+  background: var(--panel-3); border-bottom-color: var(--border);
+  min-width: 0;
+}
+#bs-lbl { color: var(--muted); }
+#bs-text { color: var(--blue); max-height: 56px; }
+#svg-area {
+  grid-column: 1; grid-row: 2;
+  position: relative; background: var(--bg); overflow: hidden; min-height: 0;
+}
+#svg-area::after {
+  top: 0; right: -3px; bottom: 0; width: 6px; cursor: col-resize; z-index: 2;
+}
+
+#toolbar {
+  position: absolute; top: 12px; left: 12px; z-index: 5;
+  gap: 6px; padding: 7px 12px;
+  background: var(--panel); border-bottom-color: var(--border);
+  border: 1px solid var(--border); border-radius: 8px;
+  box-shadow: var(--shadow); cursor: move;
+  width: max-content; max-width: calc(100% - 24px);
+}
+#toolbar button,
+#toolbar input,
+#toolbar label { cursor: auto; }
+.tbtn {
+  gap: 4px; padding: 5px 11px; line-height: 1.2;
+  border: 1px solid var(--border); border-radius: 6px;
+  background: #21262d; color: var(--text);
+  box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
+  transition: background .12s, border-color .12s, color .12s, box-shadow .12s;
+}
+.tbtn:hover {
+  background: #30363d; border-color: var(--blue); color: #fff;
+}
+.tbtn.active {
+  background: var(--bg); color: var(--blue); border-color: var(--border-strong);
+  box-shadow: inset 0 2px 0 var(--purple), 0 0 0 1px rgba(88,166,255,.12);
+}
+.tbtn.green {
+  background: rgba(46,160,67,.16); color: #b7f7c2;
+  border-color: rgba(63,185,80,.42);
+}
+.tbtn.green:hover { background: rgba(46,160,67,.28); border-color: var(--success); }
+.tbtn.red:hover {
+  background: rgba(248,81,73,.14); border-color: var(--danger); color: #ffd7d4;
+}
+#toolbar label { color: var(--muted) !important; font-size: .72rem !important; }
+#t-color {
+  width: 30px; height: 30px; border-color: var(--border);
+  border-radius: 6px; background: var(--panel-2);
+}
+#t-width,
+#t-font-size {
+  width: 54px; padding: 4px 6px; border-color: var(--border);
+  border-radius: 6px; background: var(--panel-2); color: var(--text);
+}
+#t-font-size { width: 64px; }
+.t-sep { height: 24px; background: var(--border); }
+#save-status { color: var(--muted); }
+
+#svg-wrapper {
+  width: 100%; height: 100%; padding: 0; background: #0b1220;
+  align-items: stretch; justify-content: stretch; touch-action: none;
+}
+#svg-container {
+  width: 100%; height: 100%; background: #0b1220; border-radius: 0; box-shadow: none;
+}
+#svg-container svg { background: #0b1220; }
+#svg-placeholder {
+  color: var(--muted); background: var(--panel);
+}
+
+#cmts-section {
+  grid-column: 2; grid-row: 1 / 4;
+  width: auto; min-width: 190px; max-width: none; height: auto;
+  background: var(--panel); border-left: 1px solid var(--splitter);
+  display: flex; flex-direction: column; overflow: hidden;
+  direction: rtl; position: relative;
+}
+#cmts-resizer {
+  position: absolute; top: 0; bottom: 0; left: 0; z-index: 3;
+  width: 7px; background: var(--splitter); cursor: col-resize;
+  touch-action: none;
+  opacity: .75; transition: opacity .12s, background .12s;
+}
+#cmts-section:hover #cmts-resizer,
+#cmts-resizer:hover { opacity: 1; background: var(--blue); }
+#cmts-section.cmts-collapsed {
+  min-width: 38px;
+}
+#cmts-section.cmts-collapsed #cmts-panel-body {
+  display: none !important;
+}
+#cmts-section.cmts-collapsed #cmts-title {
+  writing-mode: vertical-rl; transform: rotate(180deg);
+}
+#cmts-header {
+  padding: 11px 12px 11px 14px; border-bottom: 1px solid var(--border);
+  background: var(--panel); display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0; direction: ltr; cursor: pointer;
+}
+#cmts-title {
+  color: var(--muted); writing-mode: initial; text-orientation: initial; white-space: nowrap;
+}
+#cmts-toggle { display: none; color: var(--blue); }
+#cmts-panel-body {
+  flex: 1; min-height: 0; overflow: hidden; direction: ltr;
+}
+#cmts-history-list {
+  flex: 1; width: auto; min-width: 0; max-width: none;
+  overflow: auto; resize: none; direction: ltr;
+  padding: 8px; background: var(--panel); color: var(--text);
+  border-left: 0;
+}
+#cmts-history-list > * {
+  opacity: 1; pointer-events: auto;
+}
+#cmts-history-list > span { color: var(--muted) !important; }
+.cmt-card {
+  background: var(--panel-2); border-radius: 6px; border-left-color: var(--purple);
+  cursor: pointer;
+}
+.cmt-meta { color: var(--muted); }
+.cmt-meta strong { color: var(--blue); }
+.cmt-summary {
+  color: var(--muted); font-size: .72rem; margin-top: 4px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.cmt-body { display: none; margin-top: 7px; }
+.cmt-card.open .cmt-body { display: block; }
+.cmt-card.open .cmt-summary { display: none; }
+.cmt-text { color: var(--text); }
+.cmt-img { border-color: var(--border); border-radius: 4px; }
+
+#cmt-form {
+  grid-column: 1; grid-row: 3;
+  min-height: 118px; height: 100%; width: 100%; min-width: 0;
+  border-top: 1px solid var(--splitter); border-left: 0;
+  background: var(--panel-3); padding: 10px 12px;
+  display: flex; flex-direction: column; gap: 7px; overflow: auto; resize: none; position: relative;
+}
+#cmt-form-resizer {
+  position: absolute; top: 0; left: 0; right: 0; height: 7px; z-index: 3;
+  background: var(--splitter); cursor: row-resize;
+  touch-action: none;
+  opacity: .75; transition: opacity .12s, background .12s;
+}
+#cmt-form:hover #cmt-form-resizer,
+#cmt-form-resizer:hover { opacity: 1; background: var(--blue); }
+#cmt-input {
+  border-color: var(--border); border-radius: 6px;
+  padding: 8px 10px; min-height: 58px;
+  background: var(--panel); color: var(--text);
+}
+#cmt-input::placeholder { color: var(--muted); }
+#cmt-name {
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 6px 10px; background: var(--panel); color: var(--text);
+}
+#cmt-name::placeholder { color: var(--muted); }
+#cmt-name:disabled { color: var(--muted); }
+#cmt-file { color: var(--muted); }
+#cmt-thumb { border: 1px solid var(--border); border-radius: 4px; }
+#post-btn {
+  padding: 6px 0; background: var(--blue-strong);
+  border-radius: 6px; font-weight: 650;
+}
+#post-btn:hover { background: #388bfd; }
+#post-btn:disabled { background: #3a4658; color: var(--muted); }
+
+.spin {
+  width: 24px; height: 24px; margin: 22px auto;
+  border-color: var(--border); border-top-color: var(--blue);
+}
+#lightbox { background: rgba(1,4,9,.84); }
+</style>
+</head>
+<body>
+
+<!-- ══ Header ══════════════════════════════════════════════ -->
+<div id="header">
+  <h1>BigSMILES Viewer</h1>
+  <button id="user-badge" type="button" onclick="editReviewerSettings()" title="Set reviewer name and review key">Loading...</button>
+</div>
+<div id="settings-panel" hidden>
+  <label>
+    Reviewer name
+    <input type="text" id="settings-name" autocomplete="name">
+  </label>
+  <label>
+    Shared review key
+    <input type="password" id="settings-key" autocomplete="off">
+  </label>
+  <label>
+    Validation API base URL
+    <input type="url" id="settings-api-base" autocomplete="off" placeholder="https://.../validation-api">
+  </label>
+  <div class="settings-actions">
+    <button type="button" onclick="closeReviewerSettings()">Cancel</button>
+    <button type="button" onclick="saveReviewerSettingsFromForm()">Save</button>
+  </div>
+</div>
+
+<!-- ══ Main ════════════════════════════════════════════════ -->
+<div id="main">
+
+  <!-- Left panel -->
+  <div id="left-panel">
+    <div id="left-resizer" title="Drag to resize entries"></div>
+    <div id="lp-header">Entries</div>
+    <div id="entry-controls">
+      <input type="search" id="entry-search" placeholder="Search index" autocomplete="off">
+      <div class="entry-filter-row">
+        <label class="entry-filter">
+          <span>Comment</span>
+          <select id="comment-filter" aria-label="Comment filter">
+            <option value="any">Any</option>
+            <option value="has">Has comments</option>
+            <option value="none">No comments</option>
+          </select>
+        </label>
+        <label class="entry-filter">
+          <span>Checked</span>
+          <select id="bookmark-filter" aria-label="Checked filter">
+            <option value="any">Any</option>
+            <option value="bookmarked">Checked</option>
+            <option value="none">Unchecked</option>
+          </select>
+        </label>
+      </div>
+    </div>
+    <div id="entry-list"><div class="spin"></div></div>
+  </div>
+
+  <!-- Right panel -->
+  <div id="right-panel">
+
+    <!-- BIGSMILES bar -->
+    <div id="bs-bar" ondblclick="toggleCmtsPanel()" title="Double-click to show comments">
+      <div id="bs-lbl">BigSMILES</div>
+      <div id="bs-text">← Select an entry</div>
+    </div>
+
+    <!-- SVG area -->
+    <div id="svg-area">
+      <!-- Toolbar -->
+      <div id="toolbar">
+        <button class="tbtn active" id="tbtn-line" onclick="setTool('line')">✏ Line</button>
+        <button class="tbtn"        id="tbtn-text" onclick="setTool('text')">T Text</button>
+        <div class="t-sep"></div>
+        <label style="font-size:.72rem;color:#555">Color</label>
+        <input type="color" id="t-color" value="#e53935" title="Stroke / text color">
+        <label style="font-size:.72rem;color:#555">Width</label>
+        <input type="number" id="t-width" value="2" min="1" max="12" title="Line width">
+        <label style="font-size:.72rem;color:#555">Text</label>
+        <input type="number" id="t-font-size" value="18" min="6" max="96" title="Text size">
+        <div class="t-sep"></div>
+        <button class="tbtn" onclick="resetView()" title="Restore the canvas view">Restore View</button>
+        <button class="tbtn"     onclick="undoLast()" title="Undo last stroke">↩ Undo</button>
+        <button class="tbtn red" onclick="clearAll()" title="Clear all annotations">🗑 Clear</button>
+        <button class="tbtn green" onclick="doSave()" title="Save annotations">💾 Save</button>
+        <span id="save-status"></span>
+      </div>
+
+      <!-- SVG canvas -->
+      <div id="svg-wrapper">
+        <div id="svg-container">
+          <div id="svg-placeholder">Select an entry to view its layout</div>
+        </div>
+      </div>
+    </div><!-- /svg-area -->
+
+    <!-- Comment history -->
+    <div id="cmts-section">
+      <div id="cmts-resizer" title="Drag to resize comments"></div>
+      <div id="cmts-header" ondblclick="toggleCmtsPanel()" title="Double-click to hide comments">
+        <span id="cmts-title">💬 Comment History</span>
+        <button id="cmts-toggle" onclick="toggleCmtsPanel()">hide</button>
+      </div>
+      <div id="cmts-panel-body">
+        <div id="cmts-history-list">
+          <span style="color:#ccc;font-size:.78rem">No entry selected.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comment composer -->
+    <div id="cmt-form">
+      <div id="cmt-form-resizer" title="Drag to resize composer"></div>
+      <input type="text" id="cmt-name" placeholder="Name" disabled>
+      <textarea id="cmt-input" placeholder="Write a comment…" disabled></textarea>
+      <input type="file" id="cmt-file" accept="image/*" disabled>
+      <img id="cmt-thumb" src="" alt="preview">
+      <button id="post-btn" onclick="postComment()" disabled>Post Comment</button>
+    </div>
+
+  </div><!-- /right-panel -->
+</div><!-- /main -->
+
+<!-- Lightbox for full-size images -->
+<div id="lightbox" onclick="closeLB()">
+  <button id="lb-close">✕</button>
+  <img id="lb-img" src="" alt="">
+</div>
+
+<!-- ══ JavaScript ═══════════════════════════════════════════ -->
+<script src="config.js"></script>
+<script>
+// ── State ─────────────────────────────────────────────────────
+let currentIdx  = null;   // currently selected entry index
+let annotations = [];     // [{id, type, ...}]
+let tool        = 'line'; // 'line' | 'text'
+let drawing     = false;
+let p0          = null;   // drag start point
+let tempEl      = null;   // live preview line
+let imgB64      = null;   // pending comment image (base64)
+let imgMime     = null;
+let imgName     = null;
+let cmtsOpen    = true;
+let cmtsWidth   = 280;
+let viewport    = { tx: 0, ty: 0, scale: 1 };
+let baseViewBox  = null;
+let panning      = false;
+let panLast      = null;
+let toolbarDrag  = null;
+let allEntries   = [];
+let bookmarkedIndices = new Set();
+let commentedIndices = new Set();
+
+const API_CONFIG = window.VALIDATION_SITE_CONFIG || {};
+const REVIEWER_NAME_KEY = 'validationReviewerName';
+const REVIEWER_KEY_KEY = 'validationReviewKey';
+const API_BASE_KEY = 'validationApiBaseUrl';
+
+function apiBaseUrl() {
+  return String(API_CONFIG.apiBaseUrl || localStorage.getItem(API_BASE_KEY) || '').replace(/\/+$/, '');
+}
+
+function apiAnonKey() {
+  return String(API_CONFIG.anonKey || '');
+}
+
+function reviewerSettings() {
+  return {
+    name: localStorage.getItem(REVIEWER_NAME_KEY) || '',
+    key: localStorage.getItem(REVIEWER_KEY_KEY) || '',
+  };
+}
+
+function saveReviewerSettings(name, key, baseUrl) {
+  localStorage.setItem(REVIEWER_NAME_KEY, String(name || '').trim());
+  localStorage.setItem(REVIEWER_KEY_KEY, String(key || '').trim());
+  if (baseUrl !== undefined && String(baseUrl || '').trim()) {
+    localStorage.setItem(API_BASE_KEY, String(baseUrl).trim());
+  }
+  refreshReviewerUi();
+}
+
+function editReviewerSettings() {
+  const current = reviewerSettings();
+  document.getElementById('settings-name').value = current.name;
+  document.getElementById('settings-key').value = current.key;
+  document.getElementById('settings-api-base').value = apiBaseUrl();
+  document.getElementById('settings-panel').hidden = false;
+  return true;
+}
+
+function ensureReviewerSettings() {
+  const current = reviewerSettings();
+  if (!current.name || !current.key || !apiBaseUrl()) {
+    editReviewerSettings();
+    refreshReviewerUi();
+    return false;
+  }
+  refreshReviewerUi();
+  return true;
+}
+
+function closeReviewerSettings() {
+  document.getElementById('settings-panel').hidden = true;
+}
+
+function saveReviewerSettingsFromForm() {
+  saveReviewerSettings(
+    document.getElementById('settings-name').value,
+    document.getElementById('settings-key').value,
+    document.getElementById('settings-api-base').value,
+  );
+  closeReviewerSettings();
+  loadInitialData();
+}
+
+function refreshReviewerUi() {
+  const settings = reviewerSettings();
+  document.getElementById('user-badge').textContent =
+    settings.name ? `Reviewer: ${settings.name}` : 'Set reviewer';
+  const nameInput = document.getElementById('cmt-name');
+  if (nameInput && settings.name && !nameInput.value) nameInput.value = settings.name;
+}
+
+async function apiRequest(path, options = {}) {
+  const base = apiBaseUrl();
+  if (!base) throw new Error('Validation API base URL is not configured.');
+
+  const method = String(options.method || 'GET').toUpperCase();
+  const headers = Object.assign({ Accept: 'application/json' }, options.headers || {});
+  const anonKey = apiAnonKey();
+  const settings = reviewerSettings();
+  if (anonKey) {
+    headers.apikey = anonKey;
+    headers.Authorization = `Bearer ${anonKey}`;
+  }
+  if (settings.name) headers['x-reviewer-name'] = settings.name;
+  if (method !== 'GET' && settings.key) headers['x-validation-key'] = settings.key;
+  if (options.body !== undefined && !(options.body instanceof FormData)) {
+    headers['Content-Type'] = 'application/json';
+  }
+
+  const response = await fetch(base + path, Object.assign({}, options, { method, headers }));
+  const contentType = response.headers.get('content-type') || '';
+  const payload = contentType.includes('application/json') ? await response.json() : await response.text();
+  if (!response.ok) {
+    const message = payload && payload.error ? payload.error : `HTTP ${response.status}`;
+    throw new Error(message);
+  }
+  return payload;
+}
+
+function apiGet(path) {
+  return apiRequest(path);
+}
+
+function loadInitialData() {
+  document.getElementById('entry-list').innerHTML = '<div class="spin"></div>';
+  apiGet('/entries')
+    .then(entries => {
+      allEntries = entries || [];
+      renderList(allEntries);
+      loadBookmarks();
+      loadCommentedIndices();
+    })
+    .catch(() => {
+      document.getElementById('entry-list').innerHTML =
+        '<p style="padding:10px;color:red;font-size:.78rem">Failed to load entries.</p>';
+    });
+}
+
+// ── Boot ──────────────────────────────────────────────────────
+window.addEventListener('load', () => {
+  if (ensureReviewerSettings()) {
+    apiGet('/me').catch(err => console.warn(err));
+    loadInitialData();
+  } else {
+    document.getElementById('entry-list').innerHTML =
+      '<p style="padding:10px;color:#bbb;font-size:.78rem">Enter reviewer settings to load entries.</p>';
+  }
+
+  /*
+  // Fetch entry list
+  apiGet('/entries')
+    .then(entries => {
+      allEntries = entries || [];
+      renderList(allEntries);
+      loadBookmarks();
+      loadCommentedIndices();
+    })
+    .catch(() => {
+      document.getElementById('entry-list').innerHTML =
+        '<p style="padding:10px;color:red;font-size:.78rem">Failed to load entries.</p>';
+    });
+  */
+
+  /*
+  // Fetch user info
+  legacy Apps Script user lookup
+    .withSuccessHandler(u => {
+      document.getElementById('user-badge').textContent = '👤 ' + u.email;
+      document.getElementById('cmt-name').value = u.name || '';
+    })
+    .withFailureHandler(() => {
+      document.getElementById('user-badge').textContent = '(unknown user)';
+    })
+    getCurrentUser removed.
+  */
+
+  // Fetch entry list
+  /*
+  apiGet('/entries')
+    .then(entries => {
+      allEntries = entries || [];
+      renderList(allEntries);
+      loadBookmarks();
+      loadCommentedIndices();
+    })
+    .catch(() => {
+      document.getElementById('entry-list').innerHTML =
+        '<p style="padding:10px;color:red;font-size:.78rem">Failed to load entries.</p>';
+    });
+  */
+
+  /*
+  legacy Apps Script entry lookup
+    .withSuccessHandler(entries => {
+      allEntries = entries || [];
+      renderList(allEntries);
+      loadBookmarks();
+      loadCommentedIndices();
+    })
+    .withFailureHandler(() => {
+      document.getElementById('entry-list').innerHTML =
+        '<p style="padding:10px;color:red;font-size:.78rem">Failed to load entries.</p>';
+    })
+    getEntries removed.
+  */
+
+  // Image preview listener
+  document.getElementById('cmt-file').addEventListener('change', onFileChange);
+  document.getElementById('entry-search').addEventListener(
+    'keyup',
+    debounce(filterEntries, 180)
+  );
+  document.getElementById('entry-search').addEventListener(
+    'input',
+    debounce(filterEntries, 180)
+  );
+  document.getElementById('comment-filter').addEventListener('change', filterEntries);
+  document.getElementById('bookmark-filter').addEventListener('change', filterEntries);
+  initToolbarDrag();
+  window.addEventListener('resize', clampToolbarToCanvas);
+  initPanelResizers();
+});
+
+// ── Entry list ────────────────────────────────────────────────
+function renderList(entries) {
+  const el = document.getElementById('entry-list');
+  if (!entries || !entries.length) {
+    el.innerHTML = '<p style="padding:12px;color:#bbb;font-size:.78rem">' +
+      'No entries yet.<br>Sync entries into Supabase.</p>';
+    return;
+  }
+  el.innerHTML = entries.map(e =>
+    `<div class="entry-item ${String(e.index) === currentIdx ? 'active' : ''}"
+          data-idx="${esc(e.index)}"
+          data-bookmarked="${bookmarkedIndices.has(String(e.index)) ? 'true' : 'false'}"
+          data-has-comments="${commentedIndices.has(String(e.index)) ? 'true' : 'false'}"
+          onclick="selectEntry('${esc(e.index)}')">
+       <div class="ei-head">
+         <div class="ei-idx">${esc(e.index)}</div>
+         <button class="bookmark-btn ${bookmarkedIndices.has(String(e.index)) ? 'bookmarked' : ''}"
+                 type="button"
+                 title="${bookmarkedIndices.has(String(e.index)) ? 'Clear checked' : 'Mark checked'}"
+                 aria-pressed="${bookmarkedIndices.has(String(e.index)) ? 'true' : 'false'}"
+                 onclick="event.stopPropagation(); toggleBookmark('${esc(e.index)}')">&#10003;</button>
+       </div>
+       <div class="ei-bs">${esc(e.bigsmiles)}</div>
+     </div>`
+  ).join('');
+  filterEntries();
+}
+
+function loadBookmarks() {
+  apiGet('/entries/checked')
+    .then(indices => {
+      bookmarkedIndices = new Set((indices || []).map(String));
+      renderList(allEntries);
+    })
+    .catch(err => console.error(err));
+}
+
+function loadCommentedIndices() {
+  apiGet('/entries/commented')
+    .then(indices => {
+      commentedIndices = new Set((indices || []).map(String));
+      renderList(allEntries);
+    })
+    .catch(err => console.error(err));
+}
+
+function toggleBookmark(idx) {
+  const key = String(idx);
+  const nextChecked = !bookmarkedIndices.has(key);
+  apiRequest(`/entries/${encodeURIComponent(key)}/checked`, {
+    method: 'PATCH',
+    body: JSON.stringify({ checked: nextChecked }),
+  })
+    .then(r => {
+      if (!r || !r.ok) {
+        alert('Failed to update checked state.');
+        return;
+      }
+
+      if (r.bookmarked) bookmarkedIndices.add(key);
+      else bookmarkedIndices.delete(key);
+
+      document.querySelectorAll('.entry-item').forEach(row => {
+        if (row.dataset.idx === key) setRowBookmarkState(row, r.bookmarked);
+      });
+      filterEntries();
+    })
+    .catch(err => {
+      alert('Error: ' + (err.message || err));
+    });
+}
+
+function setRowBookmarkState(row, bookmarked) {
+  row.dataset.bookmarked = bookmarked ? 'true' : 'false';
+  const btn = row.querySelector('.bookmark-btn');
+  if (!btn) return;
+  btn.classList.toggle('bookmarked', bookmarked);
+  btn.setAttribute('aria-pressed', bookmarked ? 'true' : 'false');
+  btn.title = bookmarked ? 'Clear checked' : 'Mark checked';
+}
+
+function filterEntries() {
+  const search = document.getElementById('entry-search');
+  const commentFilter = document.getElementById('comment-filter');
+  const bookmarkFilter = document.getElementById('bookmark-filter');
+  const query = (search ? search.value : '').trim().toLowerCase();
+  const commentMode = commentFilter ? commentFilter.value : 'any';
+  const bookmarkMode = bookmarkFilter ? bookmarkFilter.value : 'any';
+
+  document.querySelectorAll('#entry-list .entry-item').forEach(row => {
+    const idx = (row.dataset.idx || '').toLowerCase();
+    const matchesIndex = !query || idx.includes(query);
+    const hasComments = row.dataset.hasComments === 'true';
+    const bookmarked = row.dataset.bookmarked === 'true';
+    const matchesComments =
+      commentMode === 'any' ||
+      (commentMode === 'has' && hasComments) ||
+      (commentMode === 'none' && !hasComments);
+    const matchesBookmark =
+      bookmarkMode === 'any' ||
+      (bookmarkMode === 'bookmarked' && bookmarked) ||
+      (bookmarkMode === 'none' && !bookmarked);
+    row.style.display = matchesIndex && matchesComments && matchesBookmark ? '' : 'none';
+  });
+}
+
+function debounce(fn, wait) {
+  let timer = null;
+  return function debounced(...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), wait);
+  };
+}
+
+function selectEntry(idx) {
+  if (idx === currentIdx) return;
+
+  // Highlight row
+  document.querySelectorAll('.entry-item').forEach(el =>
+    el.classList.toggle('active', el.dataset.idx === idx));
+
+  // Reset view
+  document.getElementById('bs-text').textContent = 'Loading…';
+  document.getElementById('svg-container').innerHTML = '<div class="spin"></div>';
+  setStatus('');
+  currentIdx = null;
+
+  // Fetch full entry from server
+  apiGet(`/entries/${encodeURIComponent(idx)}`)
+    .then(onEntry)
+    .catch(err => {
+      document.getElementById('svg-container').innerHTML =
+        '<div id="svg-placeholder" style="color:red">Error loading entry.</div>';
+      console.error(err);
+    });
+}
+
+function onEntry(entry) {
+  if (!entry) {
+    document.getElementById('bs-text').textContent = '(not found)';
+    document.getElementById('svg-container').innerHTML =
+      '<div id="svg-placeholder">Entry not found.</div>';
+    return;
+  }
+  currentIdx = entry.index;
+
+  // Show BIGSMILES
+  document.getElementById('bs-text').textContent = entry.bigsmiles || '(no BIGSMILES)';
+
+  // Parse saved annotations
+  try   { annotations = JSON.parse(entry.annotations || '[]'); }
+  catch { annotations = []; }
+
+  // Load SVG + drawing layer
+  loadSVG(entry.svg);
+
+  // Load comments thread
+  loadComments(entry.index);
+  setFormEnabled(true);
+}
+
+// ── SVG loading ───────────────────────────────────────────────
+// ── SVG loading (robust version) ──────────────────────────────
+function loadSVG(svgStr) {
+  const container = document.getElementById('svg-container');
+
+  // ── Guard: empty / undefined / non-SVG ──────────────────────
+  if (!svgStr || !svgStr.trim() || svgStr === 'undefined' || !svgStr.includes('<svg')) {
+    container.innerHTML = '<div id="svg-placeholder">No SVG for this entry.</div>';
+    return;
+  }
+
+  // ── Inject xmlns if missing ──────────────────────────────────
+  if (!svgStr.includes('xmlns')) {
+    svgStr = svgStr.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
+  }
+
+  // ── Parse ────────────────────────────────────────────────────
+  let svgEl;
+  try {
+    const doc = new DOMParser().parseFromString(svgStr, 'image/svg+xml');
+    const err = doc.querySelector('parsererror');
+    if (err) throw new Error(err.textContent);
+    // ✅ importNode — adopt into current document before appending
+    svgEl = document.importNode(doc.documentElement, true);
+  } catch (e) {
+    console.error('SVG parse error:', e);
+    container.innerHTML =
+      '<div id="svg-placeholder" style="color:red">SVG parse error — check browser console.</div>';
+    return;
+  }
+
+  // ── Guarantee viewBox ────────────────────────────────────────
+  let vbX = 0, vbY = 0, vbW, vbH;
+  const vbAttr = svgEl.getAttribute('viewBox');
+  if (vbAttr) {
+    [vbX, vbY, vbW, vbH] = vbAttr.trim().split(/[\s,]+/).map(Number);
+  } else {
+    vbW = parseFloat(svgEl.getAttribute('width'))  || 800;
+    vbH = parseFloat(svgEl.getAttribute('height')) || 600;
+    svgEl.setAttribute('viewBox', `${vbX} ${vbY} ${vbW} ${vbH}`);
+  }
+
+  // ── Make responsive ──────────────────────────────────────────
+  svgEl.setAttribute('width', '100%');
+  svgEl.setAttribute('height', '100%');
+  svgEl.style.display = 'block';
+
+  // ── Annotation layer (below hit rect) ────────────────────────
+  const annLayer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  annLayer.id = 'ann-layer';
+  annLayer.style.pointerEvents = 'none';
+  svgEl.appendChild(annLayer);
+
+  // ── Hit-capture rect (always topmost) ────────────────────────
+  const hit = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  hit.id = 'svg-hit-rect';
+  hit.setAttribute('x',      vbX);
+  hit.setAttribute('y',      vbY);
+  hit.setAttribute('width',  vbW);
+  hit.setAttribute('height', vbH);
+  hit.setAttribute('fill',   'transparent');
+  hit.setAttribute('pointer-events', 'all');
+  hit.style.cursor = 'crosshair';
+  svgEl.appendChild(hit);
+
+  // ── Bind drawing events ──────────────────────────────────────
+  svgEl.addEventListener('wheel', onWheelZoom, { passive: false });
+  svgEl.addEventListener('contextmenu', e => e.preventDefault());
+  hit.addEventListener('mousedown',  svgDown);
+  hit.addEventListener('mousemove',  svgMove);
+  hit.addEventListener('mouseup',    svgUp);
+  hit.addEventListener('mouseleave', svgLeave);
+
+  // ── Insert into page ─────────────────────────────────────────
+  container.innerHTML = '';
+  container.appendChild(svgEl);
+  initViewport();
+  renderAnnotations();
+}
+
+// ── SVG coordinate helper ─────────────────────────────────────
+// Converts screen px → SVG viewBox coordinates (handles zoom/scale)
+function initViewport() {
+  const svg = document.querySelector('#svg-container svg');
+  if (!svg) return;
+  const vb = svg.viewBox.baseVal;
+  baseViewBox = { x: vb.x, y: vb.y, width: vb.width, height: vb.height };
+  viewport = { tx: 0, ty: 0, scale: 1 };
+  applyViewport();
+}
+
+function applyViewport() {
+  const svg = document.querySelector('#svg-container svg');
+  if (!svg || !baseViewBox) return;
+  const width = baseViewBox.width / viewport.scale;
+  const height = baseViewBox.height / viewport.scale;
+  const x = baseViewBox.x + viewport.tx;
+  const y = baseViewBox.y + viewport.ty;
+  svg.setAttribute(
+    'viewBox',
+    `${x} ${y} ${width} ${height}`
+  );
+  const hit = document.getElementById('svg-hit-rect');
+  if (hit) {
+    hit.setAttribute('x', x);
+    hit.setAttribute('y', y);
+    hit.setAttribute('width', width);
+    hit.setAttribute('height', height);
+  }
+  updateViewportCursor();
+}
+
+function onWheelZoom(e) {
+  const svg = document.querySelector('#svg-container svg');
+  if (!svg || !baseViewBox) return;
+  e.preventDefault();
+
+  const rect = svg.getBoundingClientRect();
+  if (!rect.width || !rect.height) return;
+
+  const cursor = svgPt(e);
+  const relX = (e.clientX - rect.left) / rect.width;
+  const relY = (e.clientY - rect.top) / rect.height;
+  const factor = Math.exp(-e.deltaY * 0.0015);
+  const nextScale = clamp(viewport.scale * factor, 0.25, 12);
+  const nextWidth = baseViewBox.width / nextScale;
+  const nextHeight = baseViewBox.height / nextScale;
+
+  viewport.scale = nextScale;
+  viewport.tx = cursor.x - relX * nextWidth - baseViewBox.x;
+  viewport.ty = cursor.y - relY * nextHeight - baseViewBox.y;
+  applyViewport();
+}
+
+function onPanStart(e) {
+  if (!baseViewBox) return;
+  panning = true;
+  panLast = { x: e.clientX, y: e.clientY };
+  window.addEventListener('mousemove', onPanMove);
+  window.addEventListener('mouseup', onPanEnd);
+  updateViewportCursor();
+  e.preventDefault();
+}
+
+function onPanMove(e) {
+  if (!panning || !panLast || !baseViewBox) return;
+  const svg = document.querySelector('#svg-container svg');
+  if (!svg) return;
+  e.preventDefault();
+  const rect = svg.getBoundingClientRect();
+  const vb = svg.viewBox.baseVal;
+  viewport.tx -= (e.clientX - panLast.x) * vb.width / rect.width;
+  viewport.ty -= (e.clientY - panLast.y) * vb.height / rect.height;
+  panLast = { x: e.clientX, y: e.clientY };
+  applyViewport();
+}
+
+function onPanEnd() {
+  panning = false;
+  panLast = null;
+  window.removeEventListener('mousemove', onPanMove);
+  window.removeEventListener('mouseup', onPanEnd);
+  updateViewportCursor();
+}
+
+function resetView() {
+  if (!baseViewBox) return;
+  viewport = { tx: 0, ty: 0, scale: 1 };
+  applyViewport();
+}
+
+function shouldPan(e) {
+  return e.button === 2;
+}
+
+function updateViewportCursor() {
+  const hit = document.getElementById('svg-hit-rect');
+  if (!hit) return;
+  if (panning) hit.style.cursor = 'grabbing';
+  else hit.style.cursor = (tool === 'text') ? 'text' : 'crosshair';
+}
+
+function clamp(v, min, max) {
+  return Math.max(min, Math.min(max, v));
+}
+
+function initToolbarDrag() {
+  const toolbar = document.getElementById('toolbar');
+  if (!toolbar) return;
+  toolbar.addEventListener('mousedown', onToolbarDragStart);
+}
+
+function onToolbarDragStart(e) {
+  if (e.button !== 0 || isToolbarControl(e.target)) return;
+  const toolbar = document.getElementById('toolbar');
+  const area = document.getElementById('svg-area');
+  if (!toolbar || !area) return;
+
+  const tRect = toolbar.getBoundingClientRect();
+  const aRect = area.getBoundingClientRect();
+  toolbarDrag = {
+    dx: e.clientX - tRect.left,
+    dy: e.clientY - tRect.top,
+    areaLeft: aRect.left,
+    areaTop: aRect.top
+  };
+  toolbar.style.right = 'auto';
+  window.addEventListener('mousemove', onToolbarDragMove);
+  window.addEventListener('mouseup', onToolbarDragEnd);
+  e.preventDefault();
+}
+
+function onToolbarDragMove(e) {
+  if (!toolbarDrag) return;
+  const toolbar = document.getElementById('toolbar');
+  const area = document.getElementById('svg-area');
+  if (!toolbar || !area) return;
+  const aRect = area.getBoundingClientRect();
+  const maxLeft = Math.max(0, aRect.width - toolbar.offsetWidth);
+  const maxTop = Math.max(0, aRect.height - toolbar.offsetHeight);
+  const left = clamp(e.clientX - aRect.left - toolbarDrag.dx, 0, maxLeft);
+  const top = clamp(e.clientY - aRect.top - toolbarDrag.dy, 0, maxTop);
+  toolbar.style.left = `${left}px`;
+  toolbar.style.top = `${top}px`;
+}
+
+function onToolbarDragEnd() {
+  toolbarDrag = null;
+  window.removeEventListener('mousemove', onToolbarDragMove);
+  window.removeEventListener('mouseup', onToolbarDragEnd);
+}
+
+function clampToolbarToCanvas() {
+  const toolbar = document.getElementById('toolbar');
+  const area = document.getElementById('svg-area');
+  if (!toolbar || !area) return;
+  const maxLeft = Math.max(0, area.clientWidth - toolbar.offsetWidth);
+  const maxTop = Math.max(0, area.clientHeight - toolbar.offsetHeight);
+  toolbar.style.left = `${clamp(parseFloat(toolbar.style.left) || 12, 0, maxLeft)}px`;
+  toolbar.style.top = `${clamp(parseFloat(toolbar.style.top) || 12, 0, maxTop)}px`;
+}
+
+function isToolbarControl(el) {
+  return el && Boolean(el.closest('button, input, label'));
+}
+
+function svgPt(e) {
+  const svg = document.querySelector('#svg-container svg');
+  if (!svg) return { x: 0, y: 0 };
+  const p = svg.createSVGPoint();
+  p.x = e.clientX;
+  p.y = e.clientY;
+  const ctm = svg.getScreenCTM();
+  return ctm ? p.matrixTransform(ctm.inverse()) : { x: 0, y: 0 };
+}
+
+// ── Mouse event handlers ──────────────────────────────────────
+function svgDown(e) {
+  if (shouldPan(e)) {
+    onPanStart(e);
+    return;
+  }
+  if (e.button !== 0) return;
+
+  const pt = svgPt(e);
+
+  if (tool === 'line') {
+    drawing = true;
+    p0      = pt;
+
+    // Create preview line, inserted just before the hit-rect (last child)
+    const svg = document.querySelector('#svg-container svg');
+    tempEl    = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    tempEl.id = 'temp-line';
+    applyLineStyle(tempEl, pt.x, pt.y, pt.x, pt.y);
+    svg.insertBefore(tempEl, document.getElementById('svg-hit-rect'));
+
+  } else if (tool === 'text') {
+    showTextInput(pt);
+  }
+  e.preventDefault();
+}
+
+function svgMove(e) {
+  if (!drawing || !tempEl) return;
+  const pt = svgPt(e);
+  tempEl.setAttribute('x2', pt.x);
+  tempEl.setAttribute('y2', pt.y);
+}
+
+function svgUp(e) {
+  if (!drawing) return;
+  drawing = false;
+  const pt = svgPt(e);
+  const d  = Math.hypot(pt.x - p0.x, pt.y - p0.y);
+
+  if (d > 1) { // ignore accidental micro-clicks
+    annotations.push({
+      id: Date.now(), type: 'line',
+      x1: p0.x, y1: p0.y, x2: pt.x, y2: pt.y,
+      color: document.getElementById('t-color').value,
+      width: +document.getElementById('t-width').value
+    });
+    setStatus('unsaved');
+  }
+
+  if (tempEl) { tempEl.remove(); tempEl = null; }
+  renderAnnotations();
+}
+
+function svgLeave(e) {
+  if (drawing) svgUp(e);
+  if (panning) onPanEnd();
+}
+
+function applyLineStyle(el, x1, y1, x2, y2) {
+  el.setAttribute('x1', x1);  el.setAttribute('y1', y1);
+  el.setAttribute('x2', x2);  el.setAttribute('y2', y2);
+  el.setAttribute('stroke',        document.getElementById('t-color').value);
+  el.setAttribute('stroke-width',  document.getElementById('t-width').value);
+  el.setAttribute('stroke-linecap', 'round');
+}
+
+// ── Text input overlay ────────────────────────────────────────
+function showTextInput(pt) {
+  const svg = document.querySelector('#svg-container svg');
+  if (!svg) return;
+  const old = document.getElementById('txt-fo');
+  if (old) old.remove();
+
+  const vb  = svg.viewBox.baseVal;
+  const fSz = getTextSize();
+  const col = document.getElementById('t-color').value;
+
+  const fo = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
+  fo.id = 'txt-fo';
+  fo.setAttribute('x',      pt.x);
+  fo.setAttribute('y',      pt.y - fSz);
+  fo.setAttribute('width',  Math.max(vb.width * 0.3, 120));
+  fo.setAttribute('height', fSz + 12);
+
+  const inp = document.createElement('input');
+  inp.type        = 'text';
+  inp.placeholder = 'Type, then press Enter';
+  inp.style.cssText = `
+    width:100%; height:100%;
+    border: 1px dashed ${col};
+    background: rgba(255,255,255,.9);
+    padding: 2px 5px;
+    font-size: ${fSz * 0.85}px;
+    color: ${col};
+    font-family: sans-serif;
+    outline: none;
+  `;
+
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      const txt = inp.value.trim();
+      if (txt) {
+        annotations.push({
+          id: Date.now(), type: 'text',
+          x: pt.x, y: pt.y,
+          content: txt,
+          color: col,
+          size:  fSz
+        });
+        renderAnnotations();
+        setStatus('unsaved');
+      }
+      fo.remove();
+    } else if (e.key === 'Escape') {
+      fo.remove();
+    }
+    e.stopPropagation();
+  });
+
+  inp.addEventListener('blur', () => setTimeout(() => fo.remove(), 200));
+
+  fo.appendChild(inp);
+  svg.appendChild(fo); // append last → on top of hit-rect
+  requestAnimationFrame(() => inp.focus());
+}
+
+// ── Render all saved annotations ──────────────────────────────
+function renderAnnotations() {
+  const layer = document.getElementById('ann-layer');
+  if (!layer) return;
+  layer.innerHTML = '';
+
+  annotations.forEach(a => {
+    let el;
+    if (a.type === 'line') {
+      el = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      el.setAttribute('x1', a.x1);  el.setAttribute('y1', a.y1);
+      el.setAttribute('x2', a.x2);  el.setAttribute('y2', a.y2);
+      el.setAttribute('stroke',           a.color);
+      el.setAttribute('stroke-width',     a.width);
+      el.setAttribute('stroke-linecap',   'round');
+
+    } else if (a.type === 'text') {
+      el = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      el.setAttribute('x',           a.x);
+      el.setAttribute('y',           a.y);
+      el.setAttribute('fill',        a.color);
+      el.setAttribute('font-size',   a.size || getTextSize());
+      el.setAttribute('font-family', 'sans-serif');
+      el.textContent = a.content;
+    }
+    if (el) layer.appendChild(el);
+  });
+}
+
+// ── Toolbar actions ───────────────────────────────────────────
+function getTextSize() {
+  return clamp(+document.getElementById('t-font-size').value || 18, 6, 96);
+}
+
+function setTool(t) {
+  tool = t;
+  document.querySelectorAll('.tbtn[id^="tbtn-"]').forEach(b =>
+    b.classList.toggle('active', b.id === 'tbtn-' + t));
+  updateViewportCursor();
+}
+
+function undoLast() {
+  if (!annotations.length) return;
+  annotations.pop();
+  renderAnnotations();
+  setStatus('unsaved');
+}
+
+function clearAll() {
+  if (!annotations.length) return;
+  if (!confirm('Clear all annotations for this entry?')) return;
+  annotations = [];
+  renderAnnotations();
+  setStatus('unsaved');
+}
+
+function doSave() {
+  if (!currentIdx) return;
+  setStatus('saving');
+  apiRequest(`/entries/${encodeURIComponent(currentIdx)}/annotations`, {
+    method: 'PUT',
+    body: JSON.stringify({ annotations: JSON.stringify(annotations) }),
+  })
+    .then(r => setStatus(r && r.ok ? 'saved' : 'error'))
+    .catch(()  => setStatus('error'));
+}
+
+function setStatus(s) {
+  const el  = document.getElementById('save-status');
+  const msg = { '': '', unsaved: '● Unsaved', saving: '⏳ Saving…',
+                saved: '✔ Saved', error: '✗ Error' };
+  const clr = { '': '', unsaved: '#f57c00', saving: '#888',
+                saved: '#2e7d32', error: '#c62828' };
+  el.textContent = msg[s] || '';
+  el.style.color  = clr[s] || '#888';
+}
+
+// ── Comments ──────────────────────────────────────────────────
+function loadComments(idx) {
+  const list = document.getElementById('cmts-history-list');
+  list.innerHTML = '<div class="spin"></div>';
+  apiGet(`/entries/${encodeURIComponent(idx)}/comments`)
+    .then(renderComments)
+    .catch(() => {
+      list.innerHTML = '<p style="color:red;font-size:.76rem">Failed to load comments.</p>';
+    });
+}
+
+function renderComments(cmts) {
+  const list = document.getElementById('cmts-history-list');
+  if (!cmts || !cmts.length) {
+    list.innerHTML = '<span style="color:#ccc;font-size:.76rem">No comments yet — be the first!</span>';
+    return;
+  }
+  list.innerHTML = cmts.map(c => `
+    <div class="cmt-card" tabindex="0" role="button"
+         onclick="toggleCommentCard(this)"
+         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCommentCard(this);}">
+      <div class="cmt-meta">
+        <strong>${esc(c.name)}</strong> &nbsp;·&nbsp; ${esc(c.timestamp)}
+      </div>
+      <div class="cmt-summary">${commentSummary(c)}</div>
+      <div class="cmt-body">
+        <div class="cmt-text">${esc(c.text)}</div>
+        ${c.imageUrl
+          ? `<img class="cmt-img" src="${esc(c.imageUrl)}" alt="attachment"
+                 onclick="event.stopPropagation();openLB(this.src)">`
+          : ''}
+      </div>
+    </div>`
+  ).join('');
+  list.scrollTop = list.scrollHeight;
+}
+
+function commentSummary(c) {
+  const text = (c.text || '').trim();
+  if (text) return esc(text.length > 80 ? text.slice(0, 77) + '...' : text);
+  return c.imageUrl ? 'Image attachment' : 'Empty comment';
+}
+
+function toggleCommentCard(card) {
+  card.classList.toggle('open');
+}
+
+function setFormEnabled(on) {
+  ['cmt-name', 'cmt-input', 'cmt-file', 'post-btn'].forEach(id =>
+    document.getElementById(id).disabled = !on);
+}
+
+function onFileChange(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  imgMime = file.type;
+  imgName = file.name;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const data = ev.target.result;
+    imgB64 = data.split(',')[1];
+    const th = document.getElementById('cmt-thumb');
+    th.src = data; th.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+function postComment() {
+  if (!currentIdx) return;
+  const composer = document.getElementById('cmt-form');
+  const name = composer.querySelector('#cmt-name').value.trim();
+  const text = composer.querySelector('#cmt-input').value.trim();
+  if (!text && !imgB64) {
+    alert('Please write a comment or attach an image.');
+    return;
+  }
+
+  const btn = composer.querySelector('#post-btn');
+  btn.disabled = true; btn.textContent = 'Posting…';
+
+  apiRequest(`/entries/${encodeURIComponent(currentIdx)}/comments`, {
+    method: 'POST',
+    body: JSON.stringify({
+      text,
+      displayName: name,
+      imgB64: imgB64 || '',
+      imgMime: imgMime || '',
+      imgName: imgName || '',
+    }),
+  })
+    .then(r => {
+      if (r && r.ok) {
+        composer.querySelector('#cmt-input').value     = '';
+        composer.querySelector('#cmt-file').value      = '';
+        composer.querySelector('#cmt-thumb').style.display = 'none';
+        imgB64 = imgMime = imgName = null;
+        setRowCommentState(currentIdx, true);
+        loadComments(currentIdx);
+      } else {
+        alert('Failed to post comment.');
+      }
+      btn.disabled = false; btn.textContent = 'Post Comment';
+    })
+    .catch(err => {
+      alert('Error: ' + (err.message || err));
+      btn.disabled = false; btn.textContent = 'Post Comment';
+    });
+}
+
+function setRowCommentState(idx, hasComments) {
+  const key = String(idx);
+  if (hasComments) commentedIndices.add(key);
+  else commentedIndices.delete(key);
+  document.querySelectorAll('.entry-item').forEach(row => {
+    if (row.dataset.idx === key) row.dataset.hasComments = hasComments ? 'true' : 'false';
+  });
+  filterEntries();
+}
+
+function initPanelResizers() {
+  const main = document.getElementById('main');
+  const leftPanel = document.getElementById('left-panel');
+  const leftHandle = document.getElementById('left-resizer');
+  const rightPanel = document.getElementById('right-panel');
+  const cmts = document.getElementById('cmts-section');
+  const cmtsHandle = document.getElementById('cmts-resizer');
+  const form = document.getElementById('cmt-form');
+  const formHandle = document.getElementById('cmt-form-resizer');
+
+  leftHandle.addEventListener('pointerdown', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    leftHandle.setPointerCapture(e.pointerId);
+    const startX = e.clientX;
+    const startWidth = leftPanel.offsetWidth;
+    document.body.classList.add('resizing-cols');
+
+    const move = ev => {
+      const maxWidth = Math.max(170, Math.floor(main.clientWidth * 0.34));
+      const width = clamp(startWidth + ev.clientX - startX, 170, maxWidth);
+      leftPanel.style.width = width + 'px';
+    };
+    const up = ev => {
+      leftHandle.releasePointerCapture(ev.pointerId);
+      leftHandle.removeEventListener('pointermove', move);
+      leftHandle.removeEventListener('pointerup', up);
+      leftHandle.removeEventListener('pointercancel', up);
+      document.body.classList.remove('resizing-cols');
+    };
+    leftHandle.addEventListener('pointermove', move);
+    leftHandle.addEventListener('pointerup', up);
+    leftHandle.addEventListener('pointercancel', up);
+  });
+
+  cmtsHandle.addEventListener('pointerdown', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    cmts.setPointerCapture(e.pointerId);
+    const startX = e.clientX;
+    const startWidth = cmts.offsetWidth;
+    document.body.classList.add('resizing-cols');
+
+    const move = ev => {
+      const maxWidth = Math.max(190, Math.floor(rightPanel.clientWidth * 0.55));
+      const width = clamp(startWidth + startX - ev.clientX, 190, maxWidth);
+      cmtsWidth = width;
+      cmtsOpen = true;
+      cmts.classList.remove('cmts-collapsed');
+      rightPanel.style.setProperty('--cmts-width', width + 'px');
+    };
+    const up = ev => {
+      cmts.releasePointerCapture(ev.pointerId);
+      cmts.removeEventListener('pointermove', move);
+      cmts.removeEventListener('pointerup', up);
+      cmts.removeEventListener('pointercancel', up);
+      document.body.classList.remove('resizing-cols');
+    };
+    cmts.addEventListener('pointermove', move);
+    cmts.addEventListener('pointerup', up);
+    cmts.addEventListener('pointercancel', up);
+  });
+
+  formHandle.addEventListener('pointerdown', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    form.setPointerCapture(e.pointerId);
+    const startY = e.clientY;
+    const startHeight = form.offsetHeight;
+    document.body.classList.add('resizing-rows');
+
+    const move = ev => {
+      const maxHeight = Math.max(118, Math.floor(rightPanel.clientHeight * 0.55));
+      const height = clamp(startHeight + startY - ev.clientY, 118, maxHeight);
+      rightPanel.style.setProperty('--composer-height', height + 'px');
+    };
+    const up = ev => {
+      form.releasePointerCapture(ev.pointerId);
+      form.removeEventListener('pointermove', move);
+      form.removeEventListener('pointerup', up);
+      form.removeEventListener('pointercancel', up);
+      document.body.classList.remove('resizing-rows');
+    };
+    form.addEventListener('pointermove', move);
+    form.addEventListener('pointerup', up);
+    form.addEventListener('pointercancel', up);
+  });
+}
+
+function toggleCmtsPanel() {
+  cmtsOpen = !cmtsOpen;
+  const rightPanel = document.getElementById('right-panel');
+  const cmts = document.getElementById('cmts-section');
+  cmts.classList.toggle('cmts-collapsed', !cmtsOpen);
+  rightPanel.style.setProperty('--cmts-width', cmtsOpen ? cmtsWidth + 'px' : '38px');
+  document.getElementById('cmts-toggle').textContent = cmtsOpen ? 'hide' : 'show';
+  document.getElementById('bs-bar').title = cmtsOpen
+    ? 'Double-click to hide comments'
+    : 'Double-click to show comments';
+}
+
+function clamp(n, min, max) {
+  return Math.min(Math.max(n, min), max);
+}
+
+// ── Lightbox ──────────────────────────────────────────────────
+function openLB(url) {
+  document.getElementById('lb-img').src = url;
+  document.getElementById('lightbox').classList.add('on');
+}
+function closeLB() { document.getElementById('lightbox').classList.remove('on'); }
+
+// ── HTML escape helper ────────────────────────────────────────
+function esc(s) {
+  return String(s || '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+</script>
+</body>
+</html>
