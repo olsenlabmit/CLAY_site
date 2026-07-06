@@ -13,6 +13,14 @@ const supabase = createClient(supabaseUrl, serviceRoleKey, {
 
 type JsonBody = Record<string, unknown>;
 
+const allowedErrorModes = new Set([
+  "atom_overlap",
+  "invalid_valence",
+  "backbone_misplace",
+  "bracket_misplace",
+  "miscellaneous",
+]);
+
 function json(payload: unknown, status = 200): Response {
   return new Response(JSON.stringify(payload), {
     status,
@@ -58,17 +66,43 @@ function annotationString(value: unknown): string {
   return JSON.stringify(Array.isArray(value) ? value : parseAnnotations(value));
 }
 
+function normalizeErrorModes(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  const modes: string[] = [];
+  for (const item of value) {
+    const mode = String(item || "").trim();
+    if (!allowedErrorModes.has(mode)) continue;
+    if (!modes.includes(mode)) modes.push(mode);
+  }
+  return modes;
+}
+
+function parseErrorModes(value: unknown): string[] | null {
+  if (!Array.isArray(value)) return null;
+  const modes: string[] = [];
+  for (const item of value) {
+    const mode = String(item || "").trim();
+    if (!allowedErrorModes.has(mode)) return null;
+    if (!modes.includes(mode)) modes.push(mode);
+  }
+  return modes;
+}
+
 function rowToEntry(row: {
   entry_index: string;
   bigsmiles: string;
   svg?: string;
   annotations?: unknown;
+  checked?: boolean;
+  error_modes?: unknown;
 }) {
   return {
     index: String(row.entry_index),
     bigsmiles: String(row.bigsmiles || ""),
     svg: String(row.svg || ""),
     annotations: annotationString(row.annotations || []),
+    checked: Boolean(row.checked),
+    errorModes: normalizeErrorModes(row.error_modes),
   };
 }
 
@@ -149,7 +183,7 @@ async function uploadImage(
 async function handleEntries(): Promise<Response> {
   const { data, error: queryError } = await supabase
     .from("entries")
-    .select("entry_index,bigsmiles")
+    .select("entry_index,bigsmiles,checked,error_modes")
     .order("entry_index", { ascending: true });
   if (queryError) return error(queryError.message, 500);
   return json(
@@ -158,6 +192,8 @@ async function handleEntries(): Promise<Response> {
       .map((row) => ({
         index: String(row.entry_index),
         bigsmiles: String(row.bigsmiles || ""),
+        checked: Boolean(row.checked),
+        errorModes: normalizeErrorModes(row.error_modes),
       })),
   );
 }
@@ -189,7 +225,7 @@ async function handleCommentedEntries(): Promise<Response> {
 async function handleEntry(entryIndex: string): Promise<Response> {
   const { data, error: queryError } = await supabase
     .from("entries")
-    .select("entry_index,bigsmiles,svg,annotations")
+    .select("entry_index,bigsmiles,svg,annotations,checked,error_modes")
     .eq("entry_index", entryIndex)
     .maybeSingle();
   if (queryError) return error(queryError.message, 500);
@@ -201,15 +237,43 @@ async function handleCheckedPatch(req: Request, entryIndex: string): Promise<Res
   if (keyError) return keyError;
   const body = await readBody(req);
   const checked = Boolean(body.checked);
+  const update = checked ? { checked, error_modes: [] } : { checked };
   const { data, error: updateError } = await supabase
     .from("entries")
-    .update({ checked })
+    .update(update)
     .eq("entry_index", entryIndex)
-    .select("entry_index")
+    .select("entry_index,checked,error_modes")
     .maybeSingle();
   if (updateError) return error(updateError.message, 500);
   if (!data) return json({ ok: false, bookmarked: false });
-  return json({ ok: true, bookmarked: checked });
+  return json({
+    ok: true,
+    bookmarked: Boolean(data.checked),
+    checked: Boolean(data.checked),
+    errorModes: normalizeErrorModes(data.error_modes),
+  });
+}
+
+async function handleErrorModesPatch(req: Request, entryIndex: string): Promise<Response> {
+  const keyError = requireWriteKey(req);
+  if (keyError) return keyError;
+  const body = await readBody(req);
+  const errorModes = parseErrorModes(body.errorModes);
+  if (!errorModes) return error("errorModes must contain only allowed error mode ids.", 400);
+  const checked = false;
+  const { data, error: updateError } = await supabase
+    .from("entries")
+    .update({ error_modes: errorModes, checked })
+    .eq("entry_index", entryIndex)
+    .select("entry_index,checked,error_modes")
+    .maybeSingle();
+  if (updateError) return error(updateError.message, 500);
+  if (!data) return json({ ok: false, errorModes: [], checked: false });
+  return json({
+    ok: true,
+    errorModes: normalizeErrorModes(data.error_modes),
+    checked: Boolean(data.checked),
+  });
 }
 
 async function handleAnnotationsPut(req: Request, entryIndex: string): Promise<Response> {
@@ -306,6 +370,9 @@ Deno.serve(async (req) => {
       if (req.method === "GET" && route.length === 2) return await handleEntry(entryIndex);
       if (req.method === "PATCH" && route[2] === "checked") {
         return await handleCheckedPatch(req, entryIndex);
+      }
+      if (req.method === "PATCH" && route[2] === "error-modes") {
+        return await handleErrorModesPatch(req, entryIndex);
       }
       if (req.method === "PUT" && route[2] === "annotations") {
         return await handleAnnotationsPut(req, entryIndex);

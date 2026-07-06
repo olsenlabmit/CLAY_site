@@ -76,6 +76,23 @@ def _parse_annotations(value: str) -> list[Any]:
     return parsed if isinstance(parsed, list) else []
 
 
+def _parse_error_modes(value: str) -> list[str]:
+    if not value:
+        return []
+    try:
+        parsed = json.loads(value)
+    except json.JSONDecodeError:
+        parsed = [part.strip() for part in value.split(",")]
+    if not isinstance(parsed, list):
+        return []
+    modes: list[str] = []
+    for item in parsed:
+        mode = str(item or "").strip()
+        if mode and mode not in modes:
+            modes.append(mode)
+    return modes
+
+
 def _parse_timestamp(value: str) -> str | None:
     text = str(value or "").strip()
     if not text:
@@ -102,6 +119,7 @@ def _load_entry_migration(path: Path | None) -> dict[str, dict[str, Any]]:
         rows[entry_index] = {
             "annotations": _parse_annotations(_cell(row, "annotations")),
             "checked": _parse_bool(_cell(row, "checked", "bookmarks", "bookmark")),
+            "error_modes": _parse_error_modes(_cell(row, "error_modes", "error modes", "errormodes")),
         }
     return rows
 
@@ -124,13 +142,15 @@ def _load_manifest_entries(
             missing_svgs.append(svg_name)
             continue
         migration = migration_rows.get(entry_index, {})
+        error_modes = migration.get("error_modes", [])
         entries.append(
             {
                 "entry_index": entry_index,
                 "bigsmiles": bigsmiles,
                 "svg": svg_path.read_text(encoding="utf-8"),
                 "annotations": migration.get("annotations", []),
-                "checked": bool(migration.get("checked", False)),
+                "checked": bool(migration.get("checked", False)) and not error_modes,
+                "error_modes": error_modes,
             }
         )
     if missing_svgs:
