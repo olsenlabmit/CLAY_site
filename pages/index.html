@@ -68,11 +68,17 @@ body {
   max-height: 122px; overflow: auto; padding: 6px;
   border: 1px solid #ddd; border-radius: 4px; background: #fff;
 }
-.entry-checkbox-list label,
-.review-check {
+.entry-checkbox-list label {
   display: flex; align-items: center; gap: 6px; min-width: 0;
   font-size: .72rem; font-weight: 700; line-height: 1.25;
 }
+.review-check {
+  display: flex; align-items: center; gap: 6px; min-width: 0;
+  padding: 9px 12px; border-bottom: 1px solid #f4f4f4;
+  font-size: .72rem; font-weight: 400; line-height: 1.25;
+  cursor: pointer; transition: background .12s, color .12s;
+}
+.review-check:hover { background: #e3f2fd; }
 .entry-checkbox-list input,
 .review-check input {
   flex: 0 0 auto;
@@ -108,9 +114,9 @@ body {
   font-size: .7rem; font-weight: 700; text-transform: uppercase;
   letter-spacing: .07em; color: #777; margin-bottom: 7px;
 }
-.review-checkbox-list { gap: 10px; }
+.review-checkbox-list { gap: 0; }
 .review-check-acceptable {
-  margin-top: 2px; padding: 7px 9px; border-radius: 6px;
+  margin-top: 0; border-radius: 0;
   transition: background .12s, color .12s;
 }
 .review-check-acceptable.selected {
@@ -204,12 +210,21 @@ body {
   padding: 6px 8px; font-size: .77rem; font-family: inherit; min-height: 50px;
 }
 #cmt-file  { font-size: .7rem; }
+#cmt-file::file-selector-button {
+  color: #dbeafe; background: rgba(88,166,255,.14);
+  border-color: rgba(88,166,255,.28);
+  font-family: inherit; font-size: .76rem;
+}
+#cmt-file::-webkit-file-upload-button {
+  color: #dbeafe; background: rgba(88,166,255,.14);
+  border-color: rgba(88,166,255,.28);
+  font-family: inherit; font-size: .76rem;
+}
 #cmt-thumb { max-width: 100%; max-height: 42px; display: none;
              object-fit: contain; border-radius: 3px; }
 #post-btn  {
-  align-self: flex-start;
-  padding: 3px 10px; background: rgba(88,166,255,.14); color: #dbeafe;
-  border: 1px solid rgba(88,166,255,.28); border-radius: 999px; cursor: pointer;
+  padding: 5px 0; background: rgba(88,166,255,.14); color: #dbeafe;
+  border: 1px solid rgba(88,166,255,.28); border-radius: 4px; cursor: pointer;
   font-size: .77rem; font-weight: 600;
 }
 #post-btn:hover    { background: rgba(88,166,255,.22); }
@@ -419,7 +434,8 @@ body.resizing-rows { cursor: row-resize; }
 }
 
 #right-sidebar {
-  --error-modes-height: 150px;
+  --cmts-history-height: 40vh;
+  --error-modes-height: calc(100% - var(--cmts-history-height) - 7px);
   grid-column: 2; grid-row: 1 / 4;
   width: auto; min-width: 190px; max-width: none; height: auto;
   background: var(--panel); border-left: 1px solid var(--splitter);
@@ -433,7 +449,7 @@ body.resizing-rows { cursor: row-resize; }
   direction: ltr;
 }
 #error-modes-list {
-  display: flex; flex-direction: column; gap: 7px;
+  display: flex; flex-direction: column; gap: 0;
 }
 #cmts-section {
   flex: 1 1 auto; min-height: 0; height: auto;
@@ -485,6 +501,16 @@ body.resizing-rows { cursor: row-resize; }
   opacity: 1; pointer-events: auto;
 }
 #cmts-history-list > span { color: var(--muted) !important; }
+.review-check {
+  border-bottom-color: rgba(48,54,61,.7);
+  color: var(--text); font-weight: 400;
+}
+.review-check:hover { background: rgba(88,166,255,.14); }
+.review-check-acceptable.selected {
+  background: linear-gradient(90deg, rgba(31,111,235,.58), rgba(163,113,247,.44));
+  color: #fff;
+}
+.review-divider { display: none; }
 .cmt-card {
   background: var(--panel-2); border-radius: 6px; border-left-color: var(--purple);
   cursor: pointer;
@@ -529,11 +555,21 @@ body.resizing-rows { cursor: row-resize; }
 #cmt-name::placeholder { color: var(--muted); }
 #cmt-name:disabled { color: var(--muted); }
 #cmt-file { color: var(--muted); }
+#cmt-file::file-selector-button {
+  color: #dbeafe; background: rgba(88,166,255,.14);
+  border-color: rgba(88,166,255,.28);
+  font-family: inherit; font-size: .76rem;
+}
+#cmt-file::-webkit-file-upload-button {
+  color: #dbeafe; background: rgba(88,166,255,.14);
+  border-color: rgba(88,166,255,.28);
+  font-family: inherit; font-size: .76rem;
+}
 #cmt-thumb { border: 1px solid var(--border); border-radius: 4px; }
 #post-btn {
-  padding: 3px 10px; background: rgba(88,166,255,.14); color: #dbeafe;
+  padding: 6px 0; background: rgba(88,166,255,.14); color: #dbeafe;
   border: 1px solid rgba(88,166,255,.28);
-  border-radius: 999px; font-weight: 650;
+  border-radius: 6px; font-weight: 650;
 }
 #post-btn:hover { background: rgba(88,166,255,.22); }
 #post-btn:disabled {
@@ -623,8 +659,6 @@ body.resizing-rows { cursor: row-resize; }
     <div id="svg-area">
       <!-- Toolbar -->
       <div id="toolbar">
-        <button class="tbtn active" id="tbtn-pan" onclick="setPanMode()">Pan</button>
-        <div class="t-sep"></div>
         <button class="tbtn" onclick="zoomViewport(1.25)" title="Zoom in around the viewport center">Zoom In</button>
         <button class="tbtn" onclick="zoomViewport(0.8)" title="Zoom out around the viewport center">Zoom Out</button>
         <button class="tbtn" onclick="resetView()" title="Restore the canvas view">Restore View</button>
@@ -1402,12 +1436,6 @@ function svgPt(e) {
   p.y = e.clientY;
   const ctm = svg.getScreenCTM();
   return ctm ? p.matrixTransform(ctm.inverse()) : { x: 0, y: 0 };
-}
-
-function setPanMode() {
-  const panButton = document.getElementById('tbtn-pan');
-  if (panButton) panButton.classList.add('active');
-  updateViewportCursor();
 }
 
 // ── Comments ──────────────────────────────────────────────────
