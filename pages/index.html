@@ -28,7 +28,7 @@ body {
 
 /* ── Left panel ───────────────────────────────────── */
 #left-panel {
-  width: 210px; min-width: 160px; flex-shrink: 0;
+  width: 25vw; min-width: 160px; flex-shrink: 0;
   background: #fff; border-right: 1px solid #ddd;
   display: flex; flex-direction: column; overflow: hidden;
 }
@@ -303,8 +303,8 @@ body.resizing-rows { cursor: row-resize; }
   flex: 1; min-height: 0; height: calc(100vh - 48px); background: var(--bg);
 }
 #right-panel {
-  --cmts-width: 280px;
-  --composer-height: 24vh;
+  --cmts-width: 25vw;
+  --composer-height: 50vh;
   display: grid; grid-column: 2; min-width: 0; min-height: 0;
   height: 100%;
   grid-template-columns: minmax(360px, 1fr) var(--cmts-width);
@@ -315,7 +315,7 @@ body.resizing-rows { cursor: row-resize; }
 
 #left-panel {
   grid-column: 1; grid-row: 1;
-  width: 236px; min-width: 170px; max-width: 34vw;
+  width: 25vw; min-width: 170px; max-width: 34vw;
   background: var(--panel); border-right: 1px solid var(--splitter);
   overflow: auto; resize: none; position: relative;
 }
@@ -439,6 +439,7 @@ body.resizing-rows { cursor: row-resize; }
 }
 
 #right-sidebar {
+  --error-modes-height: 150px;
   grid-column: 2; grid-row: 1 / 4;
   width: auto; min-width: 190px; max-width: none; height: auto;
   background: var(--panel); border-left: 1px solid var(--splitter);
@@ -446,7 +447,8 @@ body.resizing-rows { cursor: row-resize; }
   direction: rtl; position: relative;
 }
 #error-modes-section {
-  flex: 0 0 auto; padding: 11px 12px 12px 14px;
+  flex: 0 0 var(--error-modes-height); min-height: 72px;
+  padding: 11px 12px 12px 14px; overflow: auto;
   border-bottom: 1px solid var(--border); background: var(--panel);
   direction: ltr;
 }
@@ -466,6 +468,12 @@ body.resizing-rows { cursor: row-resize; }
 }
 #right-sidebar:hover #cmts-resizer,
 #cmts-resizer:hover { opacity: 1; background: var(--blue); }
+#error-cmts-resizer {
+  flex: 0 0 7px; background: var(--splitter); cursor: row-resize;
+  touch-action: none; opacity: .75; transition: opacity .12s, background .12s;
+}
+#right-sidebar:hover #error-cmts-resizer,
+#error-cmts-resizer:hover { opacity: 1; background: var(--blue); }
 #cmts-section.cmts-collapsed {
   flex: 0 0 auto; min-height: 0;
 }
@@ -668,6 +676,8 @@ body.resizing-rows { cursor: row-resize; }
         </div>
       </div>
 
+      <div id="error-cmts-resizer" title="Drag to resize error modes"></div>
+
       <!-- Comment history -->
       <div id="cmts-section">
       <div id="cmts-header" ondblclick="toggleCmtsPanel()" title="Double-click to hide comments">
@@ -715,7 +725,7 @@ let imgB64      = null;   // pending comment image (base64)
 let imgMime     = null;
 let imgName     = null;
 let cmtsOpen    = true;
-let cmtsWidth   = 280;
+let cmtsWidth   = Math.floor(window.innerWidth * 0.25);
 let viewport    = { tx: 0, ty: 0, scale: 1 };
 let baseViewBox  = null;
 let panning      = false;
@@ -1884,6 +1894,8 @@ function initPanelResizers() {
   const leftHandle = document.getElementById('left-resizer');
   const rightPanel = document.getElementById('right-panel');
   const rightSidebar = document.getElementById('right-sidebar');
+  const errorModes = document.getElementById('error-modes-section');
+  const errorCmtsHandle = document.getElementById('error-cmts-resizer');
   const cmts = document.getElementById('cmts-section');
   const cmtsHandle = document.getElementById('cmts-resizer');
   const form = document.getElementById('cmt-form');
@@ -1942,6 +1954,31 @@ function initPanelResizers() {
     rightSidebar.addEventListener('pointercancel', up);
   });
 
+  errorCmtsHandle.addEventListener('pointerdown', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    errorCmtsHandle.setPointerCapture(e.pointerId);
+    const startY = e.clientY;
+    const startHeight = errorModes.offsetHeight;
+    document.body.classList.add('resizing-rows');
+
+    const move = ev => {
+      const maxHeight = Math.max(72, rightSidebar.clientHeight - 120);
+      const height = clamp(startHeight + ev.clientY - startY, 72, maxHeight);
+      rightSidebar.style.setProperty('--error-modes-height', height + 'px');
+    };
+    const up = ev => {
+      errorCmtsHandle.releasePointerCapture(ev.pointerId);
+      errorCmtsHandle.removeEventListener('pointermove', move);
+      errorCmtsHandle.removeEventListener('pointerup', up);
+      errorCmtsHandle.removeEventListener('pointercancel', up);
+      document.body.classList.remove('resizing-rows');
+    };
+    errorCmtsHandle.addEventListener('pointermove', move);
+    errorCmtsHandle.addEventListener('pointerup', up);
+    errorCmtsHandle.addEventListener('pointercancel', up);
+  });
+
   formHandle.addEventListener('pointerdown', e => {
     e.preventDefault();
     e.stopPropagation();
@@ -1951,7 +1988,7 @@ function initPanelResizers() {
     document.body.classList.add('resizing-rows');
 
     const move = ev => {
-      const maxHeight = Math.max(118, Math.floor(rightPanel.clientHeight * 0.55));
+      const maxHeight = Math.max(118, Math.floor(rightPanel.clientHeight * 0.75));
       const height = clamp(startHeight + startY - ev.clientY, 118, maxHeight);
       rightPanel.style.setProperty('--composer-height', height + 'px');
     };
