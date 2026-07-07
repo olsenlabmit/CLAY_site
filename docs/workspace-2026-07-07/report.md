@@ -17,3 +17,14 @@
 - Verified the extracted inline JavaScript in `pages/index.html` with `node --check`.
 - Verified whitespace with `git diff --check`.
 - Did not run browser checks.
+
+## Panel Interaction Minor Modifications
+
+- Updated the right sidebar split so the default Comment History area is `40vh` (`0.4` viewport height), with the existing row resizer behavior preserved.
+- Restyled the file input Browse button with the reviewer badge colors and font size while leaving its native shape intact.
+- Restored the Post Comment button to its prior full-width rectangular sizing and radius while keeping reviewer badge colors.
+- Removed bold weight from Error Mode options, added entry-row-like padding, hover treatment, and divider lines between options.
+- Removed the Pan toolbar button while keeping SVG panning behavior active through the viewer hit rect.
+- Verified the extracted inline JavaScript in `pages/index.html` with `node --check`.
+- Verified whitespace with `git diff --check`.
+- Did not run browser checks.
