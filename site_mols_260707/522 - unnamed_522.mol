@@ -1,0 +1,96 @@
+
+     RDKit          2D
+
+  0  0  0  0  0  0  0  0  0  0999 V3000
+M  V30 BEGIN CTAB
+M  V30 COUNTS 6 5 1 0 0
+M  V30 BEGIN ATOM
+M  V30 1 O 1.165117 -0.499050 0.000000 0
+M  V30 2 C 2.165117 -0.499050 0.000000 0
+M  V30 3 O 2.165117 -1.499052 0.000000 0
+M  V30 4 C 3.031101 0.001051 0.000000 0
+M  V30 5 C 3.031101 1.001053 0.000000 0
+M  V30 6 O 3.897321 -0.499051 0.000000 0
+M  V30 END ATOM
+M  V30 BEGIN BOND
+M  V30 1 2 2 3
+M  V30 2 1 2 4
+M  V30 3 1 4 5
+M  V30 4 1 4 6
+M  V30 5 1 1 2
+M  V30 END BOND
+M  V30 BEGIN SGROUP
+M  V30 1 SRU 0 ATOMS=(2 1 2) CBONDS=(1 5) -
+M  V30 BRKXYZ=(9 1.7321 0.2511 0 1.7321 -0.7491 0 0 0 0)
+M  V30 END SGROUP
+M  V30 END CTAB
+M  END
+>  <BIGSMILES_BRACKET_RECORDS_JSON>
+{
+  "records": [
+    {
+      "id": 0,
+      "bracket_kind": "backbone",
+      "pairing_id": "F1",
+      "group_id": "<1:3",
+      "ru_midpoint": [
+        3.031200565819769,
+        -0.24900000000000028
+      ],
+      "bond_midpoint": [
+        1.7321072028332747,
+        -0.24900000000000033
+      ],
+      "orientation_vector": [
+        -0.0,
+        1.0
+      ],
+      "half_bracket_size": 0.5001015883783859,
+      "bond": [
+        0,
+        1
+      ],
+      "fragment": "F1",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F1/fragments[0]",
+      "marker_id": "0",
+      "side": "left",
+      "connection_group": "<1",
+      "marker_type_index": 3
+    },
+    {
+      "id": 1,
+      "bracket_kind": "backbone",
+      "pairing_id": "F1",
+      "group_id": ">1:4",
+      "ru_midpoint": [
+        3.031200565819769,
+        -0.24900000000000028
+      ],
+      "bond_midpoint": [
+        4.330312208216769,
+        -0.24900000000000033
+      ],
+      "orientation_vector": [
+        -0.0,
+        1.0
+      ],
+      "half_bracket_size": 0.5001015883783859,
+      "bond": [
+        5,
+        6
+      ],
+      "fragment": "F1",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F1/fragments[0]",
+      "marker_id": "6",
+      "side": "right",
+      "connection_group": ">1",
+      "marker_type_index": 4
+    }
+  ]
+}

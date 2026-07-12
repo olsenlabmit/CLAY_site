@@ -11,7 +11,7 @@ from urllib import error, parse, request
 
 
 REPO_VALIDATION_DIR = Path(__file__).resolve().parents[1]
-DEFAULT_MANIFEST = REPO_VALIDATION_DIR / "validation_manifest.csv"
+DEFAULT_MANIFEST = REPO_VALIDATION_DIR / "validation_manifest_260707.csv"
 DEFAULT_ENV_FILE = REPO_VALIDATION_DIR / ".env.local"
 
 

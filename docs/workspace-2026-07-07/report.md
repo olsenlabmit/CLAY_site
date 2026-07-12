@@ -28,3 +28,11 @@
 - Verified the extracted inline JavaScript in `pages/index.html` with `node --check`.
 - Verified whitespace with `git diff --check`.
 - Did not run browser checks.
+
+## Error Modes Schema Cache Follow-up
+
+- Diagnosed the updated error mode save failure as a production database schema/cache issue after the Edge Function route was redeployed successfully.
+- Updated `supabase/schema.sql` to notify PostgREST to reload its schema cache after applying schema changes.
+- Updated `in.md` backend deployment instructions to state that function deployment does not apply database changes and to include the minimum SQL for restoring `entries.error_modes`.
+- Added a troubleshooting note for the `entries.error_modes` schema cache error.
+- Verified whitespace with `git diff --check -- in.md supabase/schema.sql`.
