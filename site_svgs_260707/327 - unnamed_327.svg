@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<svg version='1.1' baseProfile='full'
+              xmlns='http://www.w3.org/2000/svg'
+                      xmlns:rdkit='http://www.rdkit.org/xml'
+                      xmlns:xlink='http://www.w3.org/1999/xlink'
+                  xml:space='preserve'
+width='76px' height='34.1px' viewBox='-2 -3.1 76 34.1'>
+<!-- END OF HEADER -->
+<rect style='opacity:1.0;fill:#FFFFFF;stroke:none' width='76' height='34.1' x='-2' y='-3.1'> </rect>
+<path class='bond-0 atom-2 atom-3' d='M 18.1,9.1 L 29.9,2.3' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.6px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-1 atom-3 atom-4' d='M 29.9,5.2 L 41.6,9.1' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.6px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-1 atom-3 atom-4' d='M 29.9,2.3 L 39.2,10.6' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.6px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-2 atom-4 atom-5' d='M 41.6,9.1 L 41.6,17.8' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.6px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-3 atom-4 atom-6' d='M 41.6,9.1 L 53.4,2.3' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.6px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-4 atom-0 atom-2' d='M 6.3,2.3 L 18.1,9.1' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.6px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-5 atom-1 atom-6' d='M 65.2,9.1 L 53.4,2.3' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.6px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path d='M 18.7,8.8 L 18.1,9.1 L 17.5,8.8' style='fill:none;stroke:#000000;stroke-width:0.6px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;' />
+<path d='M 29.3,2.7 L 29.9,2.3 L 30.3,2.8' style='fill:none;stroke:#000000;stroke-width:0.6px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;' />
+<path d='M 52.8,2.7 L 53.4,2.3 L 54.0,2.7' style='fill:none;stroke:#000000;stroke-width:0.6px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;' />
+<path class='atom-5' d='M 39.2 26.3
+L 39.2 19.2
+L 41.6 19.2
+Q 42.7 19.2, 43.3 19.7
+Q 43.9 20.1, 43.9 21.1
+Q 43.9 21.6, 43.6 22.0
+Q 43.3 22.3, 42.8 22.6
+Q 43.4 22.7, 43.7 23.2
+Q 44.1 23.6, 44.1 24.2
+Q 44.1 25.2, 43.4 25.7
+Q 42.8 26.3, 41.7 26.3
+L 39.2 26.3
+M 40.2 23.0
+L 40.2 25.5
+L 41.7 25.5
+Q 42.4 25.5, 42.7 25.2
+Q 43.1 24.9, 43.1 24.3
+Q 43.1 23.0, 41.7 23.0
+L 40.2 23.0
+M 40.2 22.2
+L 41.6 22.2
+Q 42.2 22.2, 42.6 21.9
+Q 42.9 21.6, 42.9 21.1
+Q 42.9 20.5, 42.6 20.2
+Q 42.3 20.0, 41.6 20.0
+L 40.2 20.0
+L 40.2 22.2
+' fill='#000000'/>
+<path class='atom-5' d='M 47.6 21.8
+Q 47.3 21.8, 47.1 21.8
+Q 46.2 21.8, 45.9 22.5
+L 45.9 26.3
+L 45.0 26.3
+L 45.0 21.0
+L 45.9 21.0
+L 45.9 21.6
+Q 46.3 20.9, 47.2 20.9
+Q 47.4 20.9, 47.6 21.0
+L 47.6 21.8
+' fill='#000000'/>
+<path d='M 12.2,-1.1 L 12.2,12.5' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.6px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path d='M 12.2,-1.1 L 14.9,-1.1' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.6px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path d='M 12.2,12.5 L 14.9,12.5' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.6px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path d='M 59.3,-1.1 L 59.3,12.5' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.6px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path d='M 59.3,-1.1 L 56.6,-1.1' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.6px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path d='M 59.3,12.5 L 56.6,12.5' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.6px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+</svg>

@@ -110,7 +110,19 @@ This repository's deployable frontend is the static site in `pages/`. Use GitHub
 ## Backend
 
 1. Open the Supabase project dashboard.
-2. Run `supabase/schema.sql` in the SQL editor. It creates `entries`, `comments`, the update trigger, and the public `validation-comment-images` Storage bucket.
+2. Run `supabase/schema.sql` in the SQL editor. It creates or updates `entries`, `comments`, the update trigger, and the public `validation-comment-images` Storage bucket, then reloads the PostgREST schema cache.
+
+   Rerun this step whenever `supabase/schema.sql` changes. Deploying the Edge Function does not apply database schema changes.
+
+   If error mode writes fail with `Could not find the 'error_modes' column of 'entries' in the schema cache`, run at minimum:
+
+   ```sql
+   alter table if exists public.entries
+     add column if not exists error_modes text[] not null default '{}'::text[];
+
+   notify pgrst, 'reload schema';
+   ```
+
 3. Deploy the Edge Function from this repository:
 
    ```powershell
@@ -179,6 +191,7 @@ This repository's deployable frontend is the static site in `pages/`. Use GitHub
 - Local sync asks for Supabase credentials: create `.env.local` with `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`, or pass `--supabase-url` and `--service-role-key` for a one-off run.
 - SVG missing: rerun the sync script and confirm the manifest row references an existing SVG file.
 - Save errors: check the browser console and Supabase function logs. Annotation and checked writes require `x-validation-key`.
+- Error mode save cannot find `entries.error_modes`: rerun `supabase/schema.sql` in the Supabase SQL editor. The Edge Function route is deployed, but the production database schema or PostgREST schema cache has not been updated.
 - Image upload failures: confirm the `validation-comment-images` bucket exists and is public, and that `VALIDATION_COMMENT_IMAGE_BUCKET` matches it.
 - Stale Pages deployment: rerun the Deploy validation site workflow and confirm the latest artifact includes `index.html` and `config.js`.
 - Mismatched manifest/SVG counts: run the sync script. It stops when the manifest row count does not match the number of SVG files.

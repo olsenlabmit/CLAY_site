@@ -19,6 +19,7 @@ const allowedErrorModes = new Set([
   "backbone_misplace",
   "bracket_misplace",
   "miscellaneous",
+  "suboptimal_bigsmiles",
 ]);
 
 function json(payload: unknown, status = 200): Response {
