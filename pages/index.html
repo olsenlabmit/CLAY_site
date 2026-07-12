@@ -60,17 +60,41 @@ body {
   min-width: 0; width: 100%; border: 1px solid #ddd; border-radius: 4px;
   padding: 5px 6px; font-size: .72rem; background: #fff; color: #222;
 }
-.entry-checkbox-list,
 .review-checkbox-list {
   display: flex; flex-direction: column; gap: 4px;
 }
-.entry-checkbox-list {
-  max-height: 122px; overflow: auto; padding: 6px;
-  border: 1px solid #ddd; border-radius: 4px; background: #fff;
+.entry-error-dropdown {
+  position: relative; min-width: 0; width: 100%;
+  color: #222;
 }
-.entry-checkbox-list label {
+.entry-error-dropdown summary {
+  list-style: none; cursor: pointer; user-select: none;
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  min-width: 0; width: 100%; border: 1px solid #ddd; border-radius: 4px;
+  padding: 5px 6px; font-size: .72rem; background: #fff; color: #222;
+}
+.entry-error-dropdown summary::-webkit-details-marker { display: none; }
+.entry-error-dropdown summary::after {
+  content: "v"; flex: 0 0 auto; color: #777; font-size: .64rem;
+}
+.entry-error-dropdown[open] summary::after { content: "^"; }
+.entry-error-summary {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.entry-error-menu {
+  position: absolute; left: 0; right: 0; top: calc(100% + 4px); z-index: 20;
+  display: flex; flex-direction: column; gap: 0;
+  max-height: 172px; overflow: auto; padding: 4px;
+  border: 1px solid #ddd; border-radius: 4px; background: #fff;
+  box-shadow: 0 8px 22px rgba(0,0,0,.18);
+}
+.entry-error-menu label {
   display: flex; align-items: center; gap: 6px; min-width: 0;
+  padding: 5px 6px; border-radius: 3px;
   font-size: .72rem; font-weight: 700; line-height: 1.25;
+}
+.entry-error-menu label:hover {
+  background: #e3f2fd;
 }
 .review-check {
   display: flex; align-items: center; gap: 6px; min-width: 0;
@@ -79,7 +103,7 @@ body {
   cursor: pointer; transition: background .12s, color .12s;
 }
 .review-check:hover { background: #e3f2fd; }
-.entry-checkbox-list input,
+.entry-error-menu input,
 .review-check input {
   flex: 0 0 auto;
 }
@@ -357,14 +381,20 @@ body.resizing-rows { cursor: row-resize; }
 }
 #entry-search,
 .entry-filter select,
-.entry-checkbox-list {
+.entry-error-dropdown summary {
   background: var(--panel-2); border-color: var(--border);
   color: var(--text);
 }
 #entry-search::placeholder { color: var(--muted); }
 .entry-filter { color: var(--muted); }
-.entry-checkbox-list label,
+.entry-error-dropdown summary::after { color: var(--muted); }
+.entry-error-menu {
+  background: var(--panel-2); border-color: var(--border);
+  box-shadow: 0 8px 22px rgba(0,0,0,.35);
+}
+.entry-error-menu label,
 .review-check { color: var(--text); }
+.entry-error-menu label:hover { background: rgba(88,166,255,.14); }
 .review-section-title { color: var(--muted); }
 .review-divider { background: var(--border); }
 .entry-item {
@@ -637,10 +667,10 @@ body.resizing-rows { cursor: row-resize; }
             <option value="none">Needs review</option>
           </select>
         </label>
-        <label class="entry-filter entry-filter-wide">
+        <div class="entry-filter entry-filter-wide">
           <span>Error Modes</span>
-          <div id="error-filter-list" class="entry-checkbox-list" aria-label="Error mode filter"></div>
-        </label>
+          <details id="error-filter-list" class="entry-error-dropdown" aria-label="Error mode filter"></details>
+        </div>
       </div>
     </div>
     <div id="entry-list"><div class="spin"></div></div>
@@ -744,6 +774,7 @@ const ERROR_MODES = [
   { id: 'backbone_misplace', label: 'Backbone misplace' },
   { id: 'bracket_misplace', label: 'Bracket misplace' },
   { id: 'miscellaneous', label: 'Miscellaneous' },
+  { id: 'suboptimal_bigsmiles', label: 'Suboptimal BIGSMILES' },
 ];
 const ERROR_MODE_IDS = new Set(ERROR_MODES.map(mode => mode.id));
 
@@ -1089,18 +1120,36 @@ function selectedErrorFilters() {
     .filter(id => ERROR_MODE_IDS.has(id));
 }
 
+function updateErrorFilterSummary() {
+  const summary = document.getElementById('error-filter-summary');
+  if (!summary) return;
+  const labels = selectedErrorFilters()
+    .map(id => ERROR_MODES.find(mode => mode.id === id)?.label)
+    .filter(Boolean);
+  summary.textContent = labels.length ? labels.join(', ') : 'Any error mode';
+}
+
 function renderErrorFilter() {
   const container = document.getElementById('error-filter-list');
   if (!container) return;
-  container.innerHTML = ERROR_MODES.map(mode => `
-    <label>
-      <input class="error-filter" type="checkbox" value="${esc(mode.id)}">
-      <span>${esc(mode.label)}</span>
-    </label>
-  `).join('');
+  container.innerHTML = `
+    <summary><span id="error-filter-summary" class="entry-error-summary">Any error mode</span></summary>
+    <div class="entry-error-menu">
+      ${ERROR_MODES.map(mode => `
+        <label>
+          <input class="error-filter" type="checkbox" value="${esc(mode.id)}">
+          <span>${esc(mode.label)}</span>
+        </label>
+      `).join('')}
+    </div>
+  `;
   container.querySelectorAll('.error-filter').forEach(input => {
-    input.addEventListener('change', filterEntries);
+    input.addEventListener('change', () => {
+      updateErrorFilterSummary();
+      filterEntries();
+    });
   });
+  updateErrorFilterSummary();
 }
 
 function filterEntries() {
