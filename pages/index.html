@@ -60,6 +60,11 @@ body {
   min-width: 0; width: 100%; border: 1px solid #ddd; border-radius: 4px;
   padding: 5px 6px; font-size: .72rem; background: #fff; color: #222;
 }
+.entry-filter-check {
+  flex-direction: row; align-items: center; gap: 6px;
+  padding: 3px 0; font-weight: 700;
+}
+.entry-filter-check input { flex: 0 0 auto; }
 .review-checkbox-list {
   display: flex; flex-direction: column; gap: 4px;
 }
@@ -115,6 +120,8 @@ body {
 .entry-item.active         { background: #1565c0; color: #fff; }
 .ei-head { display: flex; align-items: center; gap: 6px; min-width: 0; }
 .ei-idx  { font-size: .78rem; font-weight: 700; }
+.entry-item[data-last-modified="true"] .ei-idx,
+.entry-item.active[data-last-modified="true"] .ei-idx { color: #f97316; }
 .ei-bs   { font-size: .68rem; opacity: .6; white-space: nowrap;
            overflow: hidden; text-overflow: ellipsis; max-width: 184px; }
 .entry-item.active .ei-bs  { opacity: .8; }
@@ -152,12 +159,37 @@ body {
 }
 
 /* ── BigSMILES bar ────────────────────────────────── */
-#bs-bar { background: #fff; border-bottom: 1px solid #ddd; padding: 8px 16px; flex-shrink: 0; }
+#bs-bar {
+  background: #fff; border-bottom: 1px solid #ddd; padding: 8px 16px; flex-shrink: 0;
+  display: flex; align-items: center; gap: 10px;
+}
+#bs-main { flex: 1 1 auto; min-width: 0; }
 #bs-lbl  { font-size: .68rem; font-weight: 700; text-transform: uppercase;
            letter-spacing: .07em; color: #888; margin-bottom: 3px; }
 #bs-text { font-family: 'Courier New', monospace; font-size: .87rem;
            color: #1565c0; word-break: break-all;
            max-height: 52px; overflow-y: auto; }
+.mol-download-btn {
+  flex: 0 0 auto; width: 32px; height: 32px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid #ccc; border-radius: 4px; background: #fff; color: #1565c0;
+  cursor: pointer; transition: background .12s, border-color .12s, color .12s;
+}
+.mol-download-btn:hover { background: #e3f2fd; border-color: #1565c0; }
+.mol-download-btn:disabled { cursor: default; opacity: .45; }
+.mol-download-btn[hidden] { display: none; }
+.mol-download-glyph {
+  position: relative; width: 16px; height: 16px; display: inline-block;
+}
+.mol-download-glyph::before {
+  content: ""; position: absolute; left: 7px; top: 2px;
+  width: 2px; height: 9px; background: currentColor;
+}
+.mol-download-glyph::after {
+  content: ""; position: absolute; left: 4px; top: 7px;
+  width: 8px; height: 8px; border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor; transform: rotate(45deg);
+}
 
 /* ── SVG area ─────────────────────────────────────── */
 #svg-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
@@ -667,6 +699,10 @@ body.resizing-rows { cursor: row-resize; }
             <option value="none">Needs review</option>
           </select>
         </label>
+        <label class="entry-filter entry-filter-wide entry-filter-check">
+          <input id="last-modified-filter" type="checkbox">
+          <span>Last modified</span>
+        </label>
         <div class="entry-filter entry-filter-wide">
           <span>Error Modes</span>
           <details id="error-filter-list" class="entry-error-dropdown" aria-label="Error mode filter"></details>
@@ -681,8 +717,16 @@ body.resizing-rows { cursor: row-resize; }
 
     <!-- BIGSMILES bar -->
     <div id="bs-bar" ondblclick="toggleCmtsPanel()" title="Double-click to show comments">
-      <div id="bs-lbl">BigSMILES</div>
-      <div id="bs-text">← Select an entry</div>
+      <div id="bs-main">
+        <div id="bs-lbl">BigSMILES</div>
+        <div id="bs-text">← Select an entry</div>
+      </div>
+      <button id="mol-download-btn" class="mol-download-btn" type="button"
+              onclick="downloadSelectedMol(event)"
+              title="Download MOL file" aria-label="Download MOL file"
+              hidden disabled>
+        <span class="mol-download-glyph" aria-hidden="true"></span>
+      </button>
     </div>
 
     <!-- SVG area -->
@@ -767,6 +811,10 @@ let allEntries   = [];
 let bookmarkedIndices = new Set();
 let commentedIndices = new Set();
 let entryErrorModes = new Map();
+let entryUpdatedAt = new Map();
+let lastModifiedIndices = new Set();
+let selectedMol = '';
+let selectedMolFileName = '';
 
 const ERROR_MODES = [
   { id: 'atom_overlap', label: 'Atom overlap' },
@@ -919,6 +967,11 @@ function loadInitialData() {
         String(e.index),
         normalizeErrorModes(e.errorModes),
       ]));
+      entryUpdatedAt = new Map(allEntries.map(e => [
+        String(e.index),
+        String(e.updatedAt || ''),
+      ]));
+      recomputeLastModifiedIndices();
       renderList(allEntries);
       loadCommentedIndices();
     })
@@ -1009,6 +1062,7 @@ window.addEventListener('load', () => {
   );
   document.getElementById('comment-filter').addEventListener('change', filterEntries);
   document.getElementById('bookmark-filter').addEventListener('change', filterEntries);
+  document.getElementById('last-modified-filter').addEventListener('change', filterEntries);
   document.addEventListener('keydown', onEntryNavKeydown);
   renderErrorFilter();
   renderErrorModePanel();
@@ -1027,10 +1081,12 @@ function renderList(entries) {
     const key = String(e.index);
     const isAcceptable = bookmarkedIndices.has(key);
     const modes = entryErrorModes.get(key) || [];
+    const isLastModified = lastModifiedIndices.has(key);
     return `<div class="entry-item ${String(e.index) === currentIdx ? 'active' : ''}"
           data-idx="${esc(e.index)}"
           data-bookmarked="${isAcceptable ? 'true' : 'false'}"
           data-error-modes="${esc(modes.join(' '))}"
+          data-last-modified="${isLastModified ? 'true' : 'false'}"
           data-has-comments="${commentedIndices.has(String(e.index)) ? 'true' : 'false'}"
           onclick="selectEntry('${esc(e.index)}')">
        <div class="ei-head">
@@ -1076,11 +1132,13 @@ function toggleBookmark(idx) {
       setEntryErrorModesLocal(key, r.errorModes || []);
       if (r.bookmarked || r.checked) bookmarkedIndices.add(key);
       else bookmarkedIndices.delete(key);
+      applyUpdatedAtFromResponse(key, r.updatedAt);
 
       document.querySelectorAll('.entry-item').forEach(row => {
         if (row.dataset.idx === key) {
           setRowBookmarkState(row, bookmarkedIndices.has(key));
           setRowErrorModesState(row, entryErrorModes.get(key) || []);
+          setRowLastModifiedState(row);
         }
       });
       renderErrorModePanel();
@@ -1099,9 +1157,54 @@ function setRowErrorModesState(row, modes) {
   row.dataset.errorModes = normalizeErrorModes(modes).join(' ');
 }
 
+function setRowLastModifiedState(row) {
+  row.dataset.lastModified = lastModifiedIndices.has(String(row.dataset.idx || '')) ? 'true' : 'false';
+}
+
 function setEntryErrorModesLocal(idx, modes) {
   const key = String(idx);
   entryErrorModes.set(key, normalizeErrorModes(modes));
+}
+
+function setEntryUpdatedAtLocal(idx, updatedAt) {
+  const key = String(idx);
+  const value = String(updatedAt || '');
+  entryUpdatedAt.set(key, value);
+  const entry = allEntries.find(item => String(item.index) === key);
+  if (entry) entry.updatedAt = value;
+  recomputeLastModifiedIndices();
+}
+
+function parseUpdatedAtTimestamp(value) {
+  const time = Date.parse(String(value || ''));
+  return Number.isFinite(time) ? time : null;
+}
+
+function recomputeLastModifiedIndices() {
+  let newest = null;
+  const next = new Set();
+  entryUpdatedAt.forEach((value, key) => {
+    const time = parseUpdatedAtTimestamp(value);
+    if (time === null) return;
+    if (newest === null || time > newest) {
+      newest = time;
+      next.clear();
+      next.add(key);
+    } else if (time === newest) {
+      next.add(key);
+    }
+  });
+  lastModifiedIndices = next;
+}
+
+function refreshLastModifiedRows() {
+  document.querySelectorAll('.entry-item').forEach(setRowLastModifiedState);
+}
+
+function applyUpdatedAtFromResponse(idx, updatedAt) {
+  if (!updatedAt) return;
+  setEntryUpdatedAtLocal(idx, updatedAt);
+  refreshLastModifiedRows();
 }
 
 function normalizeErrorModes(modes) {
@@ -1156,9 +1259,11 @@ function filterEntries() {
   const search = document.getElementById('entry-search');
   const commentFilter = document.getElementById('comment-filter');
   const bookmarkFilter = document.getElementById('bookmark-filter');
+  const lastModifiedFilter = document.getElementById('last-modified-filter');
   const query = (search ? search.value : '').trim().toLowerCase();
   const commentMode = commentFilter ? commentFilter.value : 'any';
   const bookmarkMode = bookmarkFilter ? bookmarkFilter.value : 'any';
+  const lastModifiedOnly = Boolean(lastModifiedFilter && lastModifiedFilter.checked);
   const errorFilters = selectedErrorFilters();
 
   document.querySelectorAll('#entry-list .entry-item').forEach(row => {
@@ -1166,6 +1271,7 @@ function filterEntries() {
     const matchesIndex = !query || idx.includes(query);
     const hasComments = row.dataset.hasComments === 'true';
     const bookmarked = row.dataset.bookmarked === 'true';
+    const lastModified = row.dataset.lastModified === 'true';
     const rowErrorModes = (row.dataset.errorModes || '').split(/\s+/).filter(Boolean);
     const matchesComments =
       commentMode === 'any' ||
@@ -1178,8 +1284,11 @@ function filterEntries() {
     const matchesErrors =
       !errorFilters.length ||
       errorFilters.some(mode => rowErrorModes.includes(mode));
+    const matchesLastModified = !lastModifiedOnly || lastModified;
     row.style.display =
-      matchesIndex && matchesComments && matchesBookmark && matchesErrors ? '' : 'none';
+      matchesIndex && matchesComments && matchesBookmark && matchesErrors && matchesLastModified
+        ? ''
+        : 'none';
   });
 }
 
@@ -1238,6 +1347,7 @@ function selectEntry(idx) {
   // Reset view
   document.getElementById('bs-text').textContent = 'Loading…';
   document.getElementById('svg-container').innerHTML = '<div class="spin"></div>';
+  setSelectedMol('', '');
   currentIdx = null;
 
   // Fetch full entry from server
@@ -1262,10 +1372,13 @@ function onEntry(entry) {
   if (entry.checked) bookmarkedIndices.add(key);
   else bookmarkedIndices.delete(key);
   setEntryErrorModesLocal(key, entry.errorModes || []);
+  applyUpdatedAtFromResponse(key, entry.updatedAt);
+  setSelectedMol(entry.mol || '', entry.molFileName || '');
   document.querySelectorAll('.entry-item').forEach(row => {
     if (row.dataset.idx === key) {
       setRowBookmarkState(row, bookmarkedIndices.has(key));
       setRowErrorModesState(row, entryErrorModes.get(key) || []);
+      setRowLastModifiedState(row);
     }
   });
   renderErrorModePanel();
@@ -1284,6 +1397,47 @@ function onEntry(entry) {
 
 // ── SVG loading ───────────────────────────────────────────────
 // ── SVG loading (robust version) ──────────────────────────────
+function setSelectedMol(mol, fileName) {
+  selectedMol = String(mol || '');
+  selectedMolFileName = String(fileName || '');
+  updateMolDownloadButton();
+}
+
+function updateMolDownloadButton() {
+  const btn = document.getElementById('mol-download-btn');
+  if (!btn) return;
+  const hasMol = Boolean(selectedMol.trim());
+  btn.hidden = !hasMol;
+  btn.disabled = !hasMol;
+}
+
+function safeMolFileName(fileName) {
+  let name = String(fileName || '').trim()
+    .replace(/[<>:"/\\|?*\x00-\x1f]/g, '_')
+    .replace(/^\.+/, '')
+    .slice(0, 160);
+  if (!name) name = currentIdx ? `entry-${currentIdx}.mol` : 'entry.mol';
+  if (!/\.mol$/i.test(name)) name += '.mol';
+  return name;
+}
+
+function downloadSelectedMol(event) {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  if (!selectedMol.trim()) return;
+  const blob = new Blob([selectedMol], { type: 'chemical/x-mdl-molfile' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = safeMolFileName(selectedMolFileName);
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 0);
+}
+
 function loadSVG(svgStr) {
   const container = document.getElementById('svg-container');
 
@@ -1542,6 +1696,7 @@ function setCurrentEntryAcceptable(checked) {
         bookmarkedIndices.delete(key);
       }
       setEntryErrorModesLocal(key, r.errorModes || []);
+      applyUpdatedAtFromResponse(key, r.updatedAt);
       updateCurrentEntryReviewRows();
     })
     .catch(err => {
@@ -1577,6 +1732,7 @@ function setCurrentEntryErrorModes(modes) {
       setEntryErrorModesLocal(key, savedModes);
       if (r.checked) bookmarkedIndices.add(key);
       else bookmarkedIndices.delete(key);
+      applyUpdatedAtFromResponse(key, r.updatedAt);
       updateCurrentEntryReviewRows();
     })
     .catch(err => {
@@ -1591,6 +1747,7 @@ function updateCurrentEntryReviewRows() {
     if (row.dataset.idx === key) {
       setRowBookmarkState(row, bookmarkedIndices.has(key));
       setRowErrorModesState(row, entryErrorModes.get(key) || []);
+      setRowLastModifiedState(row);
     }
   });
   renderErrorModePanel();

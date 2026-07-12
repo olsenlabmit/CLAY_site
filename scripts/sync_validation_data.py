@@ -11,7 +11,7 @@ from urllib import error, parse, request
 
 
 REPO_VALIDATION_DIR = Path(__file__).resolve().parents[1]
-DEFAULT_MANIFEST = REPO_VALIDATION_DIR / "validation_manifest_260707.csv"
+DEFAULT_MANIFEST = REPO_VALIDATION_DIR / "validation_manifest.csv"
 DEFAULT_ENV_FILE = REPO_VALIDATION_DIR / ".env.local"
 
 
@@ -127,19 +127,30 @@ def _load_entry_migration(path: Path | None) -> dict[str, dict[str, Any]]:
 def _load_manifest_entries(
     manifest_path: Path,
     svg_dir: Path,
+    mol_dir: Path,
     migration_rows: dict[str, dict[str, Any]],
 ) -> list[dict[str, Any]]:
     entries: list[dict[str, Any]] = []
     missing_svgs: list[str] = []
+    missing_mols: list[str] = []
+    incomplete_rows: list[str] = []
     for row in _read_csv(manifest_path):
         entry_index = _cell(row, "index", "entry_index")
         bigsmiles = _cell(row, "bigsmiles")
         svg_name = _cell(row, "svg-file-name", "svg file name", "svg_file_name", "svg")
-        if not entry_index or not svg_name:
+        mol_name = _cell(row, "mol-file-name", "mol file name", "mol_file_name", "mol")
+        if not entry_index:
+            continue
+        if not svg_name or not mol_name:
+            incomplete_rows.append(entry_index)
             continue
         svg_path = svg_dir / svg_name
         if not svg_path.exists():
             missing_svgs.append(svg_name)
+            continue
+        mol_path = mol_dir / mol_name
+        if not mol_path.exists():
+            missing_mols.append(mol_name)
             continue
         migration = migration_rows.get(entry_index, {})
         error_modes = migration.get("error_modes", [])
@@ -148,14 +159,22 @@ def _load_manifest_entries(
                 "entry_index": entry_index,
                 "bigsmiles": bigsmiles,
                 "svg": svg_path.read_text(encoding="utf-8"),
+                "mol": mol_path.read_text(encoding="utf-8"),
+                "mol_file_name": mol_name,
                 "annotations": migration.get("annotations", []),
                 "checked": bool(migration.get("checked", False)) and not error_modes,
                 "error_modes": error_modes,
             }
         )
+    if incomplete_rows:
+        preview = ", ".join(incomplete_rows[:20])
+        raise SystemExit(f"Manifest rows missing SVG-file-name or MOL-file-name: {preview}")
     if missing_svgs:
         preview = ", ".join(missing_svgs[:20])
         raise SystemExit(f"Manifest rows reference missing SVG files: {preview}")
+    if missing_mols:
+        preview = ", ".join(missing_mols[:20])
+        raise SystemExit(f"Manifest rows reference missing MOL files: {preview}")
     return entries
 
 
@@ -252,6 +271,12 @@ def parse_args() -> argparse.Namespace:
         required=True,
         help="Directory containing the SVG files referenced by --manifest.",
     )
+    parser.add_argument(
+        "--mol-dir",
+        type=Path,
+        required=True,
+        help="Directory containing the MOL files referenced by --manifest.",
+    )
     parser.add_argument("--entries-csv", type=Path, help="Optional exported Entries sheet CSV.")
     parser.add_argument("--comments-csv", type=Path, help="Optional exported Comments sheet CSV.")
     parser.add_argument(
@@ -273,17 +298,25 @@ def main() -> None:
     args = parse_args()
     manifest = args.manifest.resolve()
     svg_dir = args.svg_dir.resolve()
+    mol_dir = args.mol_dir.resolve()
     if not manifest.exists():
         raise SystemExit(f"Manifest not found: {manifest}")
     if not svg_dir.is_dir():
         raise SystemExit(f"SVG directory not found: {svg_dir}")
+    if not mol_dir.is_dir():
+        raise SystemExit(f"MOL directory not found: {mol_dir}")
 
     migration_rows = _load_entry_migration(args.entries_csv)
-    entries = _load_manifest_entries(manifest, svg_dir, migration_rows)
+    entries = _load_manifest_entries(manifest, svg_dir, mol_dir, migration_rows)
     svg_count = len(list(svg_dir.glob("*.svg")))
     if len(entries) != svg_count:
         raise SystemExit(
             f"Manifest/SVG count mismatch: {len(entries)} manifest rows for {svg_count} SVG files"
+        )
+    mol_count = len(list(mol_dir.glob("*.mol")))
+    if len(entries) != mol_count:
+        raise SystemExit(
+            f"Manifest/MOL count mismatch: {len(entries)} manifest rows for {mol_count} MOL files"
         )
 
     comments = _load_comments(args.comments_csv)

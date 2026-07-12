@@ -93,17 +93,23 @@ function rowToEntry(row: {
   entry_index: string;
   bigsmiles: string;
   svg?: string;
+  mol?: string;
+  mol_file_name?: string;
   annotations?: unknown;
   checked?: boolean;
   error_modes?: unknown;
+  updated_at?: string;
 }) {
   return {
     index: String(row.entry_index),
     bigsmiles: String(row.bigsmiles || ""),
     svg: String(row.svg || ""),
+    mol: String(row.mol || ""),
+    molFileName: String(row.mol_file_name || ""),
     annotations: annotationString(row.annotations || []),
     checked: Boolean(row.checked),
     errorModes: normalizeErrorModes(row.error_modes),
+    updatedAt: String(row.updated_at || ""),
   };
 }
 
@@ -184,7 +190,7 @@ async function uploadImage(
 async function handleEntries(): Promise<Response> {
   const { data, error: queryError } = await supabase
     .from("entries")
-    .select("entry_index,bigsmiles,checked,error_modes")
+    .select("entry_index,bigsmiles,checked,error_modes,updated_at")
     .order("entry_index", { ascending: true });
   if (queryError) return error(queryError.message, 500);
   return json(
@@ -195,6 +201,7 @@ async function handleEntries(): Promise<Response> {
         bigsmiles: String(row.bigsmiles || ""),
         checked: Boolean(row.checked),
         errorModes: normalizeErrorModes(row.error_modes),
+        updatedAt: String(row.updated_at || ""),
       })),
   );
 }
@@ -226,7 +233,7 @@ async function handleCommentedEntries(): Promise<Response> {
 async function handleEntry(entryIndex: string): Promise<Response> {
   const { data, error: queryError } = await supabase
     .from("entries")
-    .select("entry_index,bigsmiles,svg,annotations,checked,error_modes")
+    .select("entry_index,bigsmiles,svg,mol,mol_file_name,annotations,checked,error_modes,updated_at")
     .eq("entry_index", entryIndex)
     .maybeSingle();
   if (queryError) return error(queryError.message, 500);
@@ -243,7 +250,7 @@ async function handleCheckedPatch(req: Request, entryIndex: string): Promise<Res
     .from("entries")
     .update(update)
     .eq("entry_index", entryIndex)
-    .select("entry_index,checked,error_modes")
+    .select("entry_index,checked,error_modes,updated_at")
     .maybeSingle();
   if (updateError) return error(updateError.message, 500);
   if (!data) return json({ ok: false, bookmarked: false });
@@ -252,6 +259,7 @@ async function handleCheckedPatch(req: Request, entryIndex: string): Promise<Res
     bookmarked: Boolean(data.checked),
     checked: Boolean(data.checked),
     errorModes: normalizeErrorModes(data.error_modes),
+    updatedAt: String(data.updated_at || ""),
   });
 }
 
@@ -266,7 +274,7 @@ async function handleErrorModesPatch(req: Request, entryIndex: string): Promise<
     .from("entries")
     .update({ error_modes: errorModes, checked })
     .eq("entry_index", entryIndex)
-    .select("entry_index,checked,error_modes")
+    .select("entry_index,checked,error_modes,updated_at")
     .maybeSingle();
   if (updateError) return error(updateError.message, 500);
   if (!data) return json({ ok: false, errorModes: [], checked: false });
@@ -274,6 +282,7 @@ async function handleErrorModesPatch(req: Request, entryIndex: string): Promise<
     ok: true,
     errorModes: normalizeErrorModes(data.error_modes),
     checked: Boolean(data.checked),
+    updatedAt: String(data.updated_at || ""),
   });
 }
 
@@ -286,11 +295,11 @@ async function handleAnnotationsPut(req: Request, entryIndex: string): Promise<R
     .from("entries")
     .update({ annotations })
     .eq("entry_index", entryIndex)
-    .select("entry_index")
+    .select("entry_index,updated_at")
     .maybeSingle();
   if (updateError) return error(updateError.message, 500);
   if (!data) return json({ ok: false });
-  return json({ ok: true });
+  return json({ ok: true, updatedAt: String(data.updated_at || "") });
 }
 
 async function handleComments(entryIndex: string): Promise<Response> {
