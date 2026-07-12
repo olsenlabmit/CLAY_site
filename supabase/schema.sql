@@ -2,6 +2,8 @@ create table if not exists public.entries (
   entry_index text primary key,
   bigsmiles text not null,
   svg text not null,
+  mol text not null default '',
+  mol_file_name text not null default '',
   annotations jsonb not null default '[]'::jsonb,
   checked boolean not null default false,
   error_modes text[] not null default '{}'::text[],
@@ -9,6 +11,8 @@ create table if not exists public.entries (
 );
 
 alter table if exists public.entries
+  add column if not exists mol text not null default '',
+  add column if not exists mol_file_name text not null default '',
   add column if not exists error_modes text[] not null default '{}'::text[];
 
 create table if not exists public.comments (
