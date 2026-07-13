@@ -200,6 +200,23 @@ def _load_comments(path: Path | None) -> list[dict[str, Any]]:
     return comments
 
 
+def _supabase_error_message(status: int, detail: str) -> str:
+    message = f"Supabase request failed: {status} {detail}"
+    lower_detail = detail.lower()
+    if "pgrst204" in lower_detail and "schema cache" in lower_detail:
+        missing_columns = [
+            column for column in ("mol", "mol_file_name", "error_modes")
+            if f"'{column}'" in lower_detail or f'"{column}"' in lower_detail
+        ]
+        column_text = ", ".join(missing_columns) if missing_columns else "a required column"
+        message += (
+            "\nSupabase PostgREST does not see "
+            f"{column_text}. Run supabase/schema.sql in the Supabase SQL editor, "
+            "then run `notify pgrst, 'reload schema';` before retrying the sync."
+        )
+    return message
+
+
 class SupabaseRest:
     def __init__(self, url: str, key: str) -> None:
         self.base_url = url.rstrip("/")
@@ -233,7 +250,7 @@ class SupabaseRest:
                 raw = response.read().decode("utf-8")
         except error.HTTPError as exc:
             detail = exc.read().decode("utf-8", errors="replace")
-            raise SystemExit(f"Supabase request failed: {exc.code} {detail}") from exc
+            raise SystemExit(_supabase_error_message(exc.code, detail)) from exc
         return json.loads(raw) if raw else None
 
     def upsert_entries(self, entries: list[dict[str, Any]], batch_size: int) -> int:

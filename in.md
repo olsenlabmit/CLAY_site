@@ -123,6 +123,16 @@ This repository's deployable frontend is the static site in `pages/`. Use GitHub
    notify pgrst, 'reload schema';
    ```
 
+   If MOL sync fails with `Could not find the 'mol' column of 'entries' in the schema cache`, run at minimum:
+
+   ```sql
+   alter table if exists public.entries
+     add column if not exists mol text not null default '',
+     add column if not exists mol_file_name text not null default '';
+
+   notify pgrst, 'reload schema';
+   ```
+
 3. Deploy the Edge Function from this repository:
 
    ```powershell
@@ -150,16 +160,16 @@ This repository's deployable frontend is the static site in `pages/`. Use GitHub
 
    ```powershell
    conda activate rdkit-env
-   python scripts/sync_validation_data.py --svg-dir site_svgs_260701
+   python scripts/sync_validation_data.py --svg-dir site_svgs_260712 --mol-dir site_mols_260712
    ```
 
-   The script reads `validation_manifest.csv` by default and requires `--svg-dir` to identify the SVG directory, then upserts `entries`.
+   The script reads `validation_manifest.csv` by default and requires `--svg-dir` plus `--mol-dir` to identify the SVG and MOL directories, then upserts `entries`.
 
 7. To migrate exported Google Sheet entry state:
 
    ```powershell
    conda activate rdkit-env
-   python scripts/sync_validation_data.py --svg-dir site_svgs_260701 --entries-csv path\to\Entries.csv
+   python scripts/sync_validation_data.py --svg-dir site_svgs_260712 --mol-dir site_mols_260712 --entries-csv path\to\Entries.csv
    ```
 
 8. To migrate exported Google Sheet comments:
@@ -190,8 +200,10 @@ This repository's deployable frontend is the static site in `pages/`. Use GitHub
 - Entries not loading: confirm `VALIDATION_API_BASE_URL` points to the deployed `validation-api` function and that the function has `SUPABASE_SERVICE_ROLE_KEY`.
 - Local sync asks for Supabase credentials: create `.env.local` with `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`, or pass `--supabase-url` and `--service-role-key` for a one-off run.
 - SVG missing: rerun the sync script and confirm the manifest row references an existing SVG file.
+- MOL missing: rerun the sync script and confirm the manifest row references an existing MOL file in the `--mol-dir` directory.
 - Save errors: check the browser console and Supabase function logs. Annotation and checked writes require `x-validation-key`.
 - Error mode save cannot find `entries.error_modes`: rerun `supabase/schema.sql` in the Supabase SQL editor. The Edge Function route is deployed, but the production database schema or PostgREST schema cache has not been updated.
+- MOL download button missing after data sync: inspect `GET /entries/<index>` in browser DevTools. If the JSON does not include non-empty `mol` and `molFileName`, redeploy `validation-api`; the deployed Edge Function is stale even if the database columns are filled.
 - Image upload failures: confirm the `validation-comment-images` bucket exists and is public, and that `VALIDATION_COMMENT_IMAGE_BUCKET` matches it.
 - Stale Pages deployment: rerun the Deploy validation site workflow and confirm the latest artifact includes `index.html` and `config.js`.
 - Mismatched manifest/SVG counts: run the sync script. It stops when the manifest row count does not match the number of SVG files.
