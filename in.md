@@ -163,7 +163,7 @@ This repository's deployable frontend is the static site in `pages/`. Use GitHub
    python scripts/sync_validation_data.py --svg-dir site_svgs_260712 --mol-dir site_mols_260712
    ```
 
-   The script reads `validation_manifest.csv` by default and requires `--svg-dir` plus `--mol-dir` to identify the SVG and MOL directories, then upserts `entries`.
+   The script reads `validation_manifest.csv` by default and requires `--svg-dir` plus `--mol-dir` to identify the SVG and MOL directories, then upserts `entries`. For existing entries, a normal sync updates only the SVG, MOL, and MOL filename; it preserves the stored BIGSMILES, annotations, acceptable state, error modes, and comments. New entries use the manifest BIGSMILES and default review state.
 
 7. To migrate exported Google Sheet entry state:
 
@@ -172,11 +172,13 @@ This repository's deployable frontend is the static site in `pages/`. Use GitHub
    python scripts/sync_validation_data.py --svg-dir site_svgs_260712 --mol-dir site_mols_260712 --entries-csv path\to\Entries.csv
    ```
 
+   Supplying `--entries-csv` is an explicit migration override: imported annotations, acceptable state, and error modes replace the stored entry state.
+
 8. To migrate exported Google Sheet comments:
 
    ```powershell
    conda activate rdkit-env
-   python scripts/sync_validation_data.py --svg-dir site_svgs_260701 --comments-csv path\to\Comments.csv
+   python scripts/sync_validation_data.py --svg-dir site_svgs_260712 --mol-dir site_mols_260712 --comments-csv path\to\Comments.csv
    ```
 
    Add `--replace-comments` only when the existing Supabase comments should be deleted first.

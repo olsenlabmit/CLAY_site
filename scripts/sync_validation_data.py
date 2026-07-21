@@ -13,6 +13,7 @@ from urllib import error, parse, request
 REPO_VALIDATION_DIR = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = REPO_VALIDATION_DIR / "validation_manifest.csv"
 DEFAULT_ENV_FILE = REPO_VALIDATION_DIR / ".env.local"
+EXISTING_ENTRY_PAGE_SIZE = 1000
 
 
 def _cell(row: dict[str, str], *names: str) -> str:
@@ -253,10 +254,58 @@ class SupabaseRest:
             raise SystemExit(_supabase_error_message(exc.code, detail)) from exc
         return json.loads(raw) if raw else None
 
-    def upsert_entries(self, entries: list[dict[str, Any]], batch_size: int) -> int:
+    def existing_entry_bigsmiles(
+        self,
+        page_size: int = EXISTING_ENTRY_PAGE_SIZE,
+    ) -> dict[str, str]:
+        existing: dict[str, str] = {}
+        offset = 0
+        while True:
+            rows = self.request(
+                "GET",
+                "entries?select=entry_index,bigsmiles"
+                f"&order=entry_index&limit={page_size}&offset={offset}",
+            )
+            if not isinstance(rows, list):
+                raise SystemExit("Supabase returned an invalid existing-entry response.")
+            for row in rows:
+                if not isinstance(row, dict):
+                    raise SystemExit("Supabase returned an invalid existing-entry row.")
+                entry_index = str(row.get("entry_index", "")).strip()
+                if not entry_index:
+                    raise SystemExit("Supabase returned an existing entry without an entry_index.")
+                existing[entry_index] = str(row.get("bigsmiles", ""))
+            if len(rows) < page_size:
+                return existing
+            offset += page_size
+
+    def upsert_entries(
+        self,
+        entries: list[dict[str, Any]],
+        batch_size: int,
+        replace_review_state: bool = False,
+    ) -> int:
+        if replace_review_state:
+            prepared_entries = entries
+        else:
+            existing_bigsmiles = self.existing_entry_bigsmiles()
+            prepared_entries = [
+                {
+                    "entry_index": entry["entry_index"],
+                    "bigsmiles": existing_bigsmiles.get(
+                        entry["entry_index"],
+                        entry["bigsmiles"],
+                    ),
+                    "svg": entry["svg"],
+                    "mol": entry["mol"],
+                    "mol_file_name": entry["mol_file_name"],
+                }
+                for entry in entries
+            ]
+
         total = 0
-        for start in range(0, len(entries), batch_size):
-            batch = entries[start : start + batch_size]
+        for start in range(0, len(prepared_entries), batch_size):
+            batch = prepared_entries[start : start + batch_size]
             self.request(
                 "POST",
                 "entries?on_conflict=entry_index",
@@ -345,7 +394,11 @@ def main() -> None:
         raise SystemExit("Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY or pass CLI flags.")
 
     client = SupabaseRest(args.supabase_url, args.service_role_key)
-    imported_entries = client.upsert_entries(entries, args.batch_size)
+    imported_entries = client.upsert_entries(
+        entries,
+        args.batch_size,
+        replace_review_state=args.entries_csv is not None,
+    )
     print(f"Upserted {imported_entries} entries")
     if comments:
         if args.replace_comments:
