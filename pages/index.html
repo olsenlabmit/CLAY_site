@@ -141,10 +141,16 @@ body {
 #error-modes-section {
   flex: 0 0 auto; padding: 8px 14px; border-bottom: 1px solid #eee;
 }
+.review-section-heading {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  margin-bottom: 7px;
+}
+.review-section-heading .review-section-title { margin-bottom: 0; }
 .review-section-title {
   font-size: .7rem; font-weight: 700; text-transform: uppercase;
   letter-spacing: .07em; color: #777; margin-bottom: 7px;
 }
+#statistics-toggle { flex: 0 0 118px; }
 .review-checkbox-list { gap: 0; }
 .review-check-acceptable {
   margin-top: 0; border-radius: 0;
@@ -279,12 +285,14 @@ body {
 }
 #cmt-thumb { max-width: 100%; max-height: 42px; display: none;
              object-fit: contain; border-radius: 3px; }
-#post-btn  {
+#post-btn,
+#statistics-toggle {
   padding: 5px 0; background: rgba(88,166,255,.14); color: #dbeafe;
   border: 1px solid rgba(88,166,255,.28); border-radius: 4px; cursor: pointer;
   font-size: .77rem; font-weight: 600;
 }
-#post-btn:hover    { background: rgba(88,166,255,.22); }
+#post-btn:hover,
+#statistics-toggle:hover { background: rgba(88,166,255,.22); }
 #post-btn:disabled {
   background: rgba(58,70,88,.5); color: #aaa;
   border-color: rgba(170,170,170,.28); cursor: default;
@@ -513,6 +521,7 @@ body.resizing-rows { cursor: row-resize; }
 }
 #error-modes-list {
   display: flex; flex-direction: column; gap: 0;
+  min-width: 0;
 }
 #cmts-section {
   flex: 1 1 auto; min-height: 0; height: auto;
@@ -629,15 +638,100 @@ body.resizing-rows { cursor: row-resize; }
   font-family: inherit; font-size: .76rem;
 }
 #cmt-thumb { border: 1px solid var(--border); border-radius: 4px; }
-#post-btn {
+#post-btn,
+#statistics-toggle {
   padding: 6px 0; background: rgba(88,166,255,.14); color: #dbeafe;
   border: 1px solid rgba(88,166,255,.28);
   border-radius: 6px; font-weight: 650;
 }
-#post-btn:hover { background: rgba(88,166,255,.22); }
+#post-btn:hover,
+#statistics-toggle:hover { background: rgba(88,166,255,.22); }
 #post-btn:disabled {
   background: rgba(58,70,88,.5); color: var(--muted);
   border-color: rgba(139,148,158,.28);
+}
+
+.statistics-view { min-width: 0; color: var(--text); }
+.statistics-status {
+  display: grid; justify-items: center; gap: 8px; padding: 18px 8px;
+  color: var(--muted); font-size: .76rem; text-align: center;
+}
+.statistics-status .spin { margin: 0; }
+.statistics-error { color: var(--danger); }
+.statistics-retry,
+.statistics-action {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 28px; padding: 4px 8px; border: 1px solid rgba(88,166,255,.28);
+  border-radius: 5px; background: rgba(88,166,255,.14); color: #dbeafe;
+  font-size: .68rem; font-weight: 600; line-height: 1.2; text-decoration: none;
+  cursor: pointer;
+}
+.statistics-retry:hover,
+.statistics-action:hover { background: rgba(88,166,255,.22); }
+.statistics-summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  flex-wrap: wrap; margin-bottom: 8px;
+}
+.statistics-chart-title { font-size: .78rem; font-weight: 700; color: var(--text); }
+.statistics-actions { display: flex; flex-wrap: wrap; gap: 5px; }
+.statistics-zero {
+  margin-bottom: 8px; padding: 7px 8px; border: 1px solid var(--border);
+  border-radius: 5px; color: var(--muted); font-size: .72rem;
+}
+.statistics-chart-scroll {
+  width: 100%; min-width: 0; overflow-x: auto; overflow-y: hidden;
+  padding-bottom: 6px; scrollbar-gutter: stable;
+}
+.statistics-chart { min-width: 540px; }
+.statistics-chart-grid {
+  display: grid; grid-template-columns: 34px minmax(490px, 1fr);
+  grid-template-rows: 210px auto; column-gap: 6px; row-gap: 6px;
+}
+.statistics-y-axis { position: relative; color: var(--muted); font-size: .58rem; }
+.statistics-y-axis span {
+  position: absolute; right: 0; transform: translateY(50%); white-space: nowrap;
+}
+.statistics-plot {
+  position: relative; display: grid; grid-template-columns: repeat(7, minmax(54px, 1fr));
+  align-items: end; gap: 8px; padding: 0 8px;
+  border-left: 1px solid var(--border-strong); border-bottom: 1px solid var(--border-strong);
+  background: repeating-linear-gradient(
+    to top,
+    transparent 0,
+    transparent calc(25% - 1px),
+    rgba(139,148,158,.2) calc(25% - 1px),
+    rgba(139,148,158,.2) 25%
+  );
+}
+.statistics-bar {
+  position: relative; display: flex; align-items: end; justify-content: center;
+  width: 100%; height: 100%; padding: 0; border: 0; background: transparent;
+  color: inherit; cursor: help;
+}
+.statistics-bar-fill {
+  display: block; width: min(38px, 74%); height: var(--bar-height);
+  min-height: 0; border: 1px solid rgba(163,113,247,.78); border-bottom: 0;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(180deg, var(--purple), var(--blue-strong));
+}
+.statistics-bar:last-child .statistics-bar-fill {
+  border-color: rgba(63,185,80,.8);
+  background: linear-gradient(180deg, #56d364, #238636);
+}
+.statistics-bar:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.statistics-tooltip {
+  position: absolute; top: 7px; left: 50%; z-index: 2;
+  transform: translateX(-50%); display: none; width: max-content; max-width: 170px;
+  padding: 4px 6px; border: 1px solid var(--border-strong); border-radius: 4px;
+  background: #0b1220; color: var(--text); box-shadow: var(--shadow);
+  font-size: .62rem; line-height: 1.25; pointer-events: none;
+}
+.statistics-bar:hover .statistics-tooltip,
+.statistics-bar:focus .statistics-tooltip { display: block; }
+.statistics-labels {
+  display: grid; grid-template-columns: repeat(7, minmax(54px, 1fr));
+  gap: 8px; padding: 0 8px; color: var(--muted); font-size: .6rem;
+  line-height: 1.15; text-align: center;
 }
 
 .spin {
@@ -753,7 +847,11 @@ body.resizing-rows { cursor: row-resize; }
 
       <!-- Error modes -->
       <div id="error-modes-section">
-        <div class="review-section-title">Error Modes</div>
+        <div class="review-section-heading">
+          <div class="review-section-title">Error Modes</div>
+          <button id="statistics-toggle" type="button" aria-pressed="false"
+                  onclick="toggleStatisticsView()">show statistics</button>
+        </div>
         <div id="error-modes-list">
           <span style="color:#ccc;font-size:.78rem">No entry selected.</span>
         </div>
@@ -816,6 +914,11 @@ let entryUpdatedAt = new Map();
 let lastModifiedIndices = new Set();
 let selectedMol = '';
 let selectedMolFileName = '';
+let statisticsMode = false;
+let statisticsData = null;
+let statisticsLoading = false;
+let statisticsError = '';
+let statisticsRequestId = 0;
 
 const ERROR_MODES = [
   { id: 'atom_overlap', label: 'Atom overlap' },
@@ -1144,6 +1247,7 @@ function toggleBookmark(idx) {
       });
       renderErrorModePanel();
       filterEntries();
+      refreshStatisticsAfterSave();
     })
     .catch(err => {
       alert('Error: ' + (err.message || err));
@@ -1644,9 +1748,141 @@ function svgPt(e) {
 
 // ── Comments ──────────────────────────────────────────────────
 // Review state
+function toggleStatisticsView() {
+  statisticsMode = !statisticsMode;
+  updateStatisticsToggle();
+  if (statisticsMode) loadStatistics();
+  else renderErrorModePanel();
+}
+
+function updateStatisticsToggle() {
+  const button = document.getElementById('statistics-toggle');
+  if (!button) return;
+  button.textContent = statisticsMode ? 'show error modes' : 'show statistics';
+  button.setAttribute('aria-pressed', statisticsMode ? 'true' : 'false');
+}
+
+function loadStatistics() {
+  const requestId = ++statisticsRequestId;
+  statisticsLoading = true;
+  statisticsError = '';
+  renderErrorModePanel();
+  apiRequest('/statistics', { cache: 'no-store' })
+    .then(data => {
+      if (requestId !== statisticsRequestId) return;
+      if (!data || !Array.isArray(data.categories)) {
+        throw new Error('The backend returned an invalid statistics response.');
+      }
+      statisticsData = data;
+      statisticsLoading = false;
+      if (statisticsMode) renderErrorModePanel();
+    })
+    .catch(err => {
+      if (requestId !== statisticsRequestId) return;
+      statisticsLoading = false;
+      statisticsError = err && err.message ? err.message : String(err);
+      if (statisticsMode) renderErrorModePanel();
+    });
+}
+
+function refreshStatisticsAfterSave() {
+  if (statisticsMode) loadStatistics();
+}
+
+function formatPercentage(value) {
+  const percentage = Number(value);
+  if (!Number.isFinite(percentage)) return '0%';
+  return percentage.toFixed(2).replace(/\.?0+$/, '') + '%';
+}
+
+function statisticsLinks() {
+  const base = apiBaseUrl();
+  if (!base) return '';
+  return `
+    <div class="statistics-actions">
+      <button type="button" class="statistics-action" onclick="loadStatistics()">refresh</button>
+      <a class="statistics-action" href="${esc(base + '/statistics')}" target="_blank"
+         rel="noopener">view JSON</a>
+      <a class="statistics-action" href="${esc(base + '/statistics.csv')}"
+         download="validation-statistics.csv">download CSV</a>
+    </div>
+  `;
+}
+
+function renderStatisticsPanel(container) {
+  if (statisticsLoading) {
+    container.innerHTML = `
+      <div class="statistics-status" role="status" aria-live="polite">
+        <div class="spin"></div><span>Loading statistics...</span>
+      </div>`;
+    return;
+  }
+  if (statisticsError) {
+    container.innerHTML = `
+      <div class="statistics-status statistics-error" role="alert">
+        <span>Statistics unavailable: ${esc(statisticsError)}</span>
+        <button type="button" class="statistics-retry" onclick="loadStatistics()">retry</button>
+      </div>`;
+    return;
+  }
+  if (!statisticsData) {
+    container.innerHTML = `
+      <div class="statistics-status">
+        <button type="button" class="statistics-retry" onclick="loadStatistics()">load statistics</button>
+      </div>`;
+    return;
+  }
+
+  const classified = Number(statisticsData.classifiedEntries) || 0;
+  const total = Number(statisticsData.totalEntries) || 0;
+  const categories = statisticsData.categories;
+  const bars = categories.map((category, index) => {
+    const rawPercentage = Number(category.percentage);
+    const height = Number.isFinite(rawPercentage) ? clamp(rawPercentage, 0, 100) : 0;
+    const tooltip = `${category.name}: ${formatPercentage(rawPercentage)}`;
+    return `
+      <button type="button" class="statistics-bar"
+              aria-describedby="statistics-tooltip-${index}"
+              aria-label="${esc(tooltip)}" style="--bar-height:${height}%">
+        <span class="statistics-tooltip" id="statistics-tooltip-${index}" role="tooltip">${esc(tooltip)}</span>
+        <span class="statistics-bar-fill" aria-hidden="true"></span>
+      </button>`;
+  }).join('');
+  const labels = categories.map(category =>
+    `<span title="${esc(category.name)}">${esc(category.abbreviation)}</span>`
+  ).join('');
+  const axisLabels = [100, 75, 50, 25, 0].map(value =>
+    `<span style="bottom:${value}%">${value}%</span>`
+  ).join('');
+
+  container.innerHTML = `
+    <div class="statistics-view">
+      <div class="statistics-summary">
+        <div class="statistics-chart-title" role="heading" aria-level="3">Classified ${classified}/${total}</div>
+        ${statisticsLinks()}
+      </div>
+      ${classified === 0 ? '<div class="statistics-zero" role="status">No classified entries yet.</div>' : ''}
+      <div class="statistics-chart-scroll" tabindex="0" aria-label="Error-rate chart; scroll horizontally if needed">
+        <div class="statistics-chart">
+          <div class="statistics-chart-grid">
+            <div class="statistics-y-axis" aria-hidden="true">${axisLabels}</div>
+            <div class="statistics-plot" role="group" aria-label="Classification percentages">${bars}</div>
+            <div aria-hidden="true"></div>
+            <div class="statistics-labels">${labels}</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
 function renderErrorModePanel() {
   const container = document.getElementById('error-modes-list');
   if (!container) return;
+  updateStatisticsToggle();
+  if (statisticsMode) {
+    renderStatisticsPanel(container);
+    return;
+  }
   if (!currentIdx) {
     container.innerHTML = '<span style="color:#ccc;font-size:.78rem">No entry selected.</span>';
     return;
@@ -1699,6 +1935,7 @@ function setCurrentEntryAcceptable(checked) {
       setEntryErrorModesLocal(key, r.errorModes || []);
       applyUpdatedAtFromResponse(key, r.updatedAt);
       updateCurrentEntryReviewRows();
+      refreshStatisticsAfterSave();
     })
     .catch(err => {
       alert('Error: ' + (err.message || err));
@@ -1735,6 +1972,7 @@ function setCurrentEntryErrorModes(modes) {
       else bookmarkedIndices.delete(key);
       applyUpdatedAtFromResponse(key, r.updatedAt);
       updateCurrentEntryReviewRows();
+      refreshStatisticsAfterSave();
     })
     .catch(err => {
       alert('Error: ' + (err.message || err));
