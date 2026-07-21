@@ -1,0 +1,170 @@
+
+     RDKit          2D
+
+  0  0  0  0  0  0  0  0  0  0999 V3000
+M  V30 BEGIN CTAB
+M  V30 COUNTS 9 8 2 0 0
+M  V30 BEGIN ATOM
+M  V30 1 H 3.164433 0.748150 0.000000 0
+M  V30 2 H 9.226401 0.248250 0.000000 0
+M  V30 3 C 4.030429 0.248050 0.000000 0
+M  V30 4 C 4.896425 0.748150 0.000000 0
+M  V30 5 O 5.762429 0.248250 0.000000 0
+M  V30 6 C 6.628801 0.747650 0.000000 0
+M  V30 7 C 7.495201 0.248250 0.000000 0
+M  V30 8 C 7.495201 -0.751750 0.000000 0
+M  V30 9 O 8.360801 0.748850 0.000000 0
+M  V30 END ATOM
+M  V30 BEGIN BOND
+M  V30 1 1 3 4
+M  V30 2 1 4 5
+M  V30 3 1 1 3
+M  V30 4 1 6 7
+M  V30 5 1 7 8
+M  V30 6 1 7 9
+M  V30 7 1 5 6
+M  V30 8 1 2 9
+M  V30 END BOND
+M  V30 BEGIN SGROUP
+M  V30 1 SRU 0 ATOMS=(4 5 6 7 9) CBONDS=(2 6 7) -
+M  V30 BRKXYZ=(9 6.1960 1.0013 0 6.1960 -0.0047 0 0 0 0) BRKXYZ=(9 8.7940 1.00-
+M  V30 13 0 8.7940 -0.0047 0 0 0 0)
+M  V30 2 SRU 0 ATOMS=(4 3 4 5 6) CBONDS=(2 1 7) -
+M  V30 BRKXYZ=(9 3.5974 0.9983 0 3.5974 -0.0020 0 0 0 0) BRKXYZ=(9 6.1954 0.99-
+M  V30 83 0 6.1954 -0.0020 0 0 0 0)
+M  V30 END SGROUP
+M  V30 END CTAB
+M  END
+>  <BIGSMILES_BRACKET_RECORDS_JSON>
+{
+  "records": [
+    {
+      "id": 0,
+      "bracket_kind": "backbone",
+      "pairing_id": "F2",
+      "group_id": "<1:3",
+      "ru_midpoint": [
+        7.495200969976773,
+        0.4978500799096758
+      ],
+      "bond_midpoint": [
+        6.196000969976773,
+        0.49825007990967574
+      ],
+      "orientation_vector": [
+        0.0,
+        1.0
+      ],
+      "half_bracket_size": 0.503,
+      "bond": [
+        4,
+        5
+      ],
+      "fragment": "F2",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F2/fragments[0]",
+      "marker_id": "0",
+      "side": "left",
+      "connection_group": "<1",
+      "marker_type_index": 3
+    },
+    {
+      "id": 1,
+      "bracket_kind": "backbone",
+      "pairing_id": "F2",
+      "group_id": ">1:4",
+      "ru_midpoint": [
+        7.495161611784845,
+        0.4978500799096758
+      ],
+      "bond_midpoint": [
+        8.793961611784844,
+        0.49825007990967574
+      ],
+      "orientation_vector": [
+        0.0,
+        1.0
+      ],
+      "half_bracket_size": 0.503,
+      "bond": [
+        6,
+        8
+      ],
+      "fragment": "F2",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F2/fragments[0]",
+      "marker_id": "5",
+      "side": "right",
+      "connection_group": ">1",
+      "marker_type_index": 4
+    },
+    {
+      "id": 2,
+      "bracket_kind": "backbone",
+      "pairing_id": "F1",
+      "group_id": "<1:3",
+      "ru_midpoint": [
+        4.896410835752757,
+        0.4981001599500252
+      ],
+      "bond_midpoint": [
+        3.5974125303248825,
+        0.49815015993369083
+      ],
+      "orientation_vector": [
+        0.0,
+        1.0
+      ],
+      "half_bracket_size": 0.5001501599336913,
+      "bond": [
+        2,
+        3
+      ],
+      "fragment": "F1",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F1/fragments[0]",
+      "marker_id": "0",
+      "side": "left",
+      "connection_group": "<1",
+      "marker_type_index": 3
+    },
+    {
+      "id": 3,
+      "bracket_kind": "backbone",
+      "pairing_id": "F1",
+      "group_id": ">1:4",
+      "ru_midpoint": [
+        4.896425073927164,
+        0.4981001599500252
+      ],
+      "bond_midpoint": [
+        6.19542753639756,
+        0.49815015993369083
+      ],
+      "orientation_vector": [
+        0.0,
+        1.0
+      ],
+      "half_bracket_size": 0.5001501599336913,
+      "bond": [
+        4,
+        5
+      ],
+      "fragment": "F1",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F1/fragments[0]",
+      "marker_id": "4",
+      "side": "right",
+      "connection_group": ">1",
+      "marker_type_index": 4
+    }
+  ]
+}
