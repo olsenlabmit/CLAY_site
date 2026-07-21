@@ -678,13 +678,9 @@ body.resizing-rows { cursor: row-resize; }
   margin-bottom: 8px; padding: 7px 8px; border: 1px solid var(--border);
   border-radius: 5px; color: var(--muted); font-size: .72rem;
 }
-.statistics-chart-scroll {
-  width: 100%; min-width: 0; overflow-x: auto; overflow-y: hidden;
-  padding-bottom: 6px; scrollbar-gutter: stable;
-}
-.statistics-chart { min-width: 540px; }
+.statistics-chart { width: 100%; min-width: 0; }
 .statistics-chart-grid {
-  display: grid; grid-template-columns: 34px minmax(490px, 1fr);
+  display: grid; grid-template-columns: 34px minmax(0, 1fr);
   grid-template-rows: 210px auto; column-gap: 6px; row-gap: 6px;
 }
 .statistics-y-axis { position: relative; color: var(--muted); font-size: .58rem; }
@@ -692,8 +688,9 @@ body.resizing-rows { cursor: row-resize; }
   position: absolute; right: 0; transform: translateY(50%); white-space: nowrap;
 }
 .statistics-plot {
-  position: relative; display: grid; grid-template-columns: repeat(7, minmax(54px, 1fr));
-  align-items: end; gap: 8px; padding: 0 8px;
+  position: relative; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr));
+  align-items: end; gap: clamp(2px, 1.25vw, 8px); padding: 0 clamp(1px, 1vw, 8px);
+  min-width: 0;
   border-left: 1px solid var(--border-strong); border-bottom: 1px solid var(--border-strong);
   background: repeating-linear-gradient(
     to top,
@@ -728,9 +725,12 @@ body.resizing-rows { cursor: row-resize; }
 }
 .statistics-bar:hover .statistics-tooltip,
 .statistics-bar:focus .statistics-tooltip { display: block; }
+.statistics-bar:first-child .statistics-tooltip { left: 0; transform: none; }
+.statistics-bar:last-child .statistics-tooltip { right: 0; left: auto; transform: none; }
 .statistics-labels {
-  display: grid; grid-template-columns: repeat(7, minmax(54px, 1fr));
-  gap: 8px; padding: 0 8px; color: var(--muted); font-size: .6rem;
+  display: grid; grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: clamp(2px, 1.25vw, 8px); padding: 0 clamp(1px, 1vw, 8px);
+  min-width: 0; color: var(--muted); font-size: .6rem;
   line-height: 1.15; text-align: center;
 }
 
@@ -1862,14 +1862,12 @@ function renderStatisticsPanel(container) {
         ${statisticsLinks()}
       </div>
       ${classified === 0 ? '<div class="statistics-zero" role="status">No classified entries yet.</div>' : ''}
-      <div class="statistics-chart-scroll" tabindex="0" aria-label="Error-rate chart; scroll horizontally if needed">
-        <div class="statistics-chart">
-          <div class="statistics-chart-grid">
-            <div class="statistics-y-axis" aria-hidden="true">${axisLabels}</div>
-            <div class="statistics-plot" role="group" aria-label="Classification percentages">${bars}</div>
-            <div aria-hidden="true"></div>
-            <div class="statistics-labels">${labels}</div>
-          </div>
+      <div class="statistics-chart">
+        <div class="statistics-chart-grid">
+          <div class="statistics-y-axis" aria-hidden="true">${axisLabels}</div>
+          <div class="statistics-plot" role="group" aria-label="Classification percentages">${bars}</div>
+          <div aria-hidden="true"></div>
+          <div class="statistics-labels">${labels}</div>
         </div>
       </div>
     </div>`;

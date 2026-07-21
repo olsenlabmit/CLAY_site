@@ -21,3 +21,11 @@
 - Deployed totals matched `/entries`: 643 total, 0 classified, seven CSV/category rows, and every category count matched an independent recomputation.
 - Recomputed live after a reversible classification write: entry `0` changed the aggregate to 1 classified/1 acceptable, then its original classification was restored and the aggregate returned to 0 classified/0 acceptable with a new generation timestamp.
 - The GitHub Pages frontend was not committed, pushed, published, or deployed.
+
+## Responsive Error-Rate Chart
+
+- Replaced the chart's fixed 540px minimum width and horizontal scroll wrapper with fluid grid tracks in `pages/index.html`; all seven bars and abbreviated labels now contract and expand with the error-modes panel.
+- Added responsive plot gaps and padding plus first/last tooltip edge alignment, while retaining the 38px bar-fill cap, percentage heights, keyboard-accessible tooltips, and distinct Acceptable styling.
+- Browser QA with local mock statistics passed at approximately 262px, 399px, and 539px panel widths: chart and section scroll widths matched their client widths, all seven bars and labels stayed aligned, and no horizontal scrollbar appeared.
+- Narrow-panel focus checks confirmed both edge tooltips remained inside the plotting region. At a 300px viewport height, the section retained vertical scrolling while the chart still had no horizontal overflow.
+- A clean local browser run rendered the statistics panel with no console errors, and `git diff --check` passed.
