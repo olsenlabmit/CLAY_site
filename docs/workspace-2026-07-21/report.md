@@ -29,3 +29,22 @@
 - Browser QA with local mock statistics passed at approximately 262px, 399px, and 539px panel widths: chart and section scroll widths matched their client widths, all seven bars and labels stayed aligned, and no horizontal scrollbar appeared.
 - Narrow-panel focus checks confirmed both edge tooltips remained inside the plotting region. At a 300px viewport height, the section retained vertical scrolling while the chart still had no horizontal overflow.
 - A clean local browser run rendered the statistics panel with no console errors, and `git diff --check` passed.
+
+## Review-State-Preserving Asset Sync
+
+- Updated `scripts/sync_validation_data.py` so ordinary uploads first read existing entry indices and stored BIGSMILES values, then upsert only each entry identity and its SVG, MOL, and MOL filename. Existing annotations, acceptable state, error modes, BIGSMILES, and related comments are preserved; new rows use manifest BIGSMILES and database review-state defaults.
+- Kept `--entries-csv` as an explicit full-state migration override that imports annotations, acceptable state, and error modes.
+- Added paginated existing-entry reads and unit coverage for preserved state, new rows, explicit migration overrides, pagination, and upload batching.
+- Updated `in.md` to document normal preservation behavior, the migration override, and the required MOL directory for comment imports.
+
+### Validation results
+
+- `python -m unittest scripts.test_sync_validation_data`: 4 passed, 0 failed.
+- `python -m py_compile scripts/sync_validation_data.py scripts/test_sync_validation_data.py`: passed.
+- The requested `site_svgs_260712` / `site_mols_260712` dry run could not run because those directories are absent from this checkout.
+- `python scripts/sync_validation_data.py --svg-dir site_svgs_260721 --mol-dir site_mols_260721 --dry-run`: prepared 643 entries and 0 comments.
+- `git diff --check`: passed.
+
+### Follow-up
+
+- Removed `scripts/test_sync_validation_data.py` to keep the workspace lightweight. Future tests will only be added when explicitly requested.
