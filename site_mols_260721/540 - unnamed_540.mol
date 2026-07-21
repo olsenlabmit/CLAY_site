@@ -1,0 +1,244 @@
+
+     RDKit          2D
+
+  0  0  0  0  0  0  0  0  0  0999 V3000
+M  V30 BEGIN CTAB
+M  V30 COUNTS 11 10 6 0 0
+M  V30 BEGIN ATOM
+M  V30 1 O -2.598267 -0.000249 0.000000 0
+M  V30 2 H 3.463886 -0.500352 0.000000 0
+M  V30 3 C -1.732301 -0.500352 0.000000 0
+M  V30 4 O -1.732301 -1.500358 0.000000 0
+M  V30 5 C -0.866305 -0.000249 0.000000 0
+M  V30 6 C -0.866305 0.999758 0.000000 0
+M  V30 7 N -0.000290 -0.500352 0.000000 0
+M  V30 8 C 0.865709 -0.000249 0.000000 0
+M  V30 9 O 0.865709 0.999558 0.000000 0
+M  V30 10 C 1.731705 -0.500352 0.000000 0
+M  V30 11 N 2.597920 -0.000248 0.000000 0
+M  V30 END ATOM
+M  V30 BEGIN BOND
+M  V30 1 2 3 4
+M  V30 2 1 3 5
+M  V30 3 1 5 6
+M  V30 4 1 5 7
+M  V30 5 2 8 9
+M  V30 6 1 8 10
+M  V30 7 1 10 11
+M  V30 8 1 7 8
+M  V30 9 1 1 3
+M  V30 10 1 2 11
+M  V30 END BOND
+M  V30 BEGIN SGROUP
+M  V30 1 SRU 0 ATOMS=(2 1 3) CBONDS=(1 9) -
+M  V30 BRKXYZ=(9 -2.1653 0.2498 0 -2.1653 -0.7504 0 0 0 0)
+M  V30 2 SRU 0 ATOMS=(2 7 8) CBONDS=(1 8) -
+M  V30 BRKXYZ=(9 0.4327 0.2498 0 0.4327 -0.7504 0 0 0 0)
+M  V30 3 SRU 0 ATOMS=(2 7 8) CBONDS=(1 8) -
+M  V30 BRKXYZ=(9 0.4327 -0.7504 0 0.4327 0.2498 0 0 0 0)
+M  V30 4 SRU 0 ATOMS=(2 2 11) CBONDS=(1 10) -
+M  V30 BRKXYZ=(9 3.0309 -0.7504 0 3.0309 0.2498 0 0 0 0)
+M  V30 5 SRU 0 ATOMS=(2 1 3) CBONDS=(1 9) -
+M  V30 BRKXYZ=(9 -2.1653 1.1248 0 -2.1653 -1.6254 0 0 0 0)
+M  V30 6 SRU 0 ATOMS=(2 2 11) CBONDS=(1 10) -
+M  V30 BRKXYZ=(9 3.0309 -1.6254 0 3.0309 1.1248 0 0 0 0)
+M  V30 END SGROUP
+M  V30 END CTAB
+M  END
+>  <BIGSMILES_BRACKET_RECORDS_JSON>
+{
+  "records": [
+    {
+      "id": 0,
+      "bracket_kind": "backbone",
+      "pairing_id": "F1",
+      "group_id": "<1:3",
+      "ru_midpoint": [
+        -0.8663050945818975,
+        -0.25030035796537375
+      ],
+      "bond_midpoint": [
+        -2.165308515487334,
+        -0.2503003579653738
+      ],
+      "orientation_vector": [
+        0.0,
+        1.0
+      ],
+      "half_bracket_size": 0.5001039551762949,
+      "bond": [
+        0,
+        2
+      ],
+      "fragment": "F1",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F1/fragments[0]",
+      "marker_id": "0",
+      "side": "left",
+      "connection_group": "<1",
+      "marker_type_index": 3
+    },
+    {
+      "id": 1,
+      "bracket_kind": "backbone",
+      "pairing_id": "F1",
+      "group_id": ">1:4",
+      "ru_midpoint": [
+        -0.8663050945818975,
+        -0.25030035796537375
+      ],
+      "bond_midpoint": [
+        0.43270812995587793,
+        -0.2503003579653738
+      ],
+      "orientation_vector": [
+        0.0,
+        1.0
+      ],
+      "half_bracket_size": 0.5001039551762949,
+      "bond": [
+        6,
+        7
+      ],
+      "fragment": "F1",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F1/fragments[0]",
+      "marker_id": "6",
+      "side": "right",
+      "connection_group": ">1",
+      "marker_type_index": 4
+    },
+    {
+      "id": 2,
+      "bracket_kind": "backbone",
+      "pairing_id": "F1",
+      "group_id": "<1:3",
+      "ru_midpoint": [
+        1.7318050952225956,
+        -0.2502999999999998
+      ],
+      "bond_midpoint": [
+        0.4327016749578565,
+        -0.2502999999999998
+      ],
+      "orientation_vector": [
+        0.0,
+        -1.0
+      ],
+      "half_bracket_size": 0.5001043131416687,
+      "bond": [
+        6,
+        7
+      ],
+      "fragment": "F1",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F1/fragments[1]",
+      "marker_id": "0",
+      "side": "left",
+      "connection_group": "<1",
+      "marker_type_index": 3
+    },
+    {
+      "id": 3,
+      "bracket_kind": "backbone",
+      "pairing_id": "F1",
+      "group_id": ">1:4",
+      "ru_midpoint": [
+        1.7318050952225956,
+        -0.2502999999999998
+      ],
+      "bond_midpoint": [
+        3.030918319119672,
+        -0.2502999999999998
+      ],
+      "orientation_vector": [
+        0.0,
+        -1.0
+      ],
+      "half_bracket_size": 0.5001043131416687,
+      "bond": [
+        1,
+        10
+      ],
+      "fragment": "F1",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F1/fragments[1]",
+      "marker_id": "5",
+      "side": "right",
+      "connection_group": ">1",
+      "marker_type_index": 4
+    },
+    {
+      "id": 4,
+      "bracket_kind": "backbone",
+      "pairing_id": "F1",
+      "group_id": "$overall",
+      "ru_midpoint": [
+        0.43275490213651846,
+        -0.25030017898268697
+      ],
+      "bond_midpoint": [
+        -2.165308515487334,
+        -0.250300357965374
+      ],
+      "orientation_vector": [
+        0.0,
+        1.0
+      ],
+      "half_bracket_size": 1.3750639095619566,
+      "bond": [
+        0,
+        2
+      ],
+      "fragment": "F1",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F1/connected",
+      "marker_id": "connected-overall-left",
+      "side": "left",
+      "connection_group": "$overall",
+      "marker_type_index": null
+    },
+    {
+      "id": 5,
+      "bracket_kind": "backbone",
+      "pairing_id": "F1",
+      "group_id": "$overall",
+      "ru_midpoint": [
+        0.43275490213651846,
+        -0.25030017898268697
+      ],
+      "bond_midpoint": [
+        3.0309183191196727,
+        -0.2502996420346261
+      ],
+      "orientation_vector": [
+        0.0,
+        -1.0
+      ],
+      "half_bracket_size": 1.3750639095619566,
+      "bond": [
+        1,
+        10
+      ],
+      "fragment": "F1",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F1/connected",
+      "marker_id": "connected-overall-right",
+      "side": "right",
+      "connection_group": "$overall",
+      "marker_type_index": null
+    }
+  ]
+}

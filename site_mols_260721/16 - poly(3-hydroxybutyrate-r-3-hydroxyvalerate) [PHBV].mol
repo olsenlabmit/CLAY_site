@@ -1,0 +1,252 @@
+
+     RDKit          2D
+
+  0  0  0  0  0  0  0  0  0  0999 V3000
+M  V30 BEGIN CTAB
+M  V30 COUNTS 15 14 6 0 0
+M  V30 BEGIN ATOM
+M  V30 1 O -3.464234 -0.000150 0.000000 0
+M  V30 2 H 4.329845 -0.500450 0.000000 0
+M  V30 3 C -2.598151 -0.500050 0.000000 0
+M  V30 4 O -2.598151 -1.500051 0.000000 0
+M  V30 5 C -1.732146 -0.000150 0.000000 0
+M  V30 6 C -0.866250 -0.500350 0.000000 0
+M  V30 7 C -0.866250 0.499650 0.000000 0
+M  V30 8 O -0.000146 -0.000250 0.000000 0
+M  V30 9 C 0.865819 -0.500350 0.000000 0
+M  V30 10 O 0.865819 0.499696 0.000000 0
+M  V30 11 C 1.731905 -0.000427 0.000000 0
+M  V30 12 C 2.597920 -0.500450 0.000000 0
+M  V30 13 C 2.597920 -1.500396 0.000000 0
+M  V30 14 C 1.732043 -2.000481 0.000000 0
+M  V30 15 O 3.463833 -0.000427 0.000000 0
+M  V30 END ATOM
+M  V30 BEGIN BOND
+M  V30 1 2 3 4
+M  V30 2 1 3 5
+M  V30 3 1 5 6
+M  V30 4 1 6 7
+M  V30 5 1 6 8
+M  V30 6 2 9 10
+M  V30 7 1 9 11
+M  V30 8 1 11 12
+M  V30 9 1 12 13
+M  V30 10 1 13 14
+M  V30 11 1 12 15
+M  V30 12 1 8 9
+M  V30 13 1 1 3
+M  V30 14 1 2 15
+M  V30 END BOND
+M  V30 BEGIN SGROUP
+M  V30 1 SRU 0 ATOMS=(2 1 3) CBONDS=(1 13) -
+M  V30 BRKXYZ=(9 -3.0312 0.2501 0 -3.0312 -0.7505 0 0 0 0)
+M  V30 2 SRU 0 ATOMS=(2 8 9) CBONDS=(1 12) -
+M  V30 BRKXYZ=(9 0.4328 0.2501 0 0.4328 -0.7505 0 0 0 0)
+M  V30 3 SRU 0 ATOMS=(2 8 9) CBONDS=(1 12) -
+M  V30 BRKXYZ=(9 0.4329 0.2498 0 0.4329 -0.7506 0 0 0 0)
+M  V30 4 SRU 0 ATOMS=(2 2 15) CBONDS=(1 14) -
+M  V30 BRKXYZ=(9 3.8968 0.2498 0 3.8968 -0.7506 0 0 0 0)
+M  V30 5 SRU 0 ATOMS=(2 1 3) CBONDS=(1 13) -
+M  V30 BRKXYZ=(9 -3.0312 1.1250 0 -3.0312 -1.6252 0 0 0 0)
+M  V30 6 SRU 0 ATOMS=(2 2 15) CBONDS=(1 14) -
+M  V30 BRKXYZ=(9 3.8968 1.1247 0 3.8968 -1.6255 0 0 0 0)
+M  V30 END SGROUP
+M  V30 END CTAB
+M  END
+>  <BIGSMILES_BRACKET_RECORDS_JSON>
+{
+  "records": [
+    {
+      "id": 0,
+      "bracket_kind": "backbone",
+      "pairing_id": "F1",
+      "group_id": "<1:3",
+      "ru_midpoint": [
+        -1.2992484408050675,
+        -0.250250171113527
+      ],
+      "bond_midpoint": [
+        -3.0311988854010936,
+        -0.25020017112985937
+      ],
+      "orientation_vector": [
+        0.0,
+        1.0
+      ],
+      "half_bracket_size": 0.5002999578181033,
+      "bond": [
+        0,
+        2
+      ],
+      "fragment": "F1",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F1/fragments[0]",
+      "marker_id": "0",
+      "side": "left",
+      "connection_group": "<1",
+      "marker_type_index": 3
+    },
+    {
+      "id": 1,
+      "bracket_kind": "backbone",
+      "pairing_id": "F1",
+      "group_id": ">1:4",
+      "ru_midpoint": [
+        -1.2992484408050675,
+        -0.250250171113527
+      ],
+      "bond_midpoint": [
+        0.4328020845850098,
+        -0.25020017112985937
+      ],
+      "orientation_vector": [
+        0.0,
+        1.0
+      ],
+      "half_bracket_size": 0.5002999578181033,
+      "bond": [
+        7,
+        8
+      ],
+      "fragment": "F1",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F1/fragments[0]",
+      "marker_id": "7",
+      "side": "right",
+      "connection_group": ">1",
+      "marker_type_index": 4
+    },
+    {
+      "id": 2,
+      "bracket_kind": "backbone",
+      "pairing_id": "F1",
+      "group_id": "<1:3",
+      "ru_midpoint": [
+        2.1649126276867596,
+        -0.250438404784433
+      ],
+      "bond_midpoint": [
+        0.4328988034009713,
+        -0.25041349034119653
+      ],
+      "orientation_vector": [
+        0.0,
+        1.0
+      ],
+      "half_bracket_size": 0.5002249531207204,
+      "bond": [
+        7,
+        8
+      ],
+      "fragment": "F1",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F1/fragments[1]",
+      "marker_id": "0",
+      "side": "left",
+      "connection_group": "<1",
+      "marker_type_index": 3
+    },
+    {
+      "id": 3,
+      "bracket_kind": "backbone",
+      "pairing_id": "F1",
+      "group_id": ">1:4",
+      "ru_midpoint": [
+        2.1649126276867596,
+        -0.250438404784433
+      ],
+      "bond_midpoint": [
+        3.896839750864868,
+        -0.25041349034119653
+      ],
+      "orientation_vector": [
+        0.0,
+        1.0
+      ],
+      "half_bracket_size": 0.5002249531207204,
+      "bond": [
+        1,
+        14
+      ],
+      "fragment": "F1",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F1/fragments[1]",
+      "marker_id": "8",
+      "side": "right",
+      "connection_group": ">1",
+      "marker_type_index": 4
+    },
+    {
+      "id": 4,
+      "bracket_kind": "backbone",
+      "pairing_id": "F1",
+      "group_id": "$overall",
+      "ru_midpoint": [
+        0.4328383506866844,
+        -0.25030547267109393
+      ],
+      "bond_midpoint": [
+        -3.0311988854010936,
+        -0.2501002519892398
+      ],
+      "orientation_vector": [
+        0.0,
+        1.0
+      ],
+      "half_bracket_size": 1.3750970093133887,
+      "bond": [
+        0,
+        2
+      ],
+      "fragment": "F1",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F1/connected",
+      "marker_id": "connected-overall-left",
+      "side": "left",
+      "connection_group": "$overall",
+      "marker_type_index": null
+    },
+    {
+      "id": 5,
+      "bracket_kind": "backbone",
+      "pairing_id": "F1",
+      "group_id": "$overall",
+      "ru_midpoint": [
+        0.4328383506866844,
+        -0.25030547267109393
+      ],
+      "bond_midpoint": [
+        3.89683975086487,
+        -0.2504384047844328
+      ],
+      "orientation_vector": [
+        0.0,
+        1.0
+      ],
+      "half_bracket_size": 1.3750970093133887,
+      "bond": [
+        1,
+        14
+      ],
+      "fragment": "F1",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F1/connected",
+      "marker_id": "connected-overall-right",
+      "side": "right",
+      "connection_group": "$overall",
+      "marker_type_index": null
+    }
+  ]
+}

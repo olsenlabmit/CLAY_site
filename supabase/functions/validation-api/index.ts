@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { buildStatistics, statisticsToCsv } from "./statistics.ts";
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
 const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
@@ -22,21 +23,36 @@ const allowedErrorModes = new Set([
   "suboptimal_bigsmiles",
 ]);
 
-function json(payload: unknown, status = 200): Response {
+function corsHeaders(): Record<string, string> {
+  return {
+    "access-control-allow-origin": allowedOrigin,
+    "access-control-allow-methods": "GET,POST,PUT,PATCH,OPTIONS",
+    "access-control-allow-headers":
+      "authorization,apikey,content-type,x-validation-key,x-reviewer-name",
+  };
+}
+
+function json(
+  payload: unknown,
+  status = 200,
+  extraHeaders: Record<string, string> = {},
+): Response {
   return new Response(JSON.stringify(payload), {
     status,
     headers: {
       "content-type": "application/json",
-      "access-control-allow-origin": allowedOrigin,
-      "access-control-allow-methods": "GET,POST,PUT,PATCH,OPTIONS",
-      "access-control-allow-headers":
-        "authorization,apikey,content-type,x-validation-key,x-reviewer-name",
+      ...corsHeaders(),
+      ...extraHeaders,
     },
   });
 }
 
-function error(message: string, status = 400): Response {
-  return json({ ok: false, error: message }, status);
+function error(
+  message: string,
+  status = 400,
+  extraHeaders: Record<string, string> = {},
+): Response {
+  return json({ ok: false, error: message }, status, extraHeaders);
 }
 
 function requireWriteKey(req: Request): Response | null {
@@ -206,6 +222,26 @@ async function handleEntries(): Promise<Response> {
   );
 }
 
+async function handleStatistics(format: "json" | "csv"): Promise<Response> {
+  const noStoreHeaders = { "cache-control": "no-store" };
+  const { data, error: queryError } = await supabase
+    .from("entries")
+    .select("checked,error_modes");
+  if (queryError) return error(queryError.message, 500, noStoreHeaders);
+
+  const statistics = buildStatistics(data || []);
+  if (format === "json") return json(statistics, 200, noStoreHeaders);
+  return new Response(statisticsToCsv(statistics), {
+    status: 200,
+    headers: {
+      "content-type": "text/csv; charset=utf-8",
+      "content-disposition": 'attachment; filename="validation-statistics.csv"',
+      ...corsHeaders(),
+      ...noStoreHeaders,
+    },
+  });
+}
+
 async function handleCheckedEntries(): Promise<Response> {
   const { data, error: queryError } = await supabase
     .from("entries")
@@ -358,6 +394,12 @@ Deno.serve(async (req) => {
     }
     if (req.method === "GET" && route.length === 1 && route[0] === "entries") {
       return await handleEntries();
+    }
+    if (req.method === "GET" && route.length === 1 && route[0] === "statistics") {
+      return await handleStatistics("json");
+    }
+    if (req.method === "GET" && route.length === 1 && route[0] === "statistics.csv") {
+      return await handleStatistics("csv");
     }
     if (
       req.method === "GET" &&
