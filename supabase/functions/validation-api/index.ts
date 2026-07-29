@@ -1,11 +1,12 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { buildCanonicalArchive } from "./canonical_export.ts";
 import { buildStatistics, statisticsToCsv } from "./statistics.ts";
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
 const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
 const reviewKey = Deno.env.get("VALIDATION_REVIEW_KEY") || "";
-const imageBucket =
-  Deno.env.get("VALIDATION_COMMENT_IMAGE_BUCKET") || "validation-comment-images";
+const imageBucket = Deno.env.get("VALIDATION_COMMENT_IMAGE_BUCKET") ||
+  "validation-comment-images";
 const allowedOrigin = Deno.env.get("VALIDATION_CORS_ORIGIN") || "*";
 
 const supabase = createClient(supabaseUrl, serviceRoleKey, {
@@ -29,6 +30,7 @@ function corsHeaders(): Record<string, string> {
     "access-control-allow-methods": "GET,POST,PUT,PATCH,OPTIONS",
     "access-control-allow-headers":
       "authorization,apikey,content-type,x-validation-key,x-reviewer-name",
+    "access-control-expose-headers": "content-disposition",
   };
 }
 
@@ -55,10 +57,15 @@ function error(
   return json({ ok: false, error: message }, status, extraHeaders);
 }
 
-function requireWriteKey(req: Request): Response | null {
-  if (!reviewKey) return error("VALIDATION_REVIEW_KEY is not configured.", 500);
+function requireWriteKey(
+  req: Request,
+  extraHeaders: Record<string, string> = {},
+): Response | null {
+  if (!reviewKey) {
+    return error("VALIDATION_REVIEW_KEY is not configured.", 500, extraHeaders);
+  }
   if (req.headers.get("x-validation-key") !== reviewKey) {
-    return error("Invalid validation key.", 401);
+    return error("Invalid validation key.", 401, extraHeaders);
   }
   return null;
 }
@@ -156,6 +163,11 @@ function compareEntryIndex(a: string, b: string): number {
   return a.localeCompare(b, undefined, { numeric: true });
 }
 
+function isoTimestamp(value: unknown): string | null {
+  const date = new Date(String(value || ""));
+  return Number.isNaN(date.getTime()) ? null : date.toISOString();
+}
+
 function formatTimestamp(value: string): string {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return String(value || "");
@@ -204,22 +216,94 @@ async function uploadImage(
 }
 
 async function handleEntries(): Promise<Response> {
-  const { data, error: queryError } = await supabase
-    .from("entries")
-    .select("entry_index,bigsmiles,checked,error_modes,updated_at")
-    .order("entry_index", { ascending: true });
-  if (queryError) return error(queryError.message, 500);
+  const [entryResult, commentResult] = await Promise.all([
+    supabase
+      .from("entries")
+      .select("entry_index,bigsmiles,checked,error_modes,updated_at")
+      .order("entry_index", { ascending: true }),
+    supabase
+      .from("comments")
+      .select("entry_index,created_at")
+      .order("created_at", { ascending: false }),
+  ]);
+  if (entryResult.error) return error(entryResult.error.message, 500);
+  if (commentResult.error) return error(commentResult.error.message, 500);
+
+  const latestCommentByEntry = new Map<string, string>();
+  for (const comment of commentResult.data || []) {
+    const index = String(comment.entry_index);
+    const timestamp = isoTimestamp(comment.created_at);
+    if (!timestamp) continue;
+    const previous = latestCommentByEntry.get(index);
+    if (!previous || timestamp > previous) {
+      latestCommentByEntry.set(index, timestamp);
+    }
+  }
+
   return json(
-    (data || [])
-      .sort((a, b) => compareEntryIndex(String(a.entry_index), String(b.entry_index)))
+    (entryResult.data || [])
+      .sort((a, b) =>
+        compareEntryIndex(String(a.entry_index), String(b.entry_index))
+      )
       .map((row) => ({
         index: String(row.entry_index),
         bigsmiles: String(row.bigsmiles || ""),
         checked: Boolean(row.checked),
         errorModes: normalizeErrorModes(row.error_modes),
         updatedAt: String(row.updated_at || ""),
+        latestCommentAt: latestCommentByEntry.get(String(row.entry_index)) ||
+          null,
       })),
   );
+}
+
+async function handleAcceptedSvgExport(req: Request): Promise<Response> {
+  const noStoreHeaders = { "cache-control": "no-store" };
+  const keyError = requireWriteKey(req, noStoreHeaders);
+  if (keyError) return keyError;
+  const { data, error: queryError } = await supabase
+    .from("entries")
+    .select("entry_index,svg")
+    .eq("checked", true)
+    .order("entry_index", { ascending: true });
+  if (queryError) return error(queryError.message, 500, noStoreHeaders);
+  if (!data?.length) {
+    return error(
+      "No accepted entries are available for export.",
+      422,
+      noStoreHeaders,
+    );
+  }
+
+  try {
+    const archive = buildCanonicalArchive(
+      data
+        .sort((a, b) =>
+          compareEntryIndex(String(a.entry_index), String(b.entry_index))
+        )
+        .map((row) => ({
+          entryIndex: String(row.entry_index),
+          svg: String(row.svg || ""),
+        })),
+    );
+    return new Response(new Uint8Array(archive.bytes).buffer, {
+      status: 200,
+      headers: {
+        "content-type": "application/zip",
+        "content-disposition": `attachment; filename="${archive.filename}"`,
+        ...corsHeaders(),
+        ...noStoreHeaders,
+      },
+    });
+  } catch (archiveError) {
+    return error(
+      `Failed to build accepted SVG archive: ${
+        (archiveError as Error).message
+      }`,
+      500,
+      noStoreHeaders,
+    );
+  }
 }
 
 async function handleStatistics(format: "json" | "csv"): Promise<Response> {
@@ -269,14 +353,19 @@ async function handleCommentedEntries(): Promise<Response> {
 async function handleEntry(entryIndex: string): Promise<Response> {
   const { data, error: queryError } = await supabase
     .from("entries")
-    .select("entry_index,bigsmiles,svg,mol,mol_file_name,annotations,checked,error_modes,updated_at")
+    .select(
+      "entry_index,bigsmiles,svg,mol,mol_file_name,annotations,checked,error_modes,updated_at",
+    )
     .eq("entry_index", entryIndex)
     .maybeSingle();
   if (queryError) return error(queryError.message, 500);
   return json(data ? rowToEntry(data) : null);
 }
 
-async function handleCheckedPatch(req: Request, entryIndex: string): Promise<Response> {
+async function handleCheckedPatch(
+  req: Request,
+  entryIndex: string,
+): Promise<Response> {
   const keyError = requireWriteKey(req);
   if (keyError) return keyError;
   const body = await readBody(req);
@@ -299,12 +388,17 @@ async function handleCheckedPatch(req: Request, entryIndex: string): Promise<Res
   });
 }
 
-async function handleErrorModesPatch(req: Request, entryIndex: string): Promise<Response> {
+async function handleErrorModesPatch(
+  req: Request,
+  entryIndex: string,
+): Promise<Response> {
   const keyError = requireWriteKey(req);
   if (keyError) return keyError;
   const body = await readBody(req);
   const errorModes = parseErrorModes(body.errorModes);
-  if (!errorModes) return error("errorModes must contain only allowed error mode ids.", 400);
+  if (!errorModes) {
+    return error("errorModes must contain only allowed error mode ids.", 400);
+  }
   const checked = false;
   const { data, error: updateError } = await supabase
     .from("entries")
@@ -322,7 +416,10 @@ async function handleErrorModesPatch(req: Request, entryIndex: string): Promise<
   });
 }
 
-async function handleAnnotationsPut(req: Request, entryIndex: string): Promise<Response> {
+async function handleAnnotationsPut(
+  req: Request,
+  entryIndex: string,
+): Promise<Response> {
   const keyError = requireWriteKey(req);
   if (keyError) return keyError;
   const body = await readBody(req);
@@ -341,14 +438,19 @@ async function handleAnnotationsPut(req: Request, entryIndex: string): Promise<R
 async function handleComments(entryIndex: string): Promise<Response> {
   const { data, error: queryError } = await supabase
     .from("comments")
-    .select("entry_index,reviewer_email,reviewer_name,created_at,text,image_url")
+    .select(
+      "entry_index,reviewer_email,reviewer_name,created_at,text,image_url",
+    )
     .eq("entry_index", entryIndex)
     .order("created_at", { ascending: true });
   if (queryError) return error(queryError.message, 500);
   return json((data || []).map(rowToComment));
 }
 
-async function handleCommentPost(req: Request, entryIndex: string): Promise<Response> {
+async function handleCommentPost(
+  req: Request,
+  entryIndex: string,
+): Promise<Response> {
   const keyError = requireWriteKey(req);
   if (keyError) return keyError;
   const body = await readBody(req);
@@ -364,15 +466,22 @@ async function handleCommentPost(req: Request, entryIndex: string): Promise<Resp
     return error(`Image upload failed: ${(uploadError as Error).message}`, 500);
   }
 
-  const { error: insertError } = await supabase.from("comments").insert({
-    entry_index: entryIndex,
-    reviewer_name: reviewerName,
-    reviewer_email: null,
-    text: String(body.text || ""),
-    image_url: imageUrl || null,
-  });
+  const { data, error: insertError } = await supabase.from("comments")
+    .insert({
+      entry_index: entryIndex,
+      reviewer_name: reviewerName,
+      reviewer_email: null,
+      text: String(body.text || ""),
+      image_url: imageUrl || null,
+    })
+    .select("created_at")
+    .single();
   if (insertError) return error(insertError.message, 500);
-  return json({ ok: true });
+  const latestCommentAt = isoTimestamp(data.created_at);
+  if (!latestCommentAt) {
+    return error("Comment was saved with an invalid timestamp.", 500);
+  }
+  return json({ ok: true, latestCommentAt });
 }
 
 Deno.serve(async (req) => {
@@ -395,10 +504,23 @@ Deno.serve(async (req) => {
     if (req.method === "GET" && route.length === 1 && route[0] === "entries") {
       return await handleEntries();
     }
-    if (req.method === "GET" && route.length === 1 && route[0] === "statistics") {
+    if (
+      req.method === "GET" &&
+      route.length === 2 &&
+      route[0] === "entries" &&
+      route[1] === "accepted-svgs.zip"
+    ) {
+      return await handleAcceptedSvgExport(req);
+    }
+    if (
+      req.method === "GET" && route.length === 1 && route[0] === "statistics"
+    ) {
       return await handleStatistics("json");
     }
-    if (req.method === "GET" && route.length === 1 && route[0] === "statistics.csv") {
+    if (
+      req.method === "GET" && route.length === 1 &&
+      route[0] === "statistics.csv"
+    ) {
       return await handleStatistics("csv");
     }
     if (
@@ -419,7 +541,9 @@ Deno.serve(async (req) => {
     }
     if (route.length >= 2 && route[0] === "entries") {
       const entryIndex = decodeURIComponent(route[1]);
-      if (req.method === "GET" && route.length === 2) return await handleEntry(entryIndex);
+      if (req.method === "GET" && route.length === 2) {
+        return await handleEntry(entryIndex);
+      }
       if (req.method === "PATCH" && route[2] === "checked") {
         return await handleCheckedPatch(req, entryIndex);
       }
