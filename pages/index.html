@@ -20,6 +20,13 @@ body {
   box-shadow: 0 2px 4px rgba(0,0,0,.3);
 }
 #header h1    { font-size: .95rem; font-weight: 600; letter-spacing: .02em; }
+#header-actions { display: flex; align-items: center; gap: 8px; }
+#accepted-export-btn {
+  border: 1px solid rgba(255,255,255,.35); border-radius: 4px;
+  padding: 4px 9px; background: rgba(255,255,255,.12); color: #fff;
+  font-size: .76rem; cursor: pointer;
+}
+#accepted-export-btn:disabled { cursor: wait; opacity: .65; }
 #user-badge   { font-size: .76rem; background: rgba(255,255,255,.18);
                 padding: 3px 10px; border-radius: 20px; }
 
@@ -60,11 +67,6 @@ body {
   min-width: 0; width: 100%; border: 1px solid #ddd; border-radius: 4px;
   padding: 5px 6px; font-size: .72rem; background: #fff; color: #222;
 }
-.entry-filter-check {
-  flex-direction: row; align-items: center; gap: 6px;
-  padding: 3px 0; font-weight: 700;
-}
-.entry-filter-check input { flex: 0 0 auto; }
 .review-checkbox-list {
   display: flex; flex-direction: column; gap: 4px;
 }
@@ -120,8 +122,6 @@ body {
 .entry-item.active         { background: #1565c0; color: #fff; }
 .ei-head { display: flex; align-items: center; gap: 6px; min-width: 0; }
 .ei-idx  { font-size: .78rem; font-weight: 700; }
-.entry-item[data-last-modified="true"] .ei-idx,
-.entry-item.active[data-last-modified="true"] .ei-idx { color: #f97316; }
 .ei-bs   { font-size: .68rem; opacity: .6; white-space: nowrap;
            overflow: hidden; text-overflow: ellipsis; max-width: 184px; }
 .entry-item.active .ei-bs  { opacity: .8; }
@@ -349,6 +349,11 @@ body.resizing-rows { cursor: row-resize; }
   box-shadow: 0 2px 14px rgba(0,0,0,.35);
 }
 #header h1 { font-size: .95rem; font-weight: 650; letter-spacing: 0; }
+#accepted-export-btn {
+  color: #dbeafe; background: rgba(88,166,255,.14);
+  border-color: rgba(88,166,255,.28);
+}
+#accepted-export-btn:hover:not(:disabled) { background: rgba(88,166,255,.22); }
 #user-badge {
   color: #dbeafe; background: rgba(88,166,255,.14);
   border: 1px solid rgba(88,166,255,.28); border-radius: 999px;
@@ -746,7 +751,10 @@ body.resizing-rows { cursor: row-resize; }
 <!-- ══ Header ══════════════════════════════════════════════ -->
 <div id="header">
   <h1>BigSMILES Viewer</h1>
-  <button id="user-badge" type="button" onclick="editReviewerSettings()" title="Set reviewer name and review key">Loading...</button>
+  <div id="header-actions">
+    <button id="accepted-export-btn" type="button" onclick="downloadAcceptedSvgs()">Download accepted SVGs.</button>
+    <button id="user-badge" type="button" onclick="editReviewerSettings()" title="Set reviewer name and review key">Loading...</button>
+  </div>
 </div>
 <div id="settings-panel" hidden>
   <label>
@@ -794,9 +802,12 @@ body.resizing-rows { cursor: row-resize; }
             <option value="none">Needs review</option>
           </select>
         </label>
-        <label class="entry-filter entry-filter-wide entry-filter-check">
-          <input id="last-modified-filter" type="checkbox">
-          <span>Last modified</span>
+        <label class="entry-filter entry-filter-wide">
+          <span>Sort newest first</span>
+          <select id="entry-sort" aria-label="Entry sort">
+            <option value="updatedAt">Update time</option>
+            <option value="latestCommentAt">Latest comment</option>
+          </select>
         </label>
         <div class="entry-filter entry-filter-wide">
           <span>Error Modes</span>
@@ -911,7 +922,6 @@ let bookmarkedIndices = new Set();
 let commentedIndices = new Set();
 let entryErrorModes = new Map();
 let entryUpdatedAt = new Map();
-let lastModifiedIndices = new Set();
 let selectedMol = '';
 let selectedMolFileName = '';
 let statisticsMode = false;
@@ -1057,6 +1067,73 @@ function apiGet(path) {
   return apiRequest(path);
 }
 
+function responseFilename(response) {
+  const disposition = response.headers.get('content-disposition') || '';
+  const utf8Match = disposition.match(/filename\*=UTF-8''([^;]+)/i);
+  if (utf8Match) {
+    try {
+      return decodeURIComponent(utf8Match[1].trim());
+    } catch (_) {
+      return utf8Match[1].trim();
+    }
+  }
+  const quotedMatch = disposition.match(/filename="([^"]+)"/i);
+  if (quotedMatch) return quotedMatch[1];
+  const plainMatch = disposition.match(/filename=([^;]+)/i);
+  return plainMatch ? plainMatch[1].trim() : 'accepted-svgs.zip';
+}
+
+async function downloadAcceptedSvgs() {
+  const button = document.getElementById('accepted-export-btn');
+  if (button.disabled) return;
+  button.disabled = true;
+  const originalText = button.textContent;
+  button.textContent = 'Preparing ZIP...';
+
+  try {
+    const base = apiBaseUrl();
+    if (!base) throw new Error('Validation API base URL is not configured.');
+    const settings = reviewerSettings();
+    const headers = { Accept: 'application/zip' };
+    const anonKey = apiAnonKey();
+    if (anonKey) {
+      headers.apikey = anonKey;
+      headers.Authorization = `Bearer ${anonKey}`;
+    }
+    if (settings.name) headers['x-reviewer-name'] = settings.name;
+    if (settings.key) headers['x-validation-key'] = settings.key;
+
+    const response = await fetch(base + '/entries/accepted-svgs.zip', {
+      method: 'GET',
+      headers,
+      cache: 'no-store',
+    });
+    if (!response.ok) {
+      const contentType = response.headers.get('content-type') || '';
+      const payload = contentType.includes('application/json')
+        ? await response.json()
+        : await response.text();
+      const message = payload && payload.error ? payload.error : `HTTP ${response.status}`;
+      throw new Error(message);
+    }
+
+    const blob = await response.blob();
+    const objectUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = objectUrl;
+    link.download = responseFilename(response);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(objectUrl);
+  } catch (err) {
+    alert('Accepted SVG export failed: ' + (err.message || err));
+  } finally {
+    button.disabled = false;
+    button.textContent = originalText;
+  }
+}
+
 function verifyReviewerKey() {
   return apiRequest('/me', { requireValidationKey: true });
 }
@@ -1075,9 +1152,10 @@ function loadInitialData() {
         String(e.index),
         String(e.updatedAt || ''),
       ]));
-      recomputeLastModifiedIndices();
-      renderList(allEntries);
-      loadCommentedIndices();
+      commentedIndices = new Set(
+        allEntries.filter(e => e.latestCommentAt).map(e => String(e.index))
+      );
+      refreshEntryList();
     })
     .catch(() => {
       document.getElementById('entry-list').innerHTML =
@@ -1158,15 +1236,15 @@ window.addEventListener('load', () => {
   document.getElementById('cmt-file').addEventListener('change', onFileChange);
   document.getElementById('entry-search').addEventListener(
     'keyup',
-    debounce(filterEntries, 180)
+    debounce(refreshEntryList, 180)
   );
   document.getElementById('entry-search').addEventListener(
     'input',
-    debounce(filterEntries, 180)
+    debounce(refreshEntryList, 180)
   );
-  document.getElementById('comment-filter').addEventListener('change', filterEntries);
-  document.getElementById('bookmark-filter').addEventListener('change', filterEntries);
-  document.getElementById('last-modified-filter').addEventListener('change', filterEntries);
+  document.getElementById('comment-filter').addEventListener('change', refreshEntryList);
+  document.getElementById('bookmark-filter').addEventListener('change', refreshEntryList);
+  document.getElementById('entry-sort').addEventListener('change', refreshEntryList);
   document.addEventListener('keydown', onEntryNavKeydown);
   renderErrorFilter();
   renderErrorModePanel();
@@ -1177,21 +1255,15 @@ window.addEventListener('load', () => {
 function renderList(entries) {
   const el = document.getElementById('entry-list');
   if (!entries || !entries.length) {
-    el.innerHTML = '<p style="padding:12px;color:#bbb;font-size:.78rem">' +
-      'No entries yet.<br>Sync entries into Supabase.</p>';
+    const message = allEntries.length
+      ? 'No entries match the current filters.'
+      : 'No entries yet.<br>Sync entries into Supabase.';
+    el.innerHTML = `<p style="padding:12px;color:#bbb;font-size:.78rem">${message}</p>`;
     return;
   }
   el.innerHTML = entries.map(e => {
-    const key = String(e.index);
-    const isAcceptable = bookmarkedIndices.has(key);
-    const modes = entryErrorModes.get(key) || [];
-    const isLastModified = lastModifiedIndices.has(key);
     return `<div class="entry-item ${String(e.index) === currentIdx ? 'active' : ''}"
           data-idx="${esc(e.index)}"
-          data-bookmarked="${isAcceptable ? 'true' : 'false'}"
-          data-error-modes="${esc(modes.join(' '))}"
-          data-last-modified="${isLastModified ? 'true' : 'false'}"
-          data-has-comments="${commentedIndices.has(String(e.index)) ? 'true' : 'false'}"
           onclick="selectEntry('${esc(e.index)}')">
        <div class="ei-head">
          <div class="ei-idx">${esc(e.index)}</div>
@@ -1199,25 +1271,6 @@ function renderList(entries) {
         <div class="ei-bs">${esc(e.bigsmiles)}</div>
       </div>`;
   }).join('');
-  filterEntries();
-}
-
-function loadBookmarks() {
-  apiGet('/entries/checked')
-    .then(indices => {
-      bookmarkedIndices = new Set((indices || []).map(String));
-      renderList(allEntries);
-    })
-    .catch(err => console.error(err));
-}
-
-function loadCommentedIndices() {
-  apiGet('/entries/commented')
-    .then(indices => {
-      commentedIndices = new Set((indices || []).map(String));
-      renderList(allEntries);
-    })
-    .catch(err => console.error(err));
 }
 
 function toggleBookmark(idx) {
@@ -1238,32 +1291,13 @@ function toggleBookmark(idx) {
       else bookmarkedIndices.delete(key);
       applyUpdatedAtFromResponse(key, r.updatedAt);
 
-      document.querySelectorAll('.entry-item').forEach(row => {
-        if (row.dataset.idx === key) {
-          setRowBookmarkState(row, bookmarkedIndices.has(key));
-          setRowErrorModesState(row, entryErrorModes.get(key) || []);
-          setRowLastModifiedState(row);
-        }
-      });
       renderErrorModePanel();
-      filterEntries();
+      refreshEntryList();
       refreshStatisticsAfterSave();
     })
     .catch(err => {
       alert('Error: ' + (err.message || err));
     });
-}
-
-function setRowBookmarkState(row, bookmarked) {
-  row.dataset.bookmarked = bookmarked ? 'true' : 'false';
-}
-
-function setRowErrorModesState(row, modes) {
-  row.dataset.errorModes = normalizeErrorModes(modes).join(' ');
-}
-
-function setRowLastModifiedState(row) {
-  row.dataset.lastModified = lastModifiedIndices.has(String(row.dataset.idx || '')) ? 'true' : 'false';
 }
 
 function setEntryErrorModesLocal(idx, modes) {
@@ -1277,39 +1311,25 @@ function setEntryUpdatedAtLocal(idx, updatedAt) {
   entryUpdatedAt.set(key, value);
   const entry = allEntries.find(item => String(item.index) === key);
   if (entry) entry.updatedAt = value;
-  recomputeLastModifiedIndices();
 }
 
-function parseUpdatedAtTimestamp(value) {
+function parseEntryTimestamp(value) {
   const time = Date.parse(String(value || ''));
   return Number.isFinite(time) ? time : null;
-}
-
-function recomputeLastModifiedIndices() {
-  let newest = null;
-  const next = new Set();
-  entryUpdatedAt.forEach((value, key) => {
-    const time = parseUpdatedAtTimestamp(value);
-    if (time === null) return;
-    if (newest === null || time > newest) {
-      newest = time;
-      next.clear();
-      next.add(key);
-    } else if (time === newest) {
-      next.add(key);
-    }
-  });
-  lastModifiedIndices = next;
-}
-
-function refreshLastModifiedRows() {
-  document.querySelectorAll('.entry-item').forEach(setRowLastModifiedState);
 }
 
 function applyUpdatedAtFromResponse(idx, updatedAt) {
   if (!updatedAt) return;
   setEntryUpdatedAtLocal(idx, updatedAt);
-  refreshLastModifiedRows();
+}
+
+function setLatestCommentAtLocal(idx, latestCommentAt) {
+  const key = String(idx);
+  const value = String(latestCommentAt || '');
+  const entry = allEntries.find(item => String(item.index) === key);
+  if (entry) entry.latestCommentAt = value || null;
+  if (value) commentedIndices.add(key);
+  else commentedIndices.delete(key);
 }
 
 function normalizeErrorModes(modes) {
@@ -1354,30 +1374,52 @@ function renderErrorFilter() {
   container.querySelectorAll('.error-filter').forEach(input => {
     input.addEventListener('change', () => {
       updateErrorFilterSummary();
-      filterEntries();
+      refreshEntryList();
     });
   });
   updateErrorFilterSummary();
 }
 
-function filterEntries() {
+function compareEntryIndices(a, b) {
+  return String(a).localeCompare(String(b), undefined, {
+    numeric: true,
+    sensitivity: 'base',
+  });
+}
+
+function compareEntriesNewestFirst(a, b, sortField) {
+  const aValue = sortField === 'latestCommentAt'
+    ? a.latestCommentAt
+    : entryUpdatedAt.get(String(a.index));
+  const bValue = sortField === 'latestCommentAt'
+    ? b.latestCommentAt
+    : entryUpdatedAt.get(String(b.index));
+  const aTime = parseEntryTimestamp(aValue);
+  const bTime = parseEntryTimestamp(bValue);
+  if (aTime === null && bTime !== null) return 1;
+  if (aTime !== null && bTime === null) return -1;
+  if (aTime !== null && bTime !== null && aTime !== bTime) return bTime - aTime;
+  return compareEntryIndices(a.index, b.index);
+}
+
+function refreshEntryList() {
   const search = document.getElementById('entry-search');
   const commentFilter = document.getElementById('comment-filter');
   const bookmarkFilter = document.getElementById('bookmark-filter');
-  const lastModifiedFilter = document.getElementById('last-modified-filter');
+  const entrySort = document.getElementById('entry-sort');
   const query = (search ? search.value : '').trim().toLowerCase();
   const commentMode = commentFilter ? commentFilter.value : 'any';
   const bookmarkMode = bookmarkFilter ? bookmarkFilter.value : 'any';
-  const lastModifiedOnly = Boolean(lastModifiedFilter && lastModifiedFilter.checked);
+  const sortField = entrySort ? entrySort.value : 'updatedAt';
   const errorFilters = selectedErrorFilters();
 
-  document.querySelectorAll('#entry-list .entry-item').forEach(row => {
-    const idx = (row.dataset.idx || '').toLowerCase();
+  const filtered = allEntries.filter(entry => {
+    const key = String(entry.index);
+    const idx = key.toLowerCase();
     const matchesIndex = !query || idx.includes(query);
-    const hasComments = row.dataset.hasComments === 'true';
-    const bookmarked = row.dataset.bookmarked === 'true';
-    const lastModified = row.dataset.lastModified === 'true';
-    const rowErrorModes = (row.dataset.errorModes || '').split(/\s+/).filter(Boolean);
+    const hasComments = commentedIndices.has(key);
+    const bookmarked = bookmarkedIndices.has(key);
+    const rowErrorModes = entryErrorModes.get(key) || [];
     const matchesComments =
       commentMode === 'any' ||
       (commentMode === 'has' && hasComments) ||
@@ -1389,12 +1431,10 @@ function filterEntries() {
     const matchesErrors =
       !errorFilters.length ||
       errorFilters.some(mode => rowErrorModes.includes(mode));
-    const matchesLastModified = !lastModifiedOnly || lastModified;
-    row.style.display =
-      matchesIndex && matchesComments && matchesBookmark && matchesErrors && matchesLastModified
-        ? ''
-        : 'none';
+    return matchesIndex && matchesComments && matchesBookmark && matchesErrors;
   });
+  filtered.sort((a, b) => compareEntriesNewestFirst(a, b, sortField));
+  renderList(filtered);
 }
 
 function onEntryNavKeydown(e) {
@@ -1421,8 +1461,7 @@ function onEntryNavKeydown(e) {
 }
 
 function getVisibleEntryRows() {
-  return Array.from(document.querySelectorAll('#entry-list .entry-item'))
-    .filter(row => row.style.display !== 'none');
+  return Array.from(document.querySelectorAll('#entry-list .entry-item'));
 }
 
 function isTypingTarget(target) {
@@ -1479,15 +1518,8 @@ function onEntry(entry) {
   setEntryErrorModesLocal(key, entry.errorModes || []);
   applyUpdatedAtFromResponse(key, entry.updatedAt);
   setSelectedMol(entry.mol || '', entry.molFileName || '');
-  document.querySelectorAll('.entry-item').forEach(row => {
-    if (row.dataset.idx === key) {
-      setRowBookmarkState(row, bookmarkedIndices.has(key));
-      setRowErrorModesState(row, entryErrorModes.get(key) || []);
-      setRowLastModifiedState(row);
-    }
-  });
   renderErrorModePanel();
-  filterEntries();
+  refreshEntryList();
 
   // Show BIGSMILES
   document.getElementById('bs-text').textContent = entry.bigsmiles || '(no BIGSMILES)';
@@ -1979,16 +2011,8 @@ function setCurrentEntryErrorModes(modes) {
 }
 
 function updateCurrentEntryReviewRows() {
-  const key = String(currentIdx);
-  document.querySelectorAll('.entry-item').forEach(row => {
-    if (row.dataset.idx === key) {
-      setRowBookmarkState(row, bookmarkedIndices.has(key));
-      setRowErrorModesState(row, entryErrorModes.get(key) || []);
-      setRowLastModifiedState(row);
-    }
-  });
   renderErrorModePanel();
-  filterEntries();
+  refreshEntryList();
 }
 
 function loadComments(idx) {
@@ -2086,7 +2110,8 @@ function postComment() {
         composer.querySelector('#cmt-file').value      = '';
         composer.querySelector('#cmt-thumb').style.display = 'none';
         imgB64 = imgMime = imgName = null;
-        setRowCommentState(currentIdx, true);
+        setLatestCommentAtLocal(currentIdx, r.latestCommentAt);
+        refreshEntryList();
         loadComments(currentIdx);
       } else {
         alert('Failed to post comment.');
@@ -2097,16 +2122,6 @@ function postComment() {
       alert('Error: ' + (err.message || err));
       btn.disabled = false; btn.textContent = 'Post Comment';
     });
-}
-
-function setRowCommentState(idx, hasComments) {
-  const key = String(idx);
-  if (hasComments) commentedIndices.add(key);
-  else commentedIndices.delete(key);
-  document.querySelectorAll('.entry-item').forEach(row => {
-    if (row.dataset.idx === key) row.dataset.hasComments = hasComments ? 'true' : 'false';
-  });
-  filterEntries();
 }
 
 function initPanelResizers() {

@@ -9,14 +9,22 @@
    - Validation API base URL: only needed for local/manual use when `config.js` is not present.
 3. To update those values later, click the reviewer badge in the header.
 4. Browse entries in the left panel. Use Search index to filter by entry index.
-5. Use Comment and Checked filters to show all entries, only commented/checked entries, or entries without those states.
+5. Use Comment, Acceptable, and Error Modes to filter the complete entry collection. Use Sort newest first to order the filtered results by Update time (the default) or Latest comment. Entries with missing timestamps sort last.
 6. Select an entry to load its BIGSMILES string, SVG layout, saved annotations, and comment history.
 7. Pan the SVG by dragging the canvas. Zoom with the mouse wheel. Use Restore View to reset the view.
 8. Use Line or Text to add annotations. Choose color, line width, and text size from the toolbar.
 9. Click Save to persist annotations. Saved annotations reload with the entry.
-10. Click the check button beside an entry to mark it checked or unchecked.
+10. Use Acceptable in the review panel to accept or unaccept the current entry.
 11. Add text comments in the composer. Attach an image with the file picker when needed.
 12. Posted comments appear in Comment History. Click a comment card to expand it. Click a comment image to view it full size.
+13. Click **Download accepted SVGs.** in the header to download every entry currently marked Acceptable. The protected request uses the saved shared review key. The ZIP and its single top-level folder are named `canonical-YYYYMMDDTHHMMSSZ`, using the server's UTC export time.
+14. Extract the ZIP, then rename its downloaded `<Index>.svg` files to the canonical names in `validation_manifest.csv`:
+
+    ```powershell
+    python scripts/rename_canonical_svgs.py path\to\canonical-YYYYMMDDTHHMMSSZ
+    ```
+
+    Use `--manifest path\to\validation_manifest.csv` when running outside the repository root. The command validates the entire accepted subset before renaming anything and ignores manifest rows that were not included in the download.
 
 ## Deploy Frontend to GitHub Pages
 
@@ -139,6 +147,8 @@ This repository's deployable frontend is the static site in `pages/`. Use GitHub
    supabase functions deploy validation-api --project-ref <project-ref> --no-verify-jwt
    ```
 
+   Redeploying this function publishes the accepted-SVG ZIP endpoint and the latest-comment timestamps used by frontend sorting. These changes aggregate existing comments at request time and do not require a database migration or existing-entry rewrite.
+
 4. Set Edge Function secrets. Do not set `SUPABASE_SERVICE_ROLE_KEY`; Supabase provides it automatically to hosted Edge Functions.
 
    ```powershell
@@ -187,7 +197,7 @@ This repository's deployable frontend is the static site in `pages/`. Use GitHub
    - `entries`: BIGSMILES, SVG XML, annotations JSON, checked state, and update time.
    - `comments`: reviewer name/email, timestamp, comment text, and image URL.
 10. Inspect uploads in Storage under `validation-comment-images`.
-11. Rotate the shared review key by updating `VALIDATION_REVIEW_KEY` in Supabase secrets, then give reviewers the new key. No Pages redeploy is required for key rotation.
+11. Rotate the shared review key by updating `VALIDATION_REVIEW_KEY` in Supabase secrets, then give reviewers the new key. The same key protects review writes and `GET /entries/accepted-svgs.zip`. No Pages redeploy is required for key rotation.
 12. After changing `supabase/functions/validation-api/index.ts`, redeploy the Edge Function:
 
     ```powershell
@@ -204,6 +214,9 @@ This repository's deployable frontend is the static site in `pages/`. Use GitHub
 - SVG missing: rerun the sync script and confirm the manifest row references an existing SVG file.
 - MOL missing: rerun the sync script and confirm the manifest row references an existing MOL file in the `--mol-dir` directory.
 - Save errors: check the browser console and Supabase function logs. Annotation and checked writes require `x-validation-key`.
+- Accepted SVG export returns no files: confirm at least one entry is marked Acceptable. The API returns `422` when the accepted subset is empty.
+- Accepted SVG export is unauthorized: re-enter the shared review key from the reviewer badge; the ZIP endpoint requires `x-validation-key`.
+- Canonical rename aborts: read the reported preflight error and correct the manifest or extracted folder. The utility does not rename any file when it detects missing or duplicate indices, unsafe/non-SVG names, duplicate targets, or existing-file collisions.
 - Error mode save cannot find `entries.error_modes`: rerun `supabase/schema.sql` in the Supabase SQL editor. The Edge Function route is deployed, but the production database schema or PostgREST schema cache has not been updated.
 - MOL download button missing after data sync: inspect `GET /entries/<index>` in browser DevTools. If the JSON does not include non-empty `mol` and `molFileName`, redeploy `validation-api`; the deployed Edge Function is stale even if the database columns are filled.
 - Image upload failures: confirm the `validation-comment-images` bucket exists and is public, and that `VALIDATION_COMMENT_IMAGE_BUCKET` matches it.
