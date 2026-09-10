@@ -65,7 +65,6 @@ index,BIGSMILES,SVG-file-name,MOL-file-name
 64,{[][<[<]1]c1nc2c3c4c(ccc3)c3nc5c(nc3c3c4c(ccc3)c2nc1[>[>]2])cc(c([<[<]1])c5)[>[>]2][]},64 - polyquinoxaline ladder [PQL].svg,64 - polyquinoxaline ladder [PQL].mol
 65,{[][<[<]1]c1cc2c(cc1[>[>]2])sc1c(n2)cc(S[<[<]1])c(c1)=N[>[>]2][]},65 - poly(phenothiazine) ladder [PTL].svg,65 - poly(phenothiazine) ladder [PTL].mol
 66,{[][<[<]1]c1cc2c(cc1[>[>]2])oc1c(n2)cc(O[<[<]1])c(c1)=N[>[>]2][]},66 - poly(phenooxazine) ladder [POL].svg,66 - poly(phenooxazine) ladder [POL].mol
-67,{[][<[<]1]c1c(cc-2c(N(C(CCCCCCCC)CCCCCCCC)c3c2cc2c(c4c(cc5c(cc(C)c6c5cc5c(-c7c(cc8c(c(C)cc9c8cc(c[<[<]1])c([>[>]2])c9)c7)N5C(CCCCCCCC)CCCCCCCC)c6)c4)cc2C)c3)c1)c(C)[>[>]2][]},67 - carbazole-based ladder polymer.svg,67 - carbazole-based ladder polymer.mol
 68,Br{[>][<]C1=CC([>])=CC(=C1)[<][<]}B(O)O,68 - hyperbranched network.svg,68 - hyperbranched network.mol
 69,"{[][$]C(C[$])[$],[$]CC[$][]}",69 - branched polyethylene.svg,69 - branched polyethylene.mol
 78,{[][<][Si](CC)(CC)O[>][]},78 - poly[oxy(diethylsilylene)].svg,78 - poly[oxy(diethylsilylene)].mol
@@ -285,6 +284,8 @@ index,BIGSMILES,SVG-file-name,MOL-file-name
 294,"{[][$]CC(C)(C(=O)NC(C)C)[$][$]}C{[$][$]C(=C/Oc1ccccc1)C[$],[$]C(=C)C(Oc1ccccc1)[$][]}",294 - poly(N-isopropyl acrylamide)-b-poly(phenoxyallene) diblock [PNIPAM-b-PPOA].svg,294 - poly(N-isopropyl acrylamide)-b-poly(phenoxyallene) diblock [PNIPAM-b-PPOA].mol
 295,OC(=O)CCC({[$][$]C(C)(C(=O)OCCN(C)C)C[$][$]}{[$][$]CC(c1ccccc1)[$][$]}SC(=S)c1ccccc1)(C)C#N,295 - poly(2-(dimethylamino)ethyl methacrylate)-block-polystyrene [PDMAEMA-b-PS].svg,295 - poly(2-(dimethylamino)ethyl methacrylate)-block-polystyrene [PDMAEMA-b-PS].mol
 296,CCC(C){[$][$]CC(c1ccccc1)[$][$]}CCC(OCCOCc1ccc(C=C)cc1){[$][$]CC(OCCCl)[$][$]}CC(OC)OCCCl,296 - alpha-acetal-gamma-styrenyl-poly(chloroethyl vinyl ether-block-styrene) [PCEVE-b-PS].svg,296 - alpha-acetal-gamma-styrenyl-poly(chloroethyl vinyl ether-block-styrene) [PCEVE-b-PS].mol
+297,C1CCCCC1,297 - unnamed_297.svg,297 - unnamed_297.mol
+298,c1ccccc1,298 - unnamed_298.svg,298 - unnamed_298.mol
 299,{[][<][Si](C)(C)O[>][]},299 - unnamed_299.svg,299 - unnamed_299.mol
 300,{[][$]C\C=C/C[$][]},300 - unnamed_300.svg,300 - unnamed_300.mol
 301,{[][$]CC=C(CCC)C[$][]},301 - unnamed_301.svg,301 - unnamed_301.mol
