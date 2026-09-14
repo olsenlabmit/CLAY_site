@@ -1,0 +1,822 @@
+
+     RDKit          2D
+
+  0  0  0  0  0  0  0  0  0  0999 V3000
+M  V30 BEGIN CTAB
+M  V30 COUNTS 134 133 8 0 0
+M  V30 BEGIN ATOM
+M  V30 1 N -3.400619 -0.255500 0.000000 0
+M  V30 2 C -4.266730 0.244400 0.000000 0
+M  V30 3 C -5.132850 -0.255500 0.000000 0
+M  V30 4 C -5.998962 0.244400 0.000000 0
+M  V30 5 N -6.864966 -0.255500 0.000000 0
+M  V30 6 C -3.400619 -1.255500 0.000000 0
+M  V30 7 C -2.534618 -1.755393 0.000000 0
+M  V30 8 C -2.534618 -2.755394 0.000000 0
+M  V30 9 N -1.668618 -3.255487 0.000000 0
+M  V30 10 C -1.818336 0.244400 0.000000 0
+M  V30 11 C -0.952225 -0.255500 0.000000 0
+M  V30 12 C -0.086105 0.244400 0.000000 0
+M  V30 13 C 0.780007 -0.255500 0.000000 0
+M  V30 14 N 2.362289 0.244400 0.000000 0
+M  V30 15 C 2.362289 -0.755600 0.000000 0
+M  V30 16 C 1.496288 -1.255508 0.000000 0
+M  V30 17 C 1.496288 -2.255508 0.000000 0
+M  V30 18 N 0.630288 -2.755415 0.000000 0
+M  V30 19 C 3.228400 -0.255500 0.000000 0
+M  V30 20 C 4.094405 0.244400 0.000000 0
+M  V30 21 C 4.960401 -0.255500 0.000000 0
+M  V30 22 N 5.826405 0.244400 0.000000 0
+M  V30 23 C -7.730962 0.244400 0.000000 0
+M  V30 24 C -8.596958 -0.255700 0.000000 0
+M  V30 25 C -9.462963 0.244400 0.000000 0
+M  V30 26 N -10.328959 -0.255700 0.000000 0
+M  V30 27 H -13.793212 -0.255688 0.000000 0
+M  V30 28 C -11.195004 0.244266 0.000000 0
+M  V30 29 O -11.194997 1.244197 0.000000 0
+M  V30 30 C -12.061077 -0.255700 0.000000 0
+M  V30 31 C -12.061077 -1.255701 0.000000 0
+M  V30 32 C -12.927078 -1.755594 0.000000 0
+M  V30 33 C -12.927078 -2.755594 0.000000 0
+M  V30 34 C -13.793078 -3.255687 0.000000 0
+M  V30 35 N -13.793078 -4.255687 0.000000 0
+M  V30 36 N -12.927159 0.244266 0.000000 0
+M  V30 37 C -6.864966 -1.255500 0.000000 0
+M  V30 38 C -7.365066 -2.121497 0.000000 0
+M  V30 39 C -6.864966 -2.987501 0.000000 0
+M  V30 40 N -7.365066 -3.853497 0.000000 0
+M  V30 41 H -7.365054 -7.317750 0.000000 0
+M  V30 42 C -6.865100 -4.719542 0.000000 0
+M  V30 43 O -5.865168 -4.719535 0.000000 0
+M  V30 44 C -7.365066 -5.585616 0.000000 0
+M  V30 45 C -8.365067 -5.585616 0.000000 0
+M  V30 46 C -8.864960 -6.451616 0.000000 0
+M  V30 47 C -9.864960 -6.451616 0.000000 0
+M  V30 48 C -10.365053 -7.317616 0.000000 0
+M  V30 49 N -11.365053 -7.317616 0.000000 0
+M  V30 50 N -6.865100 -6.451698 0.000000 0
+M  V30 51 C -1.668618 -4.255487 0.000000 0
+M  V30 52 C -2.168718 -5.121483 0.000000 0
+M  V30 53 C -1.668618 -5.987488 0.000000 0
+M  V30 54 N -2.168718 -6.853484 0.000000 0
+M  V30 55 H -2.168706 -10.317737 0.000000 0
+M  V30 56 C -1.668752 -7.719529 0.000000 0
+M  V30 57 O -0.668821 -7.719522 0.000000 0
+M  V30 58 C -2.168718 -8.585602 0.000000 0
+M  V30 59 C -3.168719 -8.585602 0.000000 0
+M  V30 60 C -3.668612 -9.451603 0.000000 0
+M  V30 61 C -4.668612 -9.451603 0.000000 0
+M  V30 62 C -5.168705 -10.317603 0.000000 0
+M  V30 63 N -6.168705 -10.317603 0.000000 0
+M  V30 64 N -1.668752 -9.451684 0.000000 0
+M  V30 65 C -0.802618 -2.755379 0.000000 0
+M  V30 66 C 0.063378 -3.255480 0.000000 0
+M  V30 67 C 0.929383 -2.755379 0.000000 0
+M  V30 68 N 1.795379 -3.255480 0.000000 0
+M  V30 69 H 5.259632 -3.255467 0.000000 0
+M  V30 70 C 2.661424 -2.755514 0.000000 0
+M  V30 71 O 2.661417 -1.755582 0.000000 0
+M  V30 72 C 3.527498 -3.255480 0.000000 0
+M  V30 73 C 3.527498 -4.255480 0.000000 0
+M  V30 74 C 4.393498 -4.755373 0.000000 0
+M  V30 75 C 4.393498 -5.755373 0.000000 0
+M  V30 76 C 5.259498 -6.255466 0.000000 0
+M  V30 77 N 5.259498 -7.255467 0.000000 0
+M  V30 78 N 4.393580 -2.755514 0.000000 0
+M  V30 79 C 0.630288 -3.755416 0.000000 0
+M  V30 80 C 0.130188 -4.621412 0.000000 0
+M  V30 81 C 0.630288 -5.487416 0.000000 0
+M  V30 82 N 0.130188 -6.353412 0.000000 0
+M  V30 83 H 0.130200 -9.817665 0.000000 0
+M  V30 84 C 0.630154 -7.219457 0.000000 0
+M  V30 85 O 1.630086 -7.219450 0.000000 0
+M  V30 86 C 0.130188 -8.085531 0.000000 0
+M  V30 87 C -0.869812 -8.085531 0.000000 0
+M  V30 88 C -1.369705 -8.951531 0.000000 0
+M  V30 89 C -2.369706 -8.951531 0.000000 0
+M  V30 90 C -2.869799 -9.817532 0.000000 0
+M  V30 91 N -3.869799 -9.817532 0.000000 0
+M  V30 92 N 0.630154 -8.951613 0.000000 0
+M  V30 93 C -0.235712 -2.255522 0.000000 0
+M  V30 94 C -1.101708 -2.755623 0.000000 0
+M  V30 95 C -1.967713 -2.255522 0.000000 0
+M  V30 96 N -2.833709 -2.755623 0.000000 0
+M  V30 97 H -6.297962 -2.755610 0.000000 0
+M  V30 98 C -3.699754 -2.255657 0.000000 0
+M  V30 99 O -3.699747 -1.255725 0.000000 0
+M  V30 100 C -4.565827 -2.755623 0.000000 0
+M  V30 101 C -4.565827 -3.755623 0.000000 0
+M  V30 102 C -5.431828 -4.255516 0.000000 0
+M  V30 103 C -5.431828 -5.255516 0.000000 0
+M  V30 104 C -6.297828 -5.755609 0.000000 0
+M  V30 105 N -6.297828 -6.755610 0.000000 0
+M  V30 106 N -5.431909 -2.255657 0.000000 0
+M  V30 107 C 5.826405 -0.755525 0.000000 0
+M  V30 108 C 5.326305 -1.621521 0.000000 0
+M  V30 109 C 5.826405 -2.487525 0.000000 0
+M  V30 110 N 5.326305 -3.353521 0.000000 0
+M  V30 111 H 5.326317 -6.817774 0.000000 0
+M  V30 112 C 5.826271 -4.219567 0.000000 0
+M  V30 113 O 6.826203 -4.219560 0.000000 0
+M  V30 114 C 5.326305 -5.085640 0.000000 0
+M  V30 115 C 4.326304 -5.085640 0.000000 0
+M  V30 116 C 3.826412 -5.951640 0.000000 0
+M  V30 117 C 2.826411 -5.951640 0.000000 0
+M  V30 118 C 2.326318 -6.817641 0.000000 0
+M  V30 119 N 1.326318 -6.817641 0.000000 0
+M  V30 120 N 5.826271 -5.951722 0.000000 0
+M  V30 121 C 6.692489 -0.255500 0.000000 0
+M  V30 122 C 7.558485 0.244600 0.000000 0
+M  V30 123 C 8.424489 -0.255500 0.000000 0
+M  V30 124 N 9.290485 0.244600 0.000000 0
+M  V30 125 H 12.754738 0.244588 0.000000 0
+M  V30 126 C 10.156530 -0.255366 0.000000 0
+M  V30 127 O 10.156523 -1.255298 0.000000 0
+M  V30 128 C 11.022604 0.244600 0.000000 0
+M  V30 129 C 11.022604 1.244600 0.000000 0
+M  V30 130 C 11.888604 1.744493 0.000000 0
+M  V30 131 C 11.888604 2.744494 0.000000 0
+M  V30 132 C 12.754604 3.244587 0.000000 0
+M  V30 133 N 12.754604 4.244587 0.000000 0
+M  V30 134 N 11.888686 -0.255366 0.000000 0
+M  V30 END ATOM
+M  V30 BEGIN BOND
+M  V30 1 1 1 2
+M  V30 2 1 2 3
+M  V30 3 1 3 4
+M  V30 4 1 4 5
+M  V30 5 1 1 6
+M  V30 6 1 6 7
+M  V30 7 1 7 8
+M  V30 8 1 8 9
+M  V30 9 1 1 10
+M  V30 10 1 10 11
+M  V30 11 1 11 12
+M  V30 12 1 12 13
+M  V30 13 1 13 14
+M  V30 14 1 14 15
+M  V30 15 1 15 16
+M  V30 16 1 16 17
+M  V30 17 1 17 18
+M  V30 18 1 14 19
+M  V30 19 1 19 20
+M  V30 20 1 20 21
+M  V30 21 1 21 22
+M  V30 22 1 23 24
+M  V30 23 1 24 25
+M  V30 24 1 25 26
+M  V30 25 2 28 29
+M  V30 26 1 28 30
+M  V30 27 1 30 31
+M  V30 28 1 31 32
+M  V30 29 1 32 33
+M  V30 30 1 33 34
+M  V30 31 1 34 35
+M  V30 32 1 30 36
+M  V30 33 1 26 28
+M  V30 34 1 27 36
+M  V30 35 1 5 23
+M  V30 36 1 37 38
+M  V30 37 1 38 39
+M  V30 38 1 39 40
+M  V30 39 2 42 43
+M  V30 40 1 42 44
+M  V30 41 1 44 45
+M  V30 42 1 45 46
+M  V30 43 1 46 47
+M  V30 44 1 47 48
+M  V30 45 1 48 49
+M  V30 46 1 44 50
+M  V30 47 1 40 42
+M  V30 48 1 41 50
+M  V30 49 1 5 37
+M  V30 50 1 51 52
+M  V30 51 1 52 53
+M  V30 52 1 53 54
+M  V30 53 2 56 57
+M  V30 54 1 56 58
+M  V30 55 1 58 59
+M  V30 56 1 59 60
+M  V30 57 1 60 61
+M  V30 58 1 61 62
+M  V30 59 1 62 63
+M  V30 60 1 58 64
+M  V30 61 1 54 56
+M  V30 62 1 55 64
+M  V30 63 1 9 51
+M  V30 64 1 65 66
+M  V30 65 1 66 67
+M  V30 66 1 67 68
+M  V30 67 2 70 71
+M  V30 68 1 70 72
+M  V30 69 1 72 73
+M  V30 70 1 73 74
+M  V30 71 1 74 75
+M  V30 72 1 75 76
+M  V30 73 1 76 77
+M  V30 74 1 72 78
+M  V30 75 1 68 70
+M  V30 76 1 69 78
+M  V30 77 1 9 65
+M  V30 78 1 79 80
+M  V30 79 1 80 81
+M  V30 80 1 81 82
+M  V30 81 2 84 85
+M  V30 82 1 84 86
+M  V30 83 1 86 87
+M  V30 84 1 87 88
+M  V30 85 1 88 89
+M  V30 86 1 89 90
+M  V30 87 1 90 91
+M  V30 88 1 86 92
+M  V30 89 1 82 84
+M  V30 90 1 83 92
+M  V30 91 1 18 79
+M  V30 92 1 93 94
+M  V30 93 1 94 95
+M  V30 94 1 95 96
+M  V30 95 2 98 99
+M  V30 96 1 98 100
+M  V30 97 1 100 101
+M  V30 98 1 101 102
+M  V30 99 1 102 103
+M  V30 100 1 103 104
+M  V30 101 1 104 105
+M  V30 102 1 100 106
+M  V30 103 1 96 98
+M  V30 104 1 97 106
+M  V30 105 1 18 93
+M  V30 106 1 107 108
+M  V30 107 1 108 109
+M  V30 108 1 109 110
+M  V30 109 2 112 113
+M  V30 110 1 112 114
+M  V30 111 1 114 115
+M  V30 112 1 115 116
+M  V30 113 1 116 117
+M  V30 114 1 117 118
+M  V30 115 1 118 119
+M  V30 116 1 114 120
+M  V30 117 1 110 112
+M  V30 118 1 111 120
+M  V30 119 1 22 107
+M  V30 120 1 121 122
+M  V30 121 1 122 123
+M  V30 122 1 123 124
+M  V30 123 2 126 127
+M  V30 124 1 126 128
+M  V30 125 1 128 129
+M  V30 126 1 129 130
+M  V30 127 1 130 131
+M  V30 128 1 131 132
+M  V30 129 1 132 133
+M  V30 130 1 128 134
+M  V30 131 1 124 126
+M  V30 132 1 125 134
+M  V30 133 1 22 121
+M  V30 END BOND
+M  V30 BEGIN SGROUP
+M  V30 1 SRU 0 ATOMS=(4 26 27 28 36) CBONDS=(2 33 34) -
+M  V30 BRKXYZ=(9 -10.7620 0.4942 0 -10.7620 -0.5057 0 0 0 0) BRKXYZ=(9 -13.360-
+M  V30 2 0.4943 0 -13.3602 -0.5057 0 0 0 0)
+M  V30 2 SRU 0 ATOMS=(4 124 125 126 134) CBONDS=(2 131 132) -
+M  V30 BRKXYZ=(9 9.7235 -0.5053 0 9.7235 0.4946 0 0 0 0) BRKXYZ=(9 12.3217 -0.-
+M  V30 5054 0 12.3217 0.4946 0 0 0 0)
+M  V30 3 SRU 0 ATOMS=(4 110 111 112 120) CBONDS=(2 117 118) -
+M  V30 BRKXYZ=(9 6.0763 -3.7865 0 5.0763 -3.7865 0 0 0 0) BRKXYZ=(9 6.0763 -6.-
+M  V30 3847 0 5.0763 -6.3847 0 0 0 0)
+M  V30 4 SRU 0 ATOMS=(4 96 97 98 106) CBONDS=(2 103 104) -
+M  V30 BRKXYZ=(9 -3.2667 -2.0057 0 -3.2667 -3.0056 0 0 0 0) BRKXYZ=(9 -5.8649 -
+M  V30 -2.0057 0 -5.8649 -3.0056 0 0 0 0)
+M  V30 5 SRU 0 ATOMS=(4 82 83 84 92) CBONDS=(2 89 90) -
+M  V30 BRKXYZ=(9 0.8801 -6.7864 0 -0.1198 -6.7864 0 0 0 0) BRKXYZ=(9 0.8801 -9-
+M  V30 .3846 0 -0.1198 -9.3846 0 0 0 0)
+M  V30 6 SRU 0 ATOMS=(4 68 69 70 78) CBONDS=(2 75 76) -
+M  V30 BRKXYZ=(9 2.2284 -2.5055 0 2.2284 -3.5055 0 0 0 0) BRKXYZ=(9 4.8266 -2.-
+M  V30 5055 0 4.8266 -3.5055 0 0 0 0)
+M  V30 7 SRU 0 ATOMS=(4 54 55 56 64) CBONDS=(2 61 62) -
+M  V30 BRKXYZ=(9 -1.4188 -7.2865 0 -2.4187 -7.2865 0 0 0 0) BRKXYZ=(9 -1.4188 -
+M  V30 -9.8847 0 -2.4187 -9.8847 0 0 0 0)
+M  V30 8 SRU 0 ATOMS=(4 40 41 42 50) CBONDS=(2 47 48) -
+M  V30 BRKXYZ=(9 -6.6151 -4.2865 0 -7.6150 -4.2865 0 0 0 0) BRKXYZ=(9 -6.6151 -
+M  V30 -6.8847 0 -7.6150 -6.8847 0 0 0 0)
+M  V30 END SGROUP
+M  V30 END CTAB
+M  END
+>  <BIGSMILES_BRACKET_RECORDS_JSON>
+{
+  "records": [
+    {
+      "id": 0,
+      "bracket_kind": "backbone",
+      "pairing_id": "F9/fragments[0]",
+      "group_id": ">1:4",
+      "ru_midpoint": [
+        -12.06108644524664,
+        -0.05571394848237404
+      ],
+      "bond_midpoint": [
+        -10.76198130341076,
+        -0.005717275623696005
+      ],
+      "orientation_vector": [
+        0.0,
+        1.0
+      ],
+      "half_bracket_size": 0.49996592864168043,
+      "bond": [
+        25,
+        27
+      ],
+      "fragment": "F9",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F9/fragments[0]",
+      "marker_id": "0",
+      "side": "left",
+      "connection_group": ">1",
+      "marker_type_index": 4
+    },
+    {
+      "id": 1,
+      "bracket_kind": "backbone",
+      "pairing_id": "F9/fragments[0]",
+      "group_id": "<1:3",
+      "ru_midpoint": [
+        -12.06108644524664,
+        -0.05571394848237404
+      ],
+      "bond_midpoint": [
+        -13.360185552786213,
+        -0.005711191266324411
+      ],
+      "orientation_vector": [
+        0.0,
+        1.0
+      ],
+      "half_bracket_size": 0.49996592864168043,
+      "bond": [
+        26,
+        35
+      ],
+      "fragment": "F9",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F9/fragments[0]",
+      "marker_id": "10",
+      "side": "right",
+      "connection_group": "<1",
+      "marker_type_index": 3
+    },
+    {
+      "id": 2,
+      "bracket_kind": "backbone",
+      "pairing_id": "F16/fragments[0]",
+      "group_id": ">1:4",
+      "ru_midpoint": [
+        11.022612844464986,
+        0.044613788467012694
+      ],
+      "bond_midpoint": [
+        9.723507702629105,
+        -0.0053828843916653435
+      ],
+      "orientation_vector": [
+        0.0,
+        -1.0
+      ],
+      "half_bracket_size": 0.49996592864168043,
+      "bond": [
+        123,
+        125
+      ],
+      "fragment": "F16",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F16/fragments[0]",
+      "marker_id": "0",
+      "side": "left",
+      "connection_group": ">1",
+      "marker_type_index": 4
+    },
+    {
+      "id": 3,
+      "bracket_kind": "backbone",
+      "pairing_id": "F16/fragments[0]",
+      "group_id": "<1:3",
+      "ru_midpoint": [
+        11.022612844464986,
+        0.044613788467012694
+      ],
+      "bond_midpoint": [
+        12.321711952004557,
+        -0.005388968749036938
+      ],
+      "orientation_vector": [
+        0.0,
+        -1.0
+      ],
+      "half_bracket_size": 0.49996592864168043,
+      "bond": [
+        124,
+        133
+      ],
+      "fragment": "F16",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F16/fragments[0]",
+      "marker_id": "10",
+      "side": "right",
+      "connection_group": "<1",
+      "marker_type_index": 3
+    },
+    {
+      "id": 4,
+      "bracket_kind": "backbone",
+      "pairing_id": "F15/fragments[0]",
+      "group_id": ">1:4",
+      "ru_midpoint": [
+        5.526291151877896,
+        -5.085649133043907
+      ],
+      "bond_midpoint": [
+        5.576287824736574,
+        -3.786543991208026
+      ],
+      "orientation_vector": [
+        1.0,
+        0.0
+      ],
+      "half_bracket_size": 0.49996592864168043,
+      "bond": [
+        109,
+        111
+      ],
+      "fragment": "F15",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F15/fragments[0]",
+      "marker_id": "0",
+      "side": "left",
+      "connection_group": ">1",
+      "marker_type_index": 4
+    },
+    {
+      "id": 5,
+      "bracket_kind": "backbone",
+      "pairing_id": "F15/fragments[0]",
+      "group_id": "<1:3",
+      "ru_midpoint": [
+        5.526291151877896,
+        -5.085649133043907
+      ],
+      "bond_midpoint": [
+        5.576293909093945,
+        -6.384748240583479
+      ],
+      "orientation_vector": [
+        1.0,
+        0.0
+      ],
+      "half_bracket_size": 0.49996592864168043,
+      "bond": [
+        110,
+        119
+      ],
+      "fragment": "F15",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F15/fragments[0]",
+      "marker_id": "10",
+      "side": "right",
+      "connection_group": "<1",
+      "marker_type_index": 3
+    },
+    {
+      "id": 6,
+      "bracket_kind": "backbone",
+      "pairing_id": "F14/fragments[0]",
+      "group_id": ">1:4",
+      "ru_midpoint": [
+        -4.565836440397962,
+        -2.555636348507334
+      ],
+      "bond_midpoint": [
+        -3.2667312985620818,
+        -2.5056396756486556
+      ],
+      "orientation_vector": [
+        0.0,
+        1.0
+      ],
+      "half_bracket_size": 0.49996592864168043,
+      "bond": [
+        95,
+        97
+      ],
+      "fragment": "F14",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F14/fragments[0]",
+      "marker_id": "0",
+      "side": "left",
+      "connection_group": ">1",
+      "marker_type_index": 4
+    },
+    {
+      "id": 7,
+      "bracket_kind": "backbone",
+      "pairing_id": "F14/fragments[0]",
+      "group_id": "<1:3",
+      "ru_midpoint": [
+        -4.565836440397962,
+        -2.555636348507334
+      ],
+      "bond_midpoint": [
+        -5.8649355479375345,
+        -2.505633591291284
+      ],
+      "orientation_vector": [
+        0.0,
+        1.0
+      ],
+      "half_bracket_size": 0.49996592864168043,
+      "bond": [
+        96,
+        105
+      ],
+      "fragment": "F14",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F14/fragments[0]",
+      "marker_id": "10",
+      "side": "right",
+      "connection_group": "<1",
+      "marker_type_index": 3
+    },
+    {
+      "id": 8,
+      "bracket_kind": "backbone",
+      "pairing_id": "F13/fragments[0]",
+      "group_id": ">1:4",
+      "ru_midpoint": [
+        0.3301743098712304,
+        -8.085540015930828
+      ],
+      "bond_midpoint": [
+        0.3801709827299087,
+        -6.786434874094947
+      ],
+      "orientation_vector": [
+        1.0,
+        0.0
+      ],
+      "half_bracket_size": 0.49996592864168043,
+      "bond": [
+        81,
+        83
+      ],
+      "fragment": "F13",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F13/fragments[0]",
+      "marker_id": "0",
+      "side": "left",
+      "connection_group": ">1",
+      "marker_type_index": 4
+    },
+    {
+      "id": 9,
+      "bracket_kind": "backbone",
+      "pairing_id": "F13/fragments[0]",
+      "group_id": "<1:3",
+      "ru_midpoint": [
+        0.3301743098712304,
+        -8.085540015930828
+      ],
+      "bond_midpoint": [
+        0.38017706708727944,
+        -9.3846391234704
+      ],
+      "orientation_vector": [
+        1.0,
+        0.0
+      ],
+      "half_bracket_size": 0.49996592864168043,
+      "bond": [
+        82,
+        91
+      ],
+      "fragment": "F13",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F13/fragments[0]",
+      "marker_id": "10",
+      "side": "right",
+      "connection_group": "<1",
+      "marker_type_index": 3
+    },
+    {
+      "id": 10,
+      "bracket_kind": "backbone",
+      "pairing_id": "F12/fragments[0]",
+      "group_id": ">1:4",
+      "ru_midpoint": [
+        3.527506729491857,
+        -3.055493308536519
+      ],
+      "bond_midpoint": [
+        2.228401587655977,
+        -3.005496635677841
+      ],
+      "orientation_vector": [
+        0.0,
+        1.0
+      ],
+      "half_bracket_size": 0.49996592864168043,
+      "bond": [
+        67,
+        69
+      ],
+      "fragment": "F12",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F12/fragments[0]",
+      "marker_id": "0",
+      "side": "left",
+      "connection_group": ">1",
+      "marker_type_index": 4
+    },
+    {
+      "id": 11,
+      "bracket_kind": "backbone",
+      "pairing_id": "F12/fragments[0]",
+      "group_id": "<1:3",
+      "ru_midpoint": [
+        3.527506729491857,
+        -3.055493308536519
+      ],
+      "bond_midpoint": [
+        4.82660583703143,
+        -3.0054905513204693
+      ],
+      "orientation_vector": [
+        0.0,
+        1.0
+      ],
+      "half_bracket_size": 0.49996592864168043,
+      "bond": [
+        68,
+        77
+      ],
+      "fragment": "F12",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F12/fragments[0]",
+      "marker_id": "10",
+      "side": "right",
+      "connection_group": "<1",
+      "marker_type_index": 3
+    },
+    {
+      "id": 12,
+      "bracket_kind": "backbone",
+      "pairing_id": "F11/fragments[0]",
+      "group_id": ">1:4",
+      "ru_midpoint": [
+        -1.968731917742085,
+        -8.585611375891403
+      ],
+      "bond_midpoint": [
+        -1.9187352448834063,
+        -7.2865062340555244
+      ],
+      "orientation_vector": [
+        1.0,
+        0.0
+      ],
+      "half_bracket_size": 0.49996592864168043,
+      "bond": [
+        53,
+        55
+      ],
+      "fragment": "F11",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F11/fragments[0]",
+      "marker_id": "0",
+      "side": "left",
+      "connection_group": ">1",
+      "marker_type_index": 4
+    },
+    {
+      "id": 13,
+      "bracket_kind": "backbone",
+      "pairing_id": "F11/fragments[0]",
+      "group_id": "<1:3",
+      "ru_midpoint": [
+        -1.968731917742085,
+        -8.585611375891403
+      ],
+      "bond_midpoint": [
+        -1.9187291605260357,
+        -9.884710483430977
+      ],
+      "orientation_vector": [
+        1.0,
+        0.0
+      ],
+      "half_bracket_size": 0.49996592864168043,
+      "bond": [
+        54,
+        63
+      ],
+      "fragment": "F11",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F11/fragments[0]",
+      "marker_id": "10",
+      "side": "right",
+      "connection_group": "<1",
+      "marker_type_index": 3
+    },
+    {
+      "id": 14,
+      "bracket_kind": "backbone",
+      "pairing_id": "F10/fragments[0]",
+      "group_id": ">1:4",
+      "ru_midpoint": [
+        -7.16507985115863,
+        -5.58562481588695
+      ],
+      "bond_midpoint": [
+        -7.115083178299952,
+        -4.28651967405107
+      ],
+      "orientation_vector": [
+        1.0,
+        0.0
+      ],
+      "half_bracket_size": 0.49996592864168043,
+      "bond": [
+        39,
+        41
+      ],
+      "fragment": "F10",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F10/fragments[0]",
+      "marker_id": "0",
+      "side": "left",
+      "connection_group": ">1",
+      "marker_type_index": 4
+    },
+    {
+      "id": 15,
+      "bracket_kind": "backbone",
+      "pairing_id": "F10/fragments[0]",
+      "group_id": "<1:3",
+      "ru_midpoint": [
+        -7.16507985115863,
+        -5.58562481588695
+      ],
+      "bond_midpoint": [
+        -7.115077093942581,
+        -6.884723923426522
+      ],
+      "orientation_vector": [
+        1.0,
+        0.0
+      ],
+      "half_bracket_size": 0.49996592864168043,
+      "bond": [
+        40,
+        49
+      ],
+      "fragment": "F10",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F10/fragments[0]",
+      "marker_id": "10",
+      "side": "right",
+      "connection_group": "<1",
+      "marker_type_index": 3
+    }
+  ]
+}

@@ -1,0 +1,179 @@
+
+     RDKit          2D
+
+  0  0  0  0  0  0  0  0  0  0999 V3000
+M  V30 BEGIN CTAB
+M  V30 COUNTS 13 13 2 0 0
+M  V30 BEGIN ATOM
+M  V30 1 H 3.464315 0.247685 0.000000 0
+M  V30 2 H 8.660136 0.247591 0.000000 0
+M  V30 3 C 4.330311 -0.252415 0.000000 0
+M  V30 4 C 5.196307 0.247685 0.000000 0
+M  V30 5 O 6.062196 -0.252415 0.000000 0
+M  V30 6 C 6.928218 0.247591 0.000000 0
+M  V30 7 C 7.794177 -0.252416 0.000000 0
+M  V30 8 C 7.794177 -1.252418 0.000000 0
+M  V30 9 C 6.927975 -1.752351 0.000000 0
+M  V30 10 C 6.928175 -2.752353 0.000000 0
+M  V30 11 C 7.793977 -3.252422 0.000000 0
+M  V30 12 C 8.660179 -2.752489 0.000000 0
+M  V30 13 C 8.659979 -1.752487 0.000000 0
+M  V30 END ATOM
+M  V30 BEGIN BOND
+M  V30 1 1 3 4
+M  V30 2 1 4 5
+M  V30 3 1 1 3
+M  V30 4 1 6 7
+M  V30 5 1 7 8
+M  V30 6 2 8 9
+M  V30 7 1 9 10
+M  V30 8 2 10 11
+M  V30 9 1 11 12
+M  V30 10 2 12 13
+M  V30 11 1 13 8
+M  V30 12 1 5 6
+M  V30 13 1 2 7
+M  V30 END BOND
+M  V30 BEGIN SGROUP
+M  V30 1 SRU 0 ATOMS=(4 2 5 6 7) CBONDS=(2 12 13) -
+M  V30 BRKXYZ=(9 6.4952 0.4976 0 6.4952 -0.5024 0 0 0 0) BRKXYZ=(9 8.2272 0.49-
+M  V30 76 0 8.2272 -0.5024 0 0 0 0)
+M  V30 2 SRU 0 ATOMS=(4 1 3 5 6) CBONDS=(2 3 12) -
+M  V30 BRKXYZ=(9 3.8973 0.4977 0 3.8973 -0.5025 0 0 0 0) BRKXYZ=(9 6.4952 0.49-
+M  V30 77 0 6.4952 -0.5025 0 0 0 0)
+M  V30 END SGROUP
+M  V30 END CTAB
+M  END
+>  <BIGSMILES_BRACKET_RECORDS_JSON>
+{
+  "records": [
+    {
+      "id": 0,
+      "bracket_kind": "backbone",
+      "pairing_id": "F2/fragments[0]",
+      "group_id": "$a:2",
+      "ru_midpoint": [
+        7.3611536242437845,
+        -0.0024340262927806666
+      ],
+      "bond_midpoint": [
+        6.495207246020164,
+        -0.0024119681947638305
+      ],
+      "orientation_vector": [
+        0.0,
+        1.0
+      ],
+      "half_bracket_size": 0.5000070589092322,
+      "bond": [
+        4,
+        5
+      ],
+      "fragment": "F2",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F2/fragments[0]",
+      "marker_id": "0",
+      "side": "left",
+      "connection_group": "$a",
+      "marker_type_index": 2
+    },
+    {
+      "id": 1,
+      "bracket_kind": "backbone",
+      "pairing_id": "F2/fragments[0]",
+      "group_id": "$a:2",
+      "ru_midpoint": [
+        7.3611536242437845,
+        -0.0024340262927806666
+      ],
+      "bond_midpoint": [
+        8.22715686458029,
+        -0.002412468200322815
+      ],
+      "orientation_vector": [
+        0.0,
+        1.0
+      ],
+      "half_bracket_size": 0.5000070589092322,
+      "bond": [
+        1,
+        6
+      ],
+      "fragment": "F2",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F2/fragments[0]",
+      "marker_id": "9",
+      "side": "right",
+      "connection_group": "$a",
+      "marker_type_index": 2
+    },
+    {
+      "id": 2,
+      "bracket_kind": "backbone",
+      "pairing_id": "F1/fragments[0]",
+      "group_id": "<1:3",
+      "ru_midpoint": [
+        5.196230171363933,
+        0.0476530995446974
+      ],
+      "bond_midpoint": [
+        3.897313347078985,
+        -0.00236491766880792
+      ],
+      "orientation_vector": [
+        0.0,
+        1.0
+      ],
+      "half_bracket_size": 0.5001001599500253,
+      "bond": [
+        0,
+        2
+      ],
+      "fragment": "F1",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F1/fragments[0]",
+      "marker_id": "0",
+      "side": "left",
+      "connection_group": "<1",
+      "marker_type_index": 3
+    },
+    {
+      "id": 3,
+      "bracket_kind": "backbone",
+      "pairing_id": "F1/fragments[0]",
+      "group_id": ">1:4",
+      "ru_midpoint": [
+        5.196230171363933,
+        0.0476530995446974
+      ],
+      "bond_midpoint": [
+        6.495207246020164,
+        -0.0024119681947638305
+      ],
+      "orientation_vector": [
+        0.0,
+        1.0
+      ],
+      "half_bracket_size": 0.5001001599500253,
+      "bond": [
+        4,
+        5
+      ],
+      "fragment": "F1",
+      "backbone": true,
+      "suspended_anchor_atom": null,
+      "suspended_reason": null,
+      "source_label": "F1/fragments[0]",
+      "marker_id": "4",
+      "side": "right",
+      "connection_group": ">1",
+      "marker_type_index": 4
+    }
+  ]
+}
